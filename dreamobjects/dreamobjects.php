@@ -96,6 +96,8 @@ function dreamobj_options() {
 
 <h3>Conjunction Junction</h3>
 
+<p>This is where I need error handling - If the connection fails, stop!</p>
+
 <?php
 // Static DH Info
 $HOST = 'objects.dreamhost.com';
@@ -108,7 +110,6 @@ define('AWS_CANONICAL_NAME', $AWS_CANONICAL_NAME);
 require_once 'AWSSDKforPHP/sdk.class.php';
 
 // Instantiate the S3 class and point it at the desired host
-//$Connection = new AmazonS3();
 
 $Connection = new AmazonS3(array('key'=>$AWS_KEY,'secret'=>$AWS_SECRET_KEY,'certificate_authority'=>true));
 $Connection->set_hostname($HOST);
@@ -121,6 +122,9 @@ $Connection->enable_path_style();
 ?>
 
 <h3>Buckets</h3>
+
+<p>If all of the above was done correctly, show mah buckets!</p>
+
 <ul>
 <?php
 $ListResponse = $Connection->list_buckets();
