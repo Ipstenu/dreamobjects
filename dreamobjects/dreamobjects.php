@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: 
 Description: Screwing around with DreamObjects CDN
-Version: 2.2
+Version: 1.0
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -33,8 +33,7 @@ add_action('admin_init', 'dreamobj_activate' );
 function dreamobj_activate() {
     register_setting( 'dreamobj_settings_key', 'dreamobj_settings' );
     register_setting( 'dreamobj_settings_secretkey', 'dreamobj_settings' );
-    register_setting( 'dreamobj_settings_cannonicalid', 'dreamobj_settings' );
-    register_setting( 'dreamobj_settings_cannonicalname', 'dreamobj_settings' );
+    register_setting( 'dreamobj_settings_bucket', 'dreamobj_settings' );
 }
 
 
@@ -55,63 +54,58 @@ function dreamobj_options() {
         <h2><?php _e("DreamObjects", dreamobjects); ?></h2>
 
         <?php
-        
                 if (isset($_POST['update']))
                 {
                 // Update the Keys
-                    if ($AWS_KEYNEW = $_POST['AWS_KEYNEW'])
-                    { update_option('dreamobj_settings_key', $AWS_KEYNEW);}
-                    if ($AWS_SECRET_KEYNEW = $_POST['AWS_SECRET_KEYNEW'])
-                    { update_option('dreamobj_settings_secretkey', $AWS_SECRET_KEYNEW);}
-                    if ($AWS_CANONICAL_IDNEW = $_POST['AWS_CANONICAL_IDNEW'])
-                    { update_option('dreamobj_settings_cannonicalid', $AWS_CANONICAL_IDNEW);}
-                    if ($AWS_CANONICAL_NAMENEW = $_POST['AWS_CANONICAL_NAMENEW'])
-                    { update_option('dreamobj_settings_cannonicalname', $AWS_CANONICAL_NAMENEW);}
+                    if ($DH_DO_KEYNEW = $_POST['DH_DO_KEYNEW'])
+                    { update_option('dreamobj_settings_key', $DH_DO_KEYNEW);}
+                    if ($DH_DO_SECRET_KEYNEW = $_POST['DH_DO_SECRET_KEYNEW'])
+                    { update_option('dreamobj_settings_secretkey', $DH_DO_SECRET_KEYNEW);}
+                    if ($DH_DO_BUCKETNEW = $_POST['DH_DO_BUCKETNEW'])
+                    { update_option('dreamobj_settings_bucket', $DH_DO_BUCKETNEW);}
         ?>
                 <div id="message" class="updated fade"><p><strong><?php _e('Options Updated!', dreamobjects); ?></strong></p></div>
 
-<?php   } 
+                <?php   } 
     
-    $AWS_KEY = get_option('dreamobj_settings_key');
-    $AWS_SECRET_KEY = get_option('dreamobj_settings_secretkey');
-    $AWS_CANONICAL_ID = get_option('dreamobj_settings_cannonicalid');
-    $AWS_CANONICAL_NAME = get_option('dreamobj_settings_cannonicalname');
+    $DH_DO_KEY = get_option('dreamobj_settings_key');
+    $DH_DO_SECRET_KEY = get_option('dreamobj_settings_secretkey');
+    $DH_DO_BUCKET = get_option('dreamobj_settings_bucket');
 
 ?>
 
-<h3>Configuration</h3>
+<h2><?php _e('Configuration', dreamobjects); ?></h2>
 
-<p>Enter your secret information here.</p>
+<p><?php _e('Configure WP to converse with DreamHost DreamObjects.', dreamobjects); ?></p>
 
         <form method="post" width='1'>
         <fieldset class="options">
-        <p><strong><?php _e('Key', dreamobjects); ?>:</strong> <input type="text" name="AWS_KEYNEW" value="<?php echo $AWS_KEY; ?>"/></p>
-        <p><strong><?php _e('Secret Key', dreamobjects); ?>:</strong> <input type="text" name="AWS_SECRET_KEYNEW" value="<?php echo $AWS_SECRET_KEY; ?>"/></p>
-        <p><strong><?php _e('Canonical ID', dreamobjects); ?>:</strong> <input type="text" name="AWS_CANONICAL_IDNEW" value="<?php echo $AWS_CANONICAL_ID; ?>"/></p>
-        <p><strong><?php _e('Canonical Name', dreamobjects); ?>:</strong> <input type="text" name="AWS_CANONICAL_NAMENEW" value="<?php echo $AWS_CANONICAL_NAME; ?>"/></p>
-        </fieldset>
-        
-        <p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
-        </form>
+<table class="form-table">
+<tbody>
+<tr valign="top">
+<th scope="row"><label for="DH_DO_KEYNEW"><?php _e('Key', dreamobjects); ?></label></th>
+<td><input type="text" name="DH_DO_KEYNEW" value="<?php echo $DH_DO_KEY; ?>" class="regular-text"/>
+<p class="description">This is your public key.</p></td>
+</tr>
 
-<h3>Conjunction Junction</h3>
-
-<p>This is where I need error handling - If the connection fails, stop!</p>
-
+<tr valign="top">
+<th scope="row"><label for="DH_DO_SECRET_KEYNEW"><?php _e('Secret Key', dreamobjects); ?></label></th>
+<td><input type="text" name="DH_DO_SECRET_KEYNEW" value="<?php echo $DH_DO_SECRET_KEY; ?>" class="regular-text"/>
+<p class="description">This is your secret key.</p></td>
+</tr>
 <?php
+
+// This mess is for your connections.
+
 // Static DH Info
 $HOST = 'objects.dreamhost.com';
-define('AWS_KEY', $AWS_KEY);
-define('AWS_SECRET_KEY', $AWS_SECRET_KEY);
-define('AWS_CANONICAL_ID', $AWS_CANONICAL_ID);
-define('AWS_CANONICAL_NAME', $AWS_CANONICAL_NAME);
 
 // require the amazon sdk for php library
 require_once 'AWSSDKforPHP/sdk.class.php';
 
 // Instantiate the S3 class and point it at the desired host
 
-$Connection = new AmazonS3(array('key'=>$AWS_KEY,'secret'=>$AWS_SECRET_KEY,'certificate_authority'=>true));
+$Connection = new AmazonS3(array('key'=>$DH_DO_KEY,'secret'=>$DH_DO_SECRET_KEY,'certificate_authority'=>true));
 $Connection->set_hostname($HOST);
 $Connection->allow_hostname_override(false);
 
@@ -119,21 +113,43 @@ $Connection->allow_hostname_override(false);
 // instead of bucket.objects.dreamhost.com
 $Connection->enable_path_style();
 
-?>
-
-<h3>Buckets</h3>
-
-<p>If all of the above was done correctly, show mah buckets!</p>
-
-<ul>
-<?php
+// Get the buckets
 $ListResponse = $Connection->list_buckets();
-$Buckets = $ListResponse->body->Buckets->Bucket;
-foreach ($Buckets as $Bucket) {
-        echo "<li>" . $Bucket->Name . "\t" . $Bucket->CreationDate . "</li>\n";
+
+if (!$ListResponse->isOK()) {
+    // If we can't get buckets, bailout
+    ?>
+    <div id="message" class="error">
+    <h3><?php _e('Could not connect to DreamHost!', dreamobjects ); ?></h3>
+    <p><?php _e('Please double check your keys, as they\'re giving us horrible errors.', dreamobjects); ?></p>
+    </div><?php
+} else {
+
+    // We're in!  Now to work....
+    $Buckets = $ListResponse->body->Buckets->Bucket;
+    ?>
+    <tr valign="top">
+    <th scope="row"><label for="DH_DO_BUCKETNEW"><?php _e('Select your Bucket', dreamobjects); ?></label></th>
+    <td><select name="DH_DO_BUCKETNEW">
+        <option value="-1">(none)</option><?php
+    foreach ($Buckets as $Bucket) {
+    
+        if ( $Bucket->Name == $DH_DO_BUCKET ) { $dh_do_bucketselect="selected='selected'"; } else {$dh_do_bucketselect= '';}
+        echo "<option value='" . $Bucket->Name . "' " . $dh_do_bucketselect . ">" . $Bucket->Name . "</strong>\t(" . $Bucket->get_bucket_object_count . " Objects)</option>\n";
+    } ?></select>
+    </td>
+    </tr>
+    <?php
 }
+
+
 ?>
-</ul>
+</tbody>
+</table>
+        </fieldset>
         
+        <p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
+        </form>
+               
         </div> <?php
         }
