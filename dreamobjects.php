@@ -61,7 +61,7 @@ class DHDO {
 				update_option('dh-do-bucket', false);
 			}
 		}
-		if ( !get_option('dh-do-bucket') ) add_action('admin_notices', array('DHDO','newBucketWarning'));
+		if ( !get_option('dh-do-bucket') && get_option('dh-do-secretkey') && get_option('dh-do-key') ) add_action('admin_notices', array('DHDO','newBucketWarning'));
 
 		if ( isset($_GET['settings-updated']) && $_GET['page'] ==
 'dreamobjects-menu' ) add_action('admin_notices', array('DHDO','updateMessage'));
@@ -183,7 +183,7 @@ class DHDO {
             <th scope="row"><label for="dh-do-what"><?php _e('What to Backup', dreamobjects); ?></label></th>
             <td>
 								<p><label for="dh-do-section-files">
-								<input <?php if ( in_array('files', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-section-files" value="files" id="dh-do-section-files" />
+								<input <?php if ( in_array('files', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-section[]" value="files" id="dh-do-section-files" />
 								<?php _e('All Files', dreamobjects); ?>
 							</label><br />
 							<label for="dh-do-section-database">
@@ -204,6 +204,7 @@ class DHDO {
 				
 				<?php //DHDOU::backup() ?>
 				
+<?php if ( get_option('dh-do-bucket')) { ?>
 				<h3><?php _e('Download recent backups.', dreamobjects); ?></h3>
 				<p><?php _e('You will only be able to download backups if you\'re logged into DreamObjects.', dreamobjects); ?></p>
 				<div id="backups">
@@ -214,7 +215,8 @@ class DHDO {
 							krsort($backups);
 							$count = 0;
 							foreach ( $backups as $key => $backup ) {
-								$backup['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), mysql2date(__('F j, Y h:i a'), date('Y-m-d H:i:s', $backup['time'])));
+								$backup['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $backup['time']) , 'F j, Y h:i a' ) );
+								
 								
 								$backup = apply_filters('dh-do-backup-item', $backup);
 								
@@ -227,7 +229,7 @@ class DHDO {
 					?>
 				    </ul>
 				</div>
-				
+<?php } ?>				
 			</div>
 		<?php
 	}
@@ -268,10 +270,11 @@ class DHDO {
 		$file = WP_CONTENT_DIR . '/dreamobjects/dreamobject-backups.zip';
 		$zip = new PclZip($file);
 		$backups = array();
-		if ( in_array('files', $sections) ) $backups[] = ABSPATH . '/wp-config.php';
-		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/plugins'));
-		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/themes'));
-		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/uploads'));
+		//if ( in_array('files', $sections) ) $backups[] = ABSPATH . '/wp-config.php';
+		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/plugins'));
+		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/themes'));
+		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/uploads'));
+		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
 		
 		if ( in_array('database', $sections) ) {
 		
