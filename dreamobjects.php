@@ -170,16 +170,6 @@ class DHDO {
         <tr valign="top"><th colspan="2"><h3><?php _e('Backup Settings', dreamobjects); ?></h3></th></tr>
 
         <tr valign="top">
-            <th scope="row"><label for="dh-do-schedule"><?php _e('Schedule', dreamobjects); ?></label></th>
-            <td><select name="dh-do-schedule">
-								<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
-									<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-schedule') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-								<?php endforeach; ?>
-				<p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
-				</select></td>
-        </tr>
-        
-        <tr valign="top">
             <th scope="row"><label for="dh-do-what"><?php _e('What to Backup', dreamobjects); ?></label></th>
             <td>
 								<p><label for="dh-do-section-files">
@@ -194,6 +184,16 @@ class DHDO {
 				<p class="description"><?php _e('You can select portions of your site to backup.', dreamobjects); ?></p>
 				</td>
         </tr>
+        <tr valign="top">
+            <th scope="row"><label for="dh-do-schedule"><?php _e('Schedule', dreamobjects); ?></label></th>
+            <td><select name="dh-do-schedule">
+								<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
+									<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-schedule') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
+								<?php endforeach; ?>
+				<p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
+				</select></td>
+        </tr>
+        
 <?php endif; ?>
 </tbody>
 </table>
