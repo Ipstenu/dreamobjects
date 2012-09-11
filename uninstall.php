@@ -23,12 +23,10 @@ Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	exit ();
 
-// No More scheduling
-wp_clear_scheduled_hook('dreamobj_cron_event');
-
 // Deregister
 
-unregister_setting( 'dreamobj_settings_key', 'dreamobj_settings' );
-unregister_setting( 'dreamobj_settings_secretkey', 'dreamobj_settings' );
-unregister_setting( 'dreamobj_settings_bucket', 'dreamobj_settings' );
-unregister_setting( 'dreamobj_cron_on', 'dreamobj_settings' );
+unregister_setting( 'dh-do-key', 'dreamobj_settings' );
+unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
+unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
+unregister_setting( 'dh-do-section', 'dreamobj_settings' );
+unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );

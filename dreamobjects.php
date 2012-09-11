@@ -66,6 +66,10 @@ class DHDO {
 		if ( isset($_GET['settings-updated']) && $_GET['page'] ==
 'dreamobjects-menu' ) add_action('admin_notices', array('DHDO','updateMessage'));
 
+        if ( isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu' ) {
+            do_action('dh-do-backup', array('DHDO', 'backup'));
+            add_action('admin_notices', array('DHDO','backupMessage'));
+        }
 	}
 	
 	function newBucketWarning() {
@@ -75,7 +79,9 @@ class DHDO {
 	function updateMessage() {
 		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
 		}
-
+	function backupMessage() {
+		echo "<div id='message' class='updated fade'><p><strong>".__('Backup begining now.', dreamobjects)."</strong></p></div>";
+		}
 	/**
 	 * Return the filesystem path that the plugin lives in.
 	 *
@@ -201,11 +207,19 @@ class DHDO {
 <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
 
 				</form>
-				
+				<form method="post" action="admin.php?page=dreamobjects-menu&backup-now=true">
+    <input type="hidden" name="action" value="backup" />
+    <?php wp_nonce_field('backup-now'); ?>
+    
+    <p><?php _e('Oh you really want to do a backup right now? Be careful! This may take a while if you have a big site.', dreamobjects); ?></p>
+
+    <p class="submit"><input class='button-secondary' type='Submit' name='backup' value='<?php _e("Backup Now", dreamobjects); ?>' id='submitbutton' /></p>
+                </form>
+
 				<?php //DHDOU::backup() ?>
 				
 <?php if ( get_option('dh-do-bucket')) { ?>
-				<h3><?php _e('Download recent backups.', dreamobjects); ?></h3>
+				<h3><?php _e('Download Latest Backup.', dreamobjects); ?></h3>
 				<p><?php _e('You will only be able to download backups if you\'re logged into DreamObjects.', dreamobjects); ?></p>
 				<div id="backups">
 				    <ul>
@@ -270,12 +284,11 @@ class DHDO {
 		$file = WP_CONTENT_DIR . '/dreamobjects/dreamobject-backups.zip';
 		$zip = new PclZip($file);
 		$backups = array();
-		//if ( in_array('files', $sections) ) $backups[] = ABSPATH . '/wp-config.php';
-		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/plugins'));
-		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/themes'));
-		//if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH . 'wp-content/uploads'));
+
+		// All me files!
 		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
 		
+		// And me DB!
 		if ( in_array('database', $sections) ) {
 		
 			$tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
