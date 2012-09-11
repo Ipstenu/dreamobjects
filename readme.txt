@@ -1,7 +1,7 @@
 === DreamObjects ===
-Contributors: Ipstenu
+Contributors: Ipstenu,DanCoulter
 Donate link: 
-Tags: cloud,dreamhost
+Tags: cloud, dreamhost, dreamobjects
 Requires at least: 3.4
 Tested up to: 3.5
 Stable tag: 
@@ -12,9 +12,9 @@ Connect to DreamHost's DreamObjects
 
 == Description ==
 
-DreamHost has it's own Cloud - DreamObjects.
+DreamHost has it's own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects</a>.
 
-Blahblah copy here.
+DreamObjects is a cost-effective, public cloud storage service, perfect a scalable storage solution your WordPress backups.
 
 == Installation ==
 
@@ -25,6 +25,12 @@ Blahblah copy here.
 == Frequently asked questions ==
 
 = What does it do? =
+
+DreamObjects allows you to store your data securely, redundantly and inexpensively. The DreamObjects plugin will create a backup of your site, zip it, and toss it up into a DreamObjects bucket in an automated manner.
+
+= Do I have to use DreamHost? =
+
+Yes and no. You have to use Dream<em>Objects</em>, but if you had your hosting
 
 = How often can I schedule backups? =
 
