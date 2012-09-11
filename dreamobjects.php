@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: DreamObjects
-Plugin URI: 
+Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Backup your site to DreamObjects.
 Version: 1.0
 Author: Mika Epstein
@@ -80,7 +80,7 @@ class DHDO {
 		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
 		}
 	function backupMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Backup begining now.', dreamobjects)."</strong></p></div>";
+		echo "<div id='message' class='updated fade'><p><strong>".__('Backup complete. Do not hit refresh!', dreamobjects)."</strong></p></div>";
 		}
 	/**
 	 * Return the filesystem path that the plugin lives in.
@@ -218,9 +218,9 @@ class DHDO {
 
 				<?php //DHDOU::backup() ?>
 				
-<?php if ( get_option('dh-do-bucket')) { ?>
-				<h3><?php _e('Download Latest Backup.', dreamobjects); ?></h3>
-				<p><?php _e('You will only be able to download backups if you\'re logged into DreamObjects.', dreamobjects); ?></p>
+<?php if ( get_option('dh-do-bucket') ) { ?>
+				<h3><?php _e('Latest Backups', dreamobjects); ?></h3>
+				<p><?php _e('You can download the backups if you\'re logged into DreamObjects.', dreamobjects); ?></p>
 				<div id="backups">
 				    <ul>
 					<?php 
@@ -301,7 +301,7 @@ class DHDO {
 			
 			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 			$upload = $s3->inputFile($file);
-			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date('Y-m-d') . '.zip');
+			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date('Y-m-d-His') . '.zip');
 			@unlink($file);
 			@unlink(WP_CONTENT_DIR . '/dreamobjects/dreamobject-db-backup.sql');
 		}
@@ -322,4 +322,8 @@ add_action('admin_print_styles', array('DHDO', 'stylesheet'));
 
 if ( $_GET['page'] == 'dh-do-backup' ) {
 	wp_enqueue_script('jquery');
+}
+
+if ( defined('WP_CLI') && WP_CLI ) {
+	include( dirname(__FILE__) . '/wp-cli.php' );
 }
