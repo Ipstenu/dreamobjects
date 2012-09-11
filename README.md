@@ -19,31 +19,34 @@ Installation
 Frequently asked questions
 ===================
 
-= What does it do? =
+What does it do?
+-------------------
 
 DreamObjects allows you to store your data securely, redundantly and inexpensively. The DreamObjects plugin will create a backup of your site, zip it, and toss it up into a DreamObjects bucket in an automated manner.
 
-= Do I have to use DreamHost? =
+Do I have to use DreamHost?
+-------------------
 
 Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>.
 
-= How often can I schedule backups? =
+How often can I schedule backups?
+-------------------
 
 You can schedule them daily, weekly, or monthly.
 
-= Can I force a backup to run now? =
+Can I force a backup to run now?
+-------------------
 
 Not really. If you change the backups to be disabled, save, and then change it back, it will kick off a backup.
 
-== Screenshots ==
+Screenshots
+=============
 
+Changelog
+=============
 
-
-== Changelog ==
-
-= Version 1 =
+Version 1
+----------
 
 * Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
 * Pretified, consolidated, organized, and formatted.
-
-== Upgrade notice ==
