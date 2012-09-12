@@ -3,7 +3,12 @@ DreamObjects Plugin
 
 DreamHost has it's own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects</a>.
 
-DreamObjects is a cost-effective, public cloud storage service, perfect a scalable storage solution your WordPress backups. The DreamObjects Backups plugin will automate that process for you, sending your whole WordPress folder, and database, up into the cloud on a daily, weekly, or monthly schedule.
+DreamObjects is a cost-effective, public cloud storage service, perfect a scalable storage solution your WordPress backups. The DreamObjects Backups plugin will automate that process for you, sending your whole WordPress folder, and database, up into the cloud right now, or on a daily, weekly, or monthly schedule.
+
+Alternately you can use <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> to manually make a backup.
+
+<pre>wp dreamobjects backup</pre>
+
 
 Installation 
 ============
@@ -37,7 +42,7 @@ You can schedule them daily, weekly, or monthly.
 Can I force a backup to run now?
 -------------------
 
-Not really. If you change the backups to be disabled, save, and then change it back, it will kick off a backup.
+Yes, but be warned, it could take a while if your site is huge.
 
 Screenshots
 =============
