@@ -17,7 +17,7 @@ Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
     the Free Software Foundation, either version 2 of the License, or
     (at your option) any later version.
 
-    Disabler is distributed in the hope that it will be useful,
+    DreamObjects is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -45,7 +45,7 @@ class DHDO {
 		if ( isset($_POST['dh-do-schedule']) ) {
 			wp_clear_scheduled_hook('dh-do-backup');
 			if ( $_POST['dh-do-schedule'] != 'disabled' ) {
-				wp_schedule_event(time(), $_POST['dh-do-schedule'], 'dh-do-backup');
+				wp_schedule_event(time(), $_POST['dh-do-schedule'], 'dh-do-backup'); 
 			}
 		}
 		if ( isset($_POST['dh-do-newbucket']) && !empty($_POST['dh-do-newbucket']) ) {
@@ -66,8 +66,9 @@ class DHDO {
 		if ( isset($_GET['settings-updated']) && $_GET['page'] ==
 'dreamobjects-menu' ) add_action('admin_notices', array('DHDO','updateMessage'));
 
-        if ( isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu' ) {
-            do_action('dh-do-backup', array('DHDO', 'backup'));
+        if ( isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
+            // UNCOMMENT WHEN DATE FIXED
+            //wp_schedule_single_event( time()+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDO','backupMessage'));
         }
 	}
@@ -80,7 +81,11 @@ class DHDO {
 		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
 		}
 	function backupMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Backup complete. Do not hit refresh!', dreamobjects)."</strong></p></div>";
+	   $timestamp = wp_next_scheduled( 'dh-do-backup' ); // change to dh-do-backupnow when fixes
+	   //$string = sprintf( __('Backup scheduled for %d. Do not hit refresh!', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) );
+	   $string = sprintf( __('Backup scheduled for %d. Do not hit refresh!', dreamobjects), date('Y-m-d',$timestamp)); 
+	   echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
+	   
 		}
 	/**
 	 * Return the filesystem path that the plugin lives in.
@@ -104,7 +109,8 @@ class DHDO {
 	function add_settings_page() {
 		load_plugin_textdomain(dreamobjects, DHDO::getPath() . 'i18n');
 
-		add_menu_page(__('DreamObjects'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
+		add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
+		add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
 	}
 
 	// And now styles
@@ -196,8 +202,19 @@ class DHDO {
 								<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
 									<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-schedule') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 								<?php endforeach; ?>
-				<p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
 				</select></td>
+        </tr>
+        
+        <tr valign="top">
+        <th scope="row"></th>
+        <td>
+            <?php $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
+                 $nextbackup = sprintf(__('Next scheduled ackup is at %s', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) );
+                
+            ?>
+            <p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
+            <p class="description"><?php echo $nextbackup; ?></p>
+        </td>
         </tr>
         
 <?php endif; ?>
@@ -207,16 +224,25 @@ class DHDO {
 <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
 
 				</form>
-				<form method="post" action="admin.php?page=dreamobjects-menu&backup-now=true">
-    <input type="hidden" name="action" value="backup" />
-    <?php wp_nonce_field('backup-now'); ?>
-    
-    <p><?php _e('Oh you really want to do a backup right now? Be careful! This may take a while if you have a big site.', dreamobjects); ?></p>
 
-    <p class="submit"><input class='button-secondary' type='Submit' name='backup' value='<?php _e("Backup Now", dreamobjects); ?>' id='submitbutton' /></p>
-                </form>
-
-				<?php //DHDOU::backup() ?>
+		<?php
+	}
+	
+	function backup_page() {
+    	//DHDOU::backup()
+        include_once 'S3.php';
+		$sections = get_option('dh-do-section');
+		if ( !$sections ) {
+			$sections = array();
+		}
+		?>
+			<script type="text/javascript">
+				var ajaxTarget = "<?php echo self::getURL() ?>backup.ajax.php";
+				var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
+			</script>
+			<div class="wrap">
+				<div id="icon-dreamobjects" class="icon32"></div>
+				<h2><?php _e("Backups", dreamobjects); ?></h2>
 				
 <?php if ( get_option('dh-do-bucket') ) { ?>
 				<h3><?php _e('Latest Backups', dreamobjects); ?></h3>
@@ -225,6 +251,7 @@ class DHDO {
 				    <ul>
 					<?php 
 						if ( get_option('dh-do-bucket') ) {
+						    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
 							$backups = $s3->getBucket(get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))));
 							krsort($backups);
 							$count = 0;
@@ -245,7 +272,22 @@ class DHDO {
 				</div>
 <?php } ?>				
 			</div>
-		<?php
+
+			<form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">
+    <input type="hidden" name="action" value="backup" />
+    <?php wp_nonce_field('backup-now'); ?>
+    <h3><?php _e('Backup Now!', dreamobjects); ?></h3>
+    <p><?php _e('Oh you really want to do a backup right now? Be careful! This may take a while if you have a big site.', dreamobjects); ?></p>
+
+    <?php $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
+            $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) ); 
+            ?>
+    <p><?php echo $nextbackup; ?></p>
+
+
+    <p class="submit"><input class='button-primary' type='Submit' name='backup' value='<?php _e("Backup Now", dreamobjects); ?>' id='submitbutton' /></p>
+                </form>
+            <?php
 	}
 	
 	function rscandir($base='') {
@@ -317,6 +359,7 @@ class DHDO {
 add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
 add_action('admin_menu', array('DHDO', 'add_settings_page'));
 add_action('dh-do-backup', array('DHDO', 'backup'));
+add_action('dh-do-backupnow', array('DHDO', 'backup'));
 add_action('init', array('DHDO', 'init'));
 add_action('admin_print_styles', array('DHDO', 'stylesheet'));
 
