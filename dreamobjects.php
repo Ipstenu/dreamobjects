@@ -264,5 +264,5 @@ if ( $_GET['page'] == 'dh-do-backup' ) {
 }
 
 if ( defined('WP_CLI') && WP_CLI ) {
-	//include( dirname(__FILE__) . '/wp-cli.php' );
+	include( dirname(__FILE__) . '/wp-cli.php' );
 }
