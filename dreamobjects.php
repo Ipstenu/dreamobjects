@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Backup your site to DreamObjects.
-Version: 1.0-beta
+Version: 1.0
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -31,17 +31,10 @@ Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
  * @package dh-do-backups
  */
 
-if ( !defined('WP_CONTENT_URL') )
-	define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
-if ( !defined('WP_CONTENT_DIR') )
-	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-if ( !defined('PLUGIN_DIR') )
-    define( 'PLUGIN_DIR', dirname(__FILE__).'/' ); 
-if ( !defined('PLUGIN_VERSION') )
-    define( 'PLUGIN_VERSION', '1.0-beta' ); 
+require_once dirname(__FILE__) . '/admin/defines.php';
 	
 class DHDO {
-    // INIT
+    // INIT - hooking into this lets us run things when a page is hit.
 
     function init() {
 		if ( isset($_POST['dh-do-schedule']) ) {
@@ -92,7 +85,7 @@ class DHDO {
 		}
 	function backupMessage() {
 	   $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
-	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings). Do not hit refresh!', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'h:i a' ) );
+	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings).', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'h:i a' ) );
 	   echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
 		}
 
@@ -114,6 +107,7 @@ class DHDO {
 		global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
 	    $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
 		$dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
+		$dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));
 	}
 
 	// And now styles
@@ -168,7 +162,7 @@ class DHDO {
 		require_once(PLUGIN_DIR . 'lib/S3.php');
 		require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
 
-		$sections = get_option('dh-do-section');
+		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
 		}
