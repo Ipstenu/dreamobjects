@@ -18,7 +18,7 @@
 */
 
 //DHDOU::backup()
-        include_once 'S3.php';
+        include_once( PLUGIN_DIR. '/lib/S3.php');
 		$sections = get_option('dh-do-section');
 		if ( !$sections ) {
 			$sections = array();

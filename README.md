@@ -13,15 +13,11 @@ Connect to DreamHost's DreamObjects
 
 DreamHost has it's own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects</a>.
 
-DreamObjects is a cost-effective, public cloud storage service, perfect a scalable storage solution your WordPress site.
+DreamObjects™ is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
-### Features ###
+### Backup Features ###
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
-
-### Current Issues ###
-
-Somehow I broke cli!
 
 ### To Do ###
 * CDN hook up
@@ -32,7 +28,7 @@ Somehow I broke cli!
 1. Install and Activate the plugin
 1. Fill in your Key and Secret Key
 
-### For Backups... ###
+### Backups ###
 1. Pick your backup Bucket
 1. Select what you want to backup
 1. Chose when you want to backup
@@ -43,11 +39,11 @@ Somehow I broke cli!
 
 ### What does it do? ###
 
-DreamObjects allows you to store your data securely, redundantly and inexpensively. The DreamObjects plugin will create a backup of your site, zip it, and toss it up into a DreamObjects bucket in an automated manner.
+DreamObjects allows you to store your data securely, redundantly and inexpensively. The backup portion of this plugin will create a backup of your site, zip it, and toss it up into your DreamObjects bucket in an automated manner.
 
 ### Do I have to use DreamHost? ###
 
-Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>.
+Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so there's no assurance it'll work on other hosts.
 
 ### How often can I schedule backups? ###
 
@@ -65,6 +61,11 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 
 ## Screenshots ##
+###1. Your DreamObjects Public Key###
+![Your DreamObjects Public Key](http://s.wordpress.org/extend/plugins/dreamobjects-plugin/screenshot-1.png)
+
+###2. DreamObjects Private Key###
+![DreamObjects Private Key](http://s.wordpress.org/extend/plugins/dreamobjects-plugin/screenshot-2.png)
 
 
 
@@ -75,5 +76,6 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 * Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
 * Upgraded <a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a> to latest version
 * Pretified, consolidated, organized, and formatted.
+* Saving files to upgrade (vs it's own folder)
 
 ## Upgrade notice ##
