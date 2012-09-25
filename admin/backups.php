@@ -57,13 +57,15 @@
 								<?php endforeach; ?>
 							</select>
             <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
-            
-            <p class="description"><?php _e('Or create a bucket:', dreamobjects); ?></p>
-            <input type="text" name="dh-do-newbucket" id="new-s3-bucket" value="" />
+            <?php if ( get_option('dh-do-bucketcdn') && ( !get_option('dh-do-bucketcdn') || (get_option('dh-do-bucketcdn') != "XXXX") ) ) { 
+                $alreadyusing = sprintf(__('You are current using the bucket "%s" for CDN. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
+                echo '<p class="description">' . $alreadyusing . '</p>';
+            } ?>            
+
             </td>
         </tr>
 
-<?php if ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) : ?>
+<?php if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) : ?>
 
         <tr valign="top">
             <th scope="row"><label for="dh-do-what"><?php _e('What to Backup', dreamobjects); ?></label></th>
