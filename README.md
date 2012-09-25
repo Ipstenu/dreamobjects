@@ -15,6 +15,9 @@ DreamHost has it's own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/
 
 DreamObjects™ is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
+<em>This plugin is still being ironed out, so while it works, you may experience massive changes while things are sorted.</em>
+
+
 ### Backup Features ###
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
