@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Backup your site to DreamObjects.
-Version: 1.0
+Version: 1.0-beta
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
