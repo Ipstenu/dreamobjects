@@ -62,8 +62,8 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 <pre>wp dreamobjects backup</pre>
 
 == Screenshots ==
-1. Your DreamObjects Public Key
 1. DreamObjects Private Key
+1. Your DreamObjects Public Key
 
 == Changelog ==
 
