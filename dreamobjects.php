@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Integrate your WordPress install with DreamHost DreamObjects
-Version: 1.0
+Version: 1.1
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
