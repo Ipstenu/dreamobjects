@@ -3,7 +3,7 @@ Contributors: Ipstenu,DanCoulter
 Tags: cloud, dreamhost, dreamobjects
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
