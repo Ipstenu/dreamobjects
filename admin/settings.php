@@ -17,6 +17,11 @@
 
 */
 
+if (!defined('ABSPATH')) {
+    die();
+}
+
+
 include_once (PLUGIN_DIR . '/lib/S3.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {

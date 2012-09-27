@@ -1,5 +1,4 @@
 <?php
-
 /*
     This file is part of DreamObjects, a plugin for WordPress.
 
@@ -17,6 +16,11 @@
     along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+if (!defined('ABSPATH')) {
+    die();
+}
+
 
 if( class_exists( 'DHDO' ) ) {
 	WP_CLI::addCommand( 'dreamobjects', 'DreamObjects_Command' );

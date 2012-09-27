@@ -1,5 +1,4 @@
 <?php
-
 /*
     This file is part of DreamObjects, a plugin for WordPress.
 
@@ -17,6 +16,11 @@
     along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+if (!defined('ABSPATH')) {
+    die();
+}
+
 
 global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
 
@@ -76,11 +80,11 @@ if ($screen->id == 'dreamobjects_page_dreamobjects-menu-backup') {
     // Base Help
     $screen->add_help_tab( array(
 		'id'      => 'dreamobjects-menu-backup-base',
-		'title'   => __('Help', 'dreamobjects'),
+		'title'   => __('Overview', 'dreamobjects'),
 		'content' => 
-		'<h3>' . __('Backups', 'dreamobjects') .'</h3>' .
-		'<p>' . __( 'Blah blah paragraph one Backup.', 'dreamobjects' ) . '</p>' .
-		'<p>' . __( 'Blah blah paragraph two Backup.', 'dreamobjects' ) . '</p>'
+		'<h3>' . __('DreamObjects Backups', 'dreamobjects') .'</h3>' .
+		'<p>' . __( 'Backing up your WordPress site to DreamObjects will allow you to have a safe and secure backup of your site. This is useful to run before you upgrade WordPress, or make big changes.', 'dreamobjects' ) . '</p>' .
+		'<p>' . __( 'Backups can be scheduled to run daily, weekly or monthly. You also have the option to run a backup right now.', 'dreamobjects' ) . '</p>'
       ));
 	}
 

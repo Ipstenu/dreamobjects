@@ -1,13 +1,13 @@
 === DreamObjects Plugin ===
-Contributors: Ipstenu,DanCoulter
+Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Connect to DreamHost's DreamObjects
+Connect your WordPress site to DreamHost's DreamObjects
 
 == Description ==
 
@@ -59,11 +59,24 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 <pre>wp dreamobjects backup</pre>
 
+While the schedule option shows, it doesn't fully work yet. Sorry.
+
+= Do you work for DreamHost? =
+
+Yes, but this isn't an official DreamHost plugin at this time. It just works.
+
 == Screenshots ==
 1. DreamObjects Private Key
 1. Your DreamObjects Public Key
 
 == Changelog ==
+
+= Version 1.1 =
+<em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
+
+* Security (nonce, abspath, etc)
+* Better defines
+* wp-cli (still not 100%)
 
 = Version 1 =
 

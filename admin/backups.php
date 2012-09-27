@@ -17,6 +17,10 @@
 
 */
 
+if (!defined('ABSPATH')) {
+    die();
+}
+
 //DHDOU::backup()
         include_once( PLUGIN_DIR. '/lib/S3.php');
 		$sections = get_option('dh-do-backupsection');

@@ -3,8 +3,8 @@
 /*
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
-Description: Backup your site to DreamObjects.
-Version: 1.0
+Description: Integrate your WordPress install with DreamHost DreamObjects
+Version: 1.1
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -107,7 +107,7 @@ class DHDO {
 		global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
 	    $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
 		$dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
-		//$dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));
+		// $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));
 	}
 
 	// And now styles
@@ -159,7 +159,7 @@ class DHDO {
 	
 	function backup() {
 		global $wpdb;
-		require_once(PLUGIN_DIR . 'lib/S3.php');
+		require_once('lib/S3.php');
 		require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
 
 		$sections = get_option('dh-do-backupsection');
@@ -198,27 +198,4 @@ class DHDO {
 		$schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');
 		return $schedules;
 	}
-}
-
-// The Help Screen
-function dreamhost_dreamobjects_plugin_help() {
-	include_once( PLUGIN_DIR . '/admin/help.php' );
-}
-
-add_action('contextual_help', 'dreamhost_dreamobjects_plugin_help', 10, 3);
-
-add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
-
-add_action('admin_menu', array('DHDO', 'add_settings_page'));
-add_action('dh-do-backup', array('DHDO', 'backup'));
-add_action('dh-do-backupnow', array('DHDO', 'backup'));
-add_action('init', array('DHDO', 'init'));
-add_action('admin_print_styles', array('DHDO', 'stylesheet'));
-
-if ( $_GET['page'] == 'dh-do-backup' ) {
-	wp_enqueue_script('jquery');
-}
-
-if ( defined('WP_CLI') && WP_CLI ) {
-	include( dirname(__FILE__) . '/lib/wp-cli.php' );
 }

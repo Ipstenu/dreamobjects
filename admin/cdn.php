@@ -17,6 +17,9 @@
 
 */
 
+if (!defined('ABSPATH')) {
+    die();
+}
 
 include_once( PLUGIN_DIR. '/lib/S3.php');
 

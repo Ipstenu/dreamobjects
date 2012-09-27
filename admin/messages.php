@@ -1,5 +1,4 @@
 <?php
-
 /*
     This file is part of DreamObjects, a plugin for WordPress.
 
@@ -17,6 +16,11 @@
     along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
+if (!defined('ABSPATH')) {
+    die();
+}
+
 
 	function newBucketWarning() {
 		echo "<div id='message' class='error'><p><strong>".__('You need to select a valid bucket.', dreamobjects)."</strong> ".__('If you tried to create a new bucket, it may have been an invalid name.', dreamobjects)."</p></div>";
