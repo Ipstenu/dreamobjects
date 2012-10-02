@@ -43,19 +43,7 @@ class DHDO {
 				wp_schedule_event(time(), $_POST['dh-do-schedule'], 'dh-do-backup'); 
 			}
 		}
-		if ( isset($_POST['dh-do-newbucket']) && !empty($_POST['dh-do-newbucket']) ) {
-			include_once(PLUGIN_DIR . '/lib/S3.php');
-			$_POST['dh-do-newbucket'] = strtolower($_POST['dh-do-newbucket']);
-			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
-			$s3->putBucket($_POST['dh-do-newbucket']);
-			$buckets = $s3->listBuckets();
-			if ( is_array($buckets) && in_array($_POST['dh-do-newbucket'], $buckets) ) {
-				update_option('dh-do-bucket', $_POST['dh-do-newbucket']);
-				$_POST['dh-do-bucket'] = $_POST['dh-do-newbucket'];
-			} else {
-				update_option('dh-do-bucket', false);
-			}
-		}
+
 		if ( get_option('dh-do-secretkey') && get_option('dh-do-key') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') == "XXXX") ) && $_GET['page'] ==
 'dreamobjects-menu-backup' ) add_action('admin_notices', array('DHDO','newBucketWarning'));
 
@@ -76,10 +64,6 @@ class DHDO {
 	}
 
     // Messages (used by INIT)
-    	function newBucketWarning() {
-		echo "<div id='message' class='error'><p><strong>".__('You need to select a valid bucket.', dreamobjects)."</strong> ".__('If you tried to create a new bucket, it may have been an invalid name.', dreamobjects)."</p></div>";
-	}
-
 	function updateMessage() {
 		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
 		}
