@@ -54,6 +54,10 @@ You can schedule them daily, weekly, or monthly.
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
 
+= Why doesn't my backup run at the exact same time? =
+
+This is a little technical, so bear with me. It runs based on wp_cron, which is triggered when someone visits your site. If the backup is set for 12:35pm, but no one visits your site until 4:10pm, then it's not going to run until then. There's nothing wrong with that!
+
 = How do I use the CLI? =
 If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> installed on your server (which DreamHost servers do), you can use the following commands:
 
