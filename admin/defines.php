@@ -27,7 +27,7 @@ define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
-define( 'PLUGIN_VERSION', '1.0-beta' ); 
+define( 'PLUGIN_VERSION', '1.1' ); 
 
 
 // The Help Screen
