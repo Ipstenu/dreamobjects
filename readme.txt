@@ -25,7 +25,6 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 * If configured, the shortcode <code>[dreamobjects]</code> will display a list of all your upload files
 
 = To Do =
-* Permit on-demand uploads/downloads
 * CDN (when available)
 
 == Installation ==
@@ -48,9 +47,7 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 
 = What does it do? =
 
-DreamObjects allows you to store your data securely, redundantly and inexpensively. The backup portion of this plugin will create a backup of your site, zip it, and toss it up into your DreamObjects bucket in an automated manner.
-
-Also included is a uploader tool, which will let you upload files to any bucket.
+DreamObjects connects your WordPress site to your DreamObjects cloud storage, allowing you to upload files directly to your cloud, or automatically store backups.
 
 = Do I have to use DreamHost? =
 

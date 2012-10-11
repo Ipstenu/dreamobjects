@@ -19,8 +19,12 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
+### Uploader ###
+* Allows you to upload files to any bucket
+* Determine if files are public (default) or private
+* If configured, the shortcode <code>[dreamobjects]</code> will display a list of all your upload files
+
 ### To Do ###
-* Permit on-demand uploads/downloads
 * CDN (when available)
 
 ## Installation ##
@@ -35,12 +39,15 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 1. Chose when you want to backup
 1. Relax and let DreamHost do the work
 
+### Uploader ###
+1. Pick your bucket
+1. Upload a file to the bucket
 
 ## Frequently asked questions ##
 
 ### What does it do? ###
 
-DreamObjects allows you to store your data securely, redundantly and inexpensively. The backup portion of this plugin will create a backup of your site, zip it, and toss it up into your DreamObjects bucket in an automated manner.
+DreamObjects connects your WordPress site to your DreamObjects cloud storage, allowing you to upload files directly to your cloud, or automatically store backups.
 
 ### Do I have to use DreamHost? ###
 
@@ -54,26 +61,29 @@ You can schedule them daily, weekly, or monthly.
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
 
+### Who can upload files? ###
+
+Anyone who can upload media can upload files, so this generally covers Authors and up. Only the Administrators can set the upload bucket, however.
+
 ### How do I use the CLI? ###
 If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> installed on your server (which DreamHost servers do), you can use the following commands:
 
 <pre>wp dreamobjects backup</pre>
 
-While the schedule option shows, it doesn't fully work yet. Sorry.
 
 ### Do you work for DreamHost? ###
 
 Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
-## Screenshots ##
-###1. DreamObjects Private Key###
-![DreamObjects Private Key](http://s.wordpress.org/extend/plugins/dreamobjects-plugin/screenshot-1.png)
-
-###2. Your DreamObjects Public Key###
-![Your DreamObjects Public Key](http://s.wordpress.org/extend/plugins/dreamobjects-plugin/screenshot-2.png)
-
-
 ## Changelog ##
+
+### Version 1.2 ###
+
+Oct 11, 2012 by Ipstenu
+
+* Uploader added
+* Shortcode to list uploaded files added
+* Moved New Bucket code to the main settings page, where you can see your buckets now
 
 ### Version 1.1 ###
 <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
