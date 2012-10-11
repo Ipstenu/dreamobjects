@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,11 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 = Backup Features =
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
+
+= Uploader =
+* Allows you to upload files to any bucket
+* Determine if files are public (default) or private
+* If configured, the shortcode <code>[dreamobjects]</code> will display a list of all your upload files
 
 = To Do =
 * Permit on-demand uploads/downloads
@@ -35,12 +40,17 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 1. Chose when you want to backup
 1. Relax and let DreamHost do the work
 
+= Uploader =
+1. Pick your bucket
+1. Upload a file to the bucket
 
 == Frequently asked questions ==
 
 = What does it do? =
 
 DreamObjects allows you to store your data securely, redundantly and inexpensively. The backup portion of this plugin will create a backup of your site, zip it, and toss it up into your DreamObjects bucket in an automated manner.
+
+Also included is a uploader tool, which will let you upload files to any bucket.
 
 = Do I have to use DreamHost? =
 
@@ -54,16 +64,14 @@ You can schedule them daily, weekly, or monthly.
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
 
-= Why doesn't my backup run at the exact same time? =
+= Who can upload files? =
 
-This is a little technical, so bear with me. It runs based on wp_cron, which is triggered when someone visits your site. If the backup is set for 12:35pm, but no one visits your site until 4:10pm, then it's not going to run until then. There's nothing wrong with that!
+Anyone who can upload media can upload files, so this generally covers Authors and up. Only the Administrators can set the upload bucket, however.
 
 = How do I use the CLI? =
 If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> installed on your server (which DreamHost servers do), you can use the following commands:
 
 <pre>wp dreamobjects backup</pre>
-
-While the schedule option shows, it doesn't fully work yet. Sorry.
 
 = Do you work for DreamHost? =
 
@@ -72,17 +80,30 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 == Screenshots ==
 1. DreamObjects Private Key
 1. Your DreamObjects Public Key
+1. The Settings Page
+1. The backup page
+1. The uploader page
+1. The uploader page, as seen by Authors
 
 == Changelog ==
 
+= Version 1.2 =
+Oct 11, 2012 by Ipstenu
+
+* Uploader added
+* Shortcode to list uploaded files added
+* Moved New Bucket code to the main settings page, where you can see your buckets now
+
 = Version 1.1 =
-<em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
+Sept 27, 2012 by Ipstenu <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
 
 * Security (nonce, abspath, etc)
 * Better defines
 * wp-cli (still not 100%)
 
 = Version 1 =
+
+Sept 2012, by Ipstenu
 
 * Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
 * Upgraded <a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a> to latest version

@@ -34,6 +34,11 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
 	<h2><?php _e("Uploads", dreamobjects); ?></h2>
 	
 	<p><?php _e("Upload files directly to DreamObjects.", dreamobjects); ?></p>
+
+<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : // If the keys are set (standard check)
+
+    if (current_user_can('manage_options') ) {
+?>
 	<h3><?php _e('Settings', dreamobjects); ?></h3>
 	<form method="post" action="options.php">
 		<input type="hidden" name="action" value="update" />
@@ -42,8 +47,6 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
 
 <table class="form-table">
     <tbody>
-
-<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 <?php
 	$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 	$buckets = $s3->listBuckets();
@@ -67,17 +70,16 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
         <tr valign="top">
             <th scope="row"><label for="dh-do-uploadpub"><?php _e('Privacy', dreamobjects); ?></label></th>
             <td><input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php _e('Private Uploads', dreamobjects); ?>
-            <p class="description"><?php _e('Designate if your uploads are public or private. If checked, all uploads are private.', dreamobjects); ?></p>
-
-</td>
+            <p class="description"><?php _e('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p></td>
         </tr>
-        
-        <?php endif; // Show bucket list ?>
 </tbody>
 </table>
 
 <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
 	</form>
+<?php }
+
+endif; // Manage Options ?>
 
 <?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
 	<h3><?php _e('Upload File', dreamobjects); ?></h3>
@@ -97,14 +99,17 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
      </tbody>
 </table>       
 
-
 <div id="uploaders">
 <h3><?php _e('Available Files', dreamobjects); ?></h3>
 
-<p><?php _e('The files listed below are all linked using the public URL. If an image has been uploaded with \'private\' permissions, it will not display.', dreamobjects); ?></p>
-            
+<p><?php _e('The files listed below are all linked using the public URL. If an image has been uploaded with \'private\' permissions, it will not display for anyone, not even you.', dreamobjects); ?></p>
+
+<?php if (current_user_can('manage_options') ) {
+    ?><p><?php _e('To publically display the list of uploaded files, use the shortcode <code>[dreamobjects]</code> in a post or page. It will show the same list as you see below to any site visitor.', dreamobjects); ?></p><?php
+} ?>
+
     <ul><?php 
-        if ( get_option('dh-do-bucket') ) {
+        if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
             $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
             $bucket = get_option('dh-do-bucketup');
         		if (($uploads = $s3->getBucket( $bucket ) ) !== false) {
@@ -116,11 +121,8 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
                 }
 		} // if you picked a bucket
 					?>
-				    </ul>
-             </div></td>
-        
-        </tr>
-    </tbody>
-</table>
-<?php endif; // Show backup settings ?>
+     </ul>
+</div>
+<?php endif; // if bucketup ?>
+
 </div>

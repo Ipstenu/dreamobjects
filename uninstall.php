@@ -40,6 +40,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
                     unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
                     unregister_setting( 'dh-do-section', 'dreamobj_settings' );
                     unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-uploadview', 'dreamobj_settings' );
 	        }
 	        restore_current_blog();
 	    }
@@ -54,4 +55,5 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
         unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
         unregister_setting( 'dh-do-section', 'dreamobj_settings' );
         unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-uploadview', 'dreamobj_settings' );
 }

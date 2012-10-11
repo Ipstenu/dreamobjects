@@ -142,7 +142,6 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 					?>
 				    </ul>
 				</div>
-			</div>
 
 			<form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">
     <input type="hidden" name="action" value="backup" />
@@ -170,3 +169,6 @@ else:
 ?><p><?php _e("Please fill in your Access Key and Secret Key. You cannot use the rest of this plugin without those!", dreamobjects); ?></p><?php
 
 endif; // Show backup settings
+
+?>
+			</div>

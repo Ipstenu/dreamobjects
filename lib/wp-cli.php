@@ -58,12 +58,19 @@ class DreamObjects_Command extends WP_CLI_Command {
 	 */
 	public static function help() {
 		WP_CLI::line( <<<EOB
+usage: wp dreamobjects [backup]
+
+	backup    run a backup now
+EOB
+	);
+	}
+}
+
+/* Old
 usage: wp dreamobjects [backup|schedule]
 
 Available sub-commands:
 	backup    run a backup now
 	schedule  [daily|weekly|monthly|disable]
 EOB
-	);
-	}
-}
+*/

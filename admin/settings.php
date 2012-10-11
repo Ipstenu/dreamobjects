@@ -74,9 +74,12 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
         foreach ( $buckets as $b ) :
             echo "<li>".$b;
             if ( $b == get_option('dh-do-bucket') ) 
-                {_e(' - Used for Backups', dreamobjects);}
+                {$string = ' <strong>'. __(' - Used for Backups', dreamobjects).'</strong>';
+                echo $string;}
             elseif ( $b == get_option('dh-do-bucketup') ) 
-                {_e(' - Used for Uploads', dreamobjects);}
+                {$string = ' <strong>'. __(' - Used for Uploads', dreamobjects).'</strong>';
+                echo $string;
+                }
             else
                 {_e(' - Unused', dreamobjects);}
             echo "</li>";
@@ -91,7 +94,7 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
     <form  method="post" action="options.php">
         <input type="hidden" name="action" value="update" />
         <?php wp_nonce_field('update-options'); ?>
-        <input type="text" name="do-do-new-bucket" id="new-bucket" value="" />
+        <input type="text" name="do-do-new-bucket" id="new-bucket" value="<?php echo $_GET['do-do-new-bucket']; ?>" />
         <p class="submit"><input class='button-secondary' type='Submit' name='backup' value='<?php _e("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
     </form>
     <?php
@@ -101,4 +104,5 @@ else:
     ?><p><?php _e("Please fill in your Access Key and Secret Key. You cannot use the rest of this plugin without those!", dreamobjects); ?></p><?php
 
 endif; // Show backup settings
-
+?>
+			</div>

@@ -30,6 +30,12 @@ defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'
 define( 'PLUGIN_VERSION', '1.0-beta' ); 
 
 
+add_theme_support( 'hybrid-core-shortcodes' );
+
+// Shortcode
+if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
+    include_once( PLUGIN_DIR . '/lib/shortcode.php');
+}
 // The Help Screen
 function dreamhost_dreamobjects_plugin_help() {
 	include_once( PLUGIN_DIR . '/admin/help.php' );

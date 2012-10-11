@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Integrate your WordPress install with DreamHost DreamObjects
-Version: 1.1
+Version: 1.2
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -44,7 +44,18 @@ class DHDO {
 				wp_schedule_event(time(), $_POST['dh-do-schedule'], 'dh-do-backup'); 
 			}
 		}
-	
+
+		// CREATE NEW BUCKET
+        if ( isset($_POST['do-do-new-bucket']) && !empty($_POST['do-do-new-bucket']) ) {
+	       include_once 'lib/S3.php';
+	        $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
+	        $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
+	        if ($s3->putBucket($_POST['do-do-new-bucket']))
+	           {add_action('admin_notices', array('DHDO','newBucketMessage'));}
+	        else
+	           {add_action('admin_notices', array('DHDO','newBucketError'));}
+	       }
+       
         // UPLOADER
         if( isset($_POST['Submit']) && isset($_FILES['theFile']) && $_GET['page'] ==
 'dreamobjects-menu-uploader' ){
@@ -70,16 +81,19 @@ class DHDO {
 
         }
         
+        // Update messgae
 		if ( isset($_GET['settings-updated']) && ( $_GET['page'] ==
 'dreamobjects-menu' || $_GET['page'] ==
 'dreamobjects-menu-backup' || $_GET['page'] ==
 'dreamobjects-menu-uploader' ) ) add_action('admin_notices', array('DHDO','updateMessage'));
 
+        // Backup Noe
         if ( isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
             wp_schedule_single_event( time()+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDO','backupMessage'));
         }
         
+        // Backup Message
         if ( wp_next_scheduled( 'dh-do-backupnow' ) && ( $_GET['page'] ==
 'dreamobjects-menu' || $_GET['page'] ==
 'dreamobjects-menu-backup' ) ) {
@@ -106,6 +120,14 @@ class DHDO {
 		echo "<div id='message' class='error fade'><p><strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
 		}
 
+	function newBucketMessage() {
+		echo "<div id='message' class='updated fade'><p><strong>".__('Your new bucket has been created.', dreamobjects)."</strong></p></div>";
+		}
+		
+	function newBucketError() {
+		echo "<div id='message' class='error fade'><p><strong>".__('Error: Unable to create bucket (it may already exist and/or be owned by someone else)', dreamobjects)."</strong></p></div>";
+		}
+
 	// Return the filesystem path that the plugin lives in.
 	function getPath() {
 		return dirname(__FILE__) . '/';
@@ -123,7 +145,7 @@ class DHDO {
 		global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
 	    $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
 		$dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
-		$dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'manage_options', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
+		$dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
 		// $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));
 	}
 
