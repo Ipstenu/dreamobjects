@@ -27,7 +27,7 @@ define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
-define( 'PLUGIN_VERSION', '1.1' ); 
+define( 'PLUGIN_VERSION', '1.0-beta' ); 
 
 
 // The Help Screen
@@ -44,6 +44,7 @@ add_action('admin_menu', array('DHDO', 'add_settings_page'));
 
 add_action('dh-do-backup', array('DHDO', 'backup'));
 add_action('dh-do-backupnow', array('DHDO', 'backup'));
+add_action('dh-do-upload', array('DHDO', 'uploader'));
 
 add_action('init', array('DHDO', 'init'));
 add_action('admin_print_styles', array('DHDO', 'stylesheet'));

@@ -35,6 +35,8 @@ if (!defined('ABSPATH')) {
 			<div class="wrap">
 				<div id="icon-dreamobjects" class="icon32"></div>
 				<h2><?php _e("Backups", dreamobjects); ?></h2>
+
+<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 				
 				<p><?php _e("Configure your site for backups by selecting your bucket, what you want to backup, and when.", dreamobjects); ?></p>
 
@@ -47,7 +49,6 @@ if (!defined('ABSPATH')) {
 <table class="form-table">
     <tbody>
 
-<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 						<?php
 							$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 							$buckets = $s3->listBuckets();
@@ -61,15 +62,16 @@ if (!defined('ABSPATH')) {
 								<?php endforeach; ?>
 							</select>
             <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
-            <?php if ( get_option('dh-do-bucketcdn') && ( !get_option('dh-do-bucketcdn') || (get_option('dh-do-bucketcdn') != "XXXX") ) ) { 
-                $alreadyusing = sprintf(__('You are current using the bucket "%s" for CDN. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
+            <?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
+                $alreadyusing = sprintf(__('You are current using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
                 echo '<p class="description">' . $alreadyusing . '</p>';
             } ?>            
 
             </td>
         </tr>
 
-<?php if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) : ?>
+<?php  // BEGIN Show Bucket List 
+if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) :?>
 
         <tr valign="top">
             <th scope="row"><label for="dh-do-what"><?php _e('What to Backup', dreamobjects); ?></label></th>
@@ -106,11 +108,9 @@ if (!defined('ABSPATH')) {
             <p class="description"><?php echo $nextbackup; ?></p>
             <?php } // Show next scheduled ?>
         </td>
-        </tr>
-
-<?php endif; // Show backup settings ?>
-        
-<?php endif; // Show bucket list ?>
+        </tr>        
+<?php endif; 
+// ENDS how bucket list ?>
 </tbody>
 </table>
 
@@ -164,3 +164,9 @@ if (!defined('ABSPATH')) {
         } else {    
         ?><p><?php _e('Until you connect to a bucket, you can\'t see anything here.', dreamobjects); ?></p><?php
         }
+
+else:
+
+?><p><?php _e("Please fill in your Access Key and Secret Key. You cannot use the rest of this plugin without those!", dreamobjects); ?></p><?php
+
+endif; // Show backup settings

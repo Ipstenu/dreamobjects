@@ -60,5 +60,45 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
 </table>
 
 <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
-
 				</form>
+				
+<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
+
+    <h3><?php _e('Buckets', dreamobjects); ?></h3>
+    
+    <?php
+    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
+    $buckets = $s3->listBuckets();
+
+    if ( !empty($buckets) ) :
+        foreach ( $buckets as $b ) :
+            echo "<li>".$b;
+            if ( $b == get_option('dh-do-bucket') ) 
+                {_e(' - Used for Backups', dreamobjects);}
+            elseif ( $b == get_option('dh-do-bucketup') ) 
+                {_e(' - Used for Uploads', dreamobjects);}
+            else
+                {_e(' - Unused', dreamobjects);}
+            echo "</li>";
+        endforeach;
+    endif;
+    
+    ?>
+ 
+    <h3><?php _e('Create A New Bucket', dreamobjects); ?></h3>
+
+    <p><?php _e('If you need to create a new bucket, just enter the name and click Create Bucket. All buckets are created as private.', dreamobjects); ?></p>
+    <form  method="post" action="options.php">
+        <input type="hidden" name="action" value="update" />
+        <?php wp_nonce_field('update-options'); ?>
+        <input type="text" name="do-do-new-bucket" id="new-bucket" value="" />
+        <p class="submit"><input class='button-secondary' type='Submit' name='backup' value='<?php _e("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
+    </form>
+    <?php
+    
+else:
+
+    ?><p><?php _e("Please fill in your Access Key and Secret Key. You cannot use the rest of this plugin without those!", dreamobjects); ?></p><?php
+
+endif; // Show backup settings
+

@@ -88,6 +88,18 @@ if ($screen->id == 'dreamobjects_page_dreamobjects-menu-backup') {
       ));
 	}
 
-
+// Uploader Page
+if ($screen->id == 'dreamobjects_page_dreamobjects-menu-uploader') {
+    
+    // Base Help
+    $screen->add_help_tab( array(
+		'id'      => 'dreamobjects-menu-backup-base',
+		'title'   => __('Overview', 'dreamobjects'),
+		'content' => 
+		'<h3>' . __('DreamObjects Uploader', 'dreamobjects') .'</h3>' .
+		'<p>' . __( 'The basic uploader allows you to upload files via WordPress to your DreamObjects buckets. It is not as fast as using a client like CyberDuck, but is very useful in a pinch.', 'dreamobjects' ) . '</p>' .
+		'<p>' . __( 'By default all uploads are public. If you check the box for private uploads, they will become private and the provided URL will not work.', 'dreamobjects' ) . '</p>'
+      ));
+	}
 else
     return;

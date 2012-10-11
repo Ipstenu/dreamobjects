@@ -23,8 +23,35 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 
 // Deregister
 
-unregister_setting( 'dh-do-key', 'dreamobj_settings' );
-unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
-unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
-unregister_setting( 'dh-do-section', 'dreamobj_settings' );
-unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );
+	if (is_multisite()) {
+	    global $wpdb;
+	    $blogs = $wpdb->get_results("SELECT blog_id FROM {$wpdb->blogs}", ARRAY_A);
+	    if ($blogs) {
+	        foreach($blogs as $blog) {
+	            switch_to_blog($blog['blog_id']);
+
+                    unregister_setting( 'dh-do-backupsection', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-bucketcdn', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-bucketup', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-cdn', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-key', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-section', 'dreamobj_settings' );
+                    unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
+	        }
+	        restore_current_blog();
+	    }
+	} else {
+        unregister_setting( 'dh-do-backupsection', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-bucketcdn', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-bucketup', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-cdn', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-key', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-section', 'dreamobj_settings' );
+        unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
+}
