@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Integrate your WordPress install with DreamHost DreamObjects
-Version: 1.2
+Version: 2.0
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -206,6 +206,7 @@ class DHDO {
 		require_once('lib/S3.php');
 		require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
 
+		// Pull in data for what to backup
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
@@ -214,6 +215,7 @@ class DHDO {
 		$file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
 		$zip = new PclZip($file);
 		$backups = array();
+
 
 		// All me files!
 		if ( in_array('files', $sections) ) $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
@@ -234,6 +236,23 @@ class DHDO {
 			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date('Y-m-d-His') . '.zip');
 			@unlink($file);
 			@unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
+		}
+		
+		
+		// Cleanup Old Backups
+		if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
+		    $num_backups = get_option('dh-do-retain');
+		    
+		    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
+            if (($backups = $s3->getBucket(get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) ) ) !== false) {
+                krsort($backups);
+                $count = 0;
+                foreach ($backups as $object) {
+                    if ( ++$count > $num_backups ) {
+                        $s3->deleteObject(get_option('dh-do-bucket'), $object['name']);
+                    }    
+                }
+            }
 		}
 	}
 	

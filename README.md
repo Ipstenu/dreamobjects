@@ -3,7 +3,7 @@
 **Tags:** cloud, dreamhost, dreamobjects  
 **Requires at least:** 3.4  
 **Tested up to:** 3.5  
-**Stable tag:** 1.1  
+**Stable tag:** 2.0  
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -17,6 +17,7 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 
 ### Backup Features ###
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
+* Retains 15, 30, 60, or 90 backups at any given time (so as not to charge you the moon when you have a large site).
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
 ### Uploader ###
@@ -53,6 +54,10 @@ DreamObjects connects your WordPress site to your DreamObjects cloud storage, al
 
 Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so there's no assurance it'll work on other hosts.
 
+### Can I use this on a Windows Server? ###
+
+You can try, and let me know how it goes. I built this for DreamHost, so it has only been tested on Linux boxes.
+
 ### How often can I schedule backups? ###
 
 You can schedule them daily, weekly, or monthly.
@@ -60,6 +65,14 @@ You can schedule them daily, weekly, or monthly.
 ### Can I force a backup to run now? ###
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
+
+### How long does it keep backups for? ###
+
+Since you get charged on space used for DreamObjects, the default is to retain the last 15 backups. If you need more, you can save up to 90 backups, however that's rarely needed.
+
+### Can I keep them forever? ###
+
+If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you will be charged more money.
 
 ### Who can upload files? ###
 
@@ -70,15 +83,18 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 <pre>wp dreamobjects backup</pre>
 
-
 ### Do you work for DreamHost? ###
 
 Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
 ## Changelog ##
 
-### Version 1.2 ###
+### Version 2.0 ###
+Nov 1, 2012 by Ipstenu
 
+* Backup retention - chose your own adventure.
+
+### Version 1.2 ###
 Oct 11, 2012 by Ipstenu
 
 * Uploader added
@@ -86,17 +102,20 @@ Oct 11, 2012 by Ipstenu
 * Moved New Bucket code to the main settings page, where you can see your buckets now
 
 ### Version 1.1 ###
-<em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
+Sept 27, 2012 by Ipstenu 
 
+* <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
 * Security (nonce, abspath, etc)
 * Better defines
 * wp-cli (still not 100%)
 
 ### Version 1 ###
 
+Sept 2012, by Ipstenu
+
 * Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
 * Upgraded <a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a> to latest version
 * Pretified, consolidated, organized, and formatted.
-* Saving files to upgrade (vs it's own folder)
+* Saving temp files to upgrade (vs it's own folder)
 
 ## Upgrade notice ##

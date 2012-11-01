@@ -84,7 +84,8 @@ if ($screen->id == 'dreamobjects_page_dreamobjects-menu-backup') {
 		'content' => 
 		'<h3>' . __('DreamObjects Backups', 'dreamobjects') .'</h3>' .
 		'<p>' . __( 'Backing up your WordPress site to DreamObjects will allow you to have a safe and secure backup of your site. This is useful to run before you upgrade WordPress, or make big changes.', 'dreamobjects' ) . '</p>' .
-		'<p>' . __( 'Backups can be scheduled to run daily, weekly or monthly. You also have the option to run a backup right now.', 'dreamobjects' ) . '</p>'
+		'<p>' . __( 'Backups can be scheduled to run daily, weekly or monthly. You also have the option to run a backup right now.', 'dreamobjects' ) . '</p>' .
+		'<p>' . __( 'The default backup retention is 15 backups, however you can change this t0 30, 60, 90, or all backups (where \'all\' io all backups, forever and ever). Keep in mind you will be charged for the space you use, so chose wisely.', 'dreamobjects' ) . '</p>'
       ));
 	}
 
