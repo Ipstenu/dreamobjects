@@ -1,0 +1,473 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DreamObjects\n"
+"POT-Creation-Date: 2012-11-01 12:22-0800\n"
+"PO-Revision-Date: 2012-11-01 12:22-0800\n"
+"Last-Translator: \n"
+"Language-Team: DreamHost\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../dreamobjects.php:106 ../admin/messages.php:26
+msgid "Options Updated!"
+msgstr ""
+
+#: ../dreamobjects.php:111 ../admin/messages.php:31
+#, php-format
+msgid ""
+"You have an ad-hoc backup scheduled for today at %s (time based on WP time/"
+"date settings). Do not hit refresh!"
+msgstr ""
+
+#: ../dreamobjects.php:116 ../admin/messages.php:36
+msgid "Your file was successfully uploaded."
+msgstr ""
+
+#: ../dreamobjects.php:120 ../admin/messages.php:40
+msgid "Error: Something went wrong while uploading your file."
+msgstr ""
+
+#: ../dreamobjects.php:124
+msgid "Your new bucket has been created."
+msgstr ""
+
+#: ../dreamobjects.php:128
+msgid ""
+"Error: Unable to create bucket (it may already exist and/or be owned by "
+"someone else)"
+msgstr ""
+
+#: ../dreamobjects.php:146
+msgid "DreamObjects Settings"
+msgstr ""
+
+#: ../dreamobjects.php:146 ../admin/settings.php:37
+msgid "DreamObjects"
+msgstr ""
+
+#: ../dreamobjects.php:147 ../admin/backups.php:37
+msgid "Backups"
+msgstr ""
+
+#: ../dreamobjects.php:148
+msgid "Uploader"
+msgstr ""
+
+#: ../admin/backups.php:41
+msgid ""
+"Configure your site for backups by selecting your bucket, what you want to "
+"backup, and when."
+msgstr ""
+
+#: ../admin/backups.php:43 ../admin/cdn.php:45 ../admin/uploader.php:42
+msgid "Settings"
+msgstr ""
+
+#: ../admin/backups.php:57 ../admin/cdn.php:60 ../admin/uploader.php:55
+msgid "Bucket Name"
+msgstr ""
+
+#: ../admin/backups.php:64 ../admin/cdn.php:67
+msgid "Select from pre-existing buckets."
+msgstr ""
+
+#: ../admin/backups.php:66
+#, php-format
+msgid ""
+"You are current using the bucket \"%s\" for Uploads. While you can reuse "
+"this bucket, it would be best not to."
+msgstr ""
+
+#: ../admin/backups.php:77
+msgid "What to Backup"
+msgstr ""
+
+#: ../admin/backups.php:81
+msgid "All Files"
+msgstr ""
+
+#: ../admin/backups.php:85
+msgid "Database"
+msgstr ""
+
+#: ../admin/backups.php:88 ../admin/cdn.php:88
+msgid "You can select portions of your site to backup."
+msgstr ""
+
+#: ../admin/backups.php:93
+msgid "Schedule"
+msgstr ""
+
+#: ../admin/backups.php:102
+#, php-format
+msgid "Next scheduled backup is at %s"
+msgstr ""
+
+#: ../admin/backups.php:104
+msgid "How often do you want to backup your files? Daily is recommended."
+msgstr ""
+
+#: ../admin/backups.php:111
+msgid "Backup Retention"
+msgstr ""
+
+#: ../admin/backups.php:118
+msgid "How many many backups do you want to keep? 30 is recommended."
+msgstr ""
+
+#: ../admin/backups.php:119
+msgid "NOTICE!"
+msgstr ""
+
+#: ../admin/backups.php:119
+msgid ""
+"DreamObjects charges you based on diskspace used. Setting to 'All' will "
+"retain your backups forwever, however this can cost you a large sum of money "
+"over time. Please use cautiously!"
+msgstr ""
+
+#: ../admin/backups.php:133 ../admin/cdn.php:98 ../admin/settings.php:62
+#: ../admin/uploader.php:78
+msgid "Update Options"
+msgstr ""
+
+#: ../admin/backups.php:141
+#, php-format
+msgid "Latest %s Backups"
+msgstr ""
+
+#: ../admin/backups.php:144
+msgid ""
+"All backups can be downloaded from this page without logging in to "
+"DreamObjects."
+msgstr ""
+
+#: ../admin/backups.php:155
+#, php-format
+msgid "WordPress Backup from %s"
+msgstr ""
+
+#: ../admin/backups.php:170
+msgid "Backup ASAP!"
+msgstr ""
+
+#: ../admin/backups.php:171
+msgid ""
+"Oh you really want to do a backup right now? Schedule your backup to start "
+"in a minute. Be careful! This may take a while, and slow your site down, if "
+"you have a big site."
+msgstr ""
+
+#: ../admin/backups.php:174
+#, php-format
+msgid "Keep in mind, your next scheduled backup is at %s"
+msgstr ""
+
+#: ../admin/backups.php:181
+msgid "Backup ASAP"
+msgstr ""
+
+#: ../admin/backups.php:185
+msgid "Until you connect to a bucket, you can't see anything here."
+msgstr ""
+
+#: ../admin/backups.php:190 ../admin/settings.php:104
+msgid ""
+"Please fill in your Access Key and Secret Key. You cannot use the rest of "
+"this plugin without those!"
+msgstr ""
+
+#: ../admin/cdn.php:39
+msgid "CDN"
+msgstr ""
+
+#: ../admin/cdn.php:41
+msgid "Configure your site to use DreamObjects for CDN."
+msgstr ""
+
+#: ../admin/cdn.php:69 ../admin/uploader.php:64
+#, php-format
+msgid ""
+"You are already using the bucket \"%s\" for backups. While you can reuse "
+"this bucket, it would be best not to."
+msgstr ""
+
+#: ../admin/cdn.php:77
+msgid "What to move to CDN"
+msgstr ""
+
+#: ../admin/cdn.php:81
+msgid "Theme Files"
+msgstr ""
+
+#: ../admin/cdn.php:85
+msgid "Images"
+msgstr ""
+
+#: ../admin/help.php:35 ../admin/help.php:46 ../admin/help.php:83
+#: ../admin/help.php:98
+msgid "Overview"
+msgstr ""
+
+#: ../admin/help.php:37
+msgid "Welcome to DreamObjects"
+msgstr ""
+
+#: ../admin/help.php:38 ../admin/settings.php:44
+msgid ""
+"DreamObjects is an inexpensive, scalable object storage service that was "
+"developed from the ground up to provide a reliable, flexible cloud storage "
+"solution for entrepreneurs and developers. It provides a perfect, scalable "
+"storage solution for your WordPress site."
+msgstr ""
+
+#: ../admin/help.php:39
+msgid ""
+"This plugin was built on and for DreamHost Servers. While it may work on "
+"other webhosts, provided of course you have DreamObjects, it does so at your "
+"own risk."
+msgstr ""
+
+#: ../admin/help.php:40
+msgid ""
+"If you haven't already signed up for DreamObjects, you won't find this "
+"plugin of any use at all."
+msgstr ""
+
+#: ../admin/help.php:43
+msgid "For more information:"
+msgstr ""
+
+#: ../admin/help.php:45
+msgid "DreamObjects Homepage"
+msgstr ""
+
+#: ../admin/help.php:47
+msgid "API"
+msgstr ""
+
+#: ../admin/help.php:53 ../admin/help.php:55
+msgid "Setup"
+msgstr ""
+
+#: ../admin/help.php:57
+msgid ""
+"Sign up for <a href=\"http://dreamhost.com/cloud/dreamobjects/"
+"\">DreamObjects</a>"
+msgstr ""
+
+#: ../admin/help.php:58
+msgid "Install and Activate the plugin"
+msgstr ""
+
+#: ../admin/help.php:59
+msgid "Fill in your Key and Secret Key"
+msgstr ""
+
+#: ../admin/help.php:66 ../admin/help.php:68
+msgid "Terminology"
+msgstr ""
+
+#: ../admin/help.php:69
+msgid "Object: "
+msgstr ""
+
+#: ../admin/help.php:69
+msgid "Files uploaded to DreamObjects."
+msgstr ""
+
+#: ../admin/help.php:70
+msgid "Bucket: "
+msgstr ""
+
+#: ../admin/help.php:70
+msgid ""
+"A mechanism for grouping objects, similar to a folder. One key distinction "
+"is that bucket names must be unique, like a domain name, since they are used "
+"to create public URLs to stored objects."
+msgstr ""
+
+#: ../admin/help.php:71
+msgid "Access Key: "
+msgstr ""
+
+#: ../admin/help.php:71
+msgid ""
+"A similar concept to a username for DreamObjects users. One or more can be "
+"created for each user if desired. Each access key will allow access to all "
+"of the buckets and their contents for a user. You will need this key to "
+"connect."
+msgstr ""
+
+#: ../admin/help.php:72
+msgid "Secret Key: "
+msgstr ""
+
+#: ../admin/help.php:72
+msgid ""
+"A similar concept to a password for DreamObjects users. A secret key is "
+"automatically generated for each access key and cannot be changed. Never "
+"give anyone your secret key."
+msgstr ""
+
+#: ../admin/help.php:73
+msgid "Key Pair: "
+msgstr ""
+
+#: ../admin/help.php:73
+msgid "A singular term used to describe both an access key and its secret key."
+msgstr ""
+
+#: ../admin/help.php:85
+msgid "DreamObjects Backups"
+msgstr ""
+
+#: ../admin/help.php:86
+msgid ""
+"Backing up your WordPress site to DreamObjects will allow you to have a safe "
+"and secure backup of your site. This is useful to run before you upgrade "
+"WordPress, or make big changes."
+msgstr ""
+
+#: ../admin/help.php:87
+msgid ""
+"Backups can be scheduled to run daily, weekly or monthly. You also have the "
+"option to run a backup right now."
+msgstr ""
+
+#: ../admin/help.php:88
+msgid ""
+"The default backup retention is 15 backups, however you can change this t0 "
+"30, 60, 90, or all backups (where 'all' io all backups, forever and ever). "
+"Keep in mind you will be charged for the space you use, so chose wisely."
+msgstr ""
+
+#: ../admin/help.php:100
+msgid "DreamObjects Uploader"
+msgstr ""
+
+#: ../admin/help.php:101
+msgid ""
+"The basic uploader allows you to upload files via WordPress to your "
+"DreamObjects buckets. It is not as fast as using a client like CyberDuck, "
+"but is very useful in a pinch."
+msgstr ""
+
+#: ../admin/help.php:102
+msgid ""
+"By default all uploads are public. If the admin has checked the box for "
+"private uploads, they will become private and the provided URL will not work."
+msgstr ""
+
+#: ../admin/settings.php:45
+msgid ""
+"Once you've configured your keypair here, you'll be able to use the features "
+"of this plugin."
+msgstr ""
+
+#: ../admin/settings.php:49
+msgid "DreamObject Settings"
+msgstr ""
+
+#: ../admin/settings.php:51
+msgid "Access Key"
+msgstr ""
+
+#: ../admin/settings.php:56
+msgid "Secret Key"
+msgstr ""
+
+#: ../admin/settings.php:67
+msgid "Buckets"
+msgstr ""
+
+#: ../admin/settings.php:77
+msgid " - Used for Backups"
+msgstr ""
+
+#: ../admin/settings.php:80
+msgid " - Used for Uploads"
+msgstr ""
+
+#: ../admin/settings.php:84
+msgid " - Unused"
+msgstr ""
+
+#: ../admin/settings.php:91
+msgid "Create A New Bucket"
+msgstr ""
+
+#: ../admin/settings.php:93
+msgid ""
+"If you need to create a new bucket, just enter the name and click Create "
+"Bucket. All buckets are created as private."
+msgstr ""
+
+#: ../admin/settings.php:98
+msgid "Create Bucket"
+msgstr ""
+
+#: ../admin/uploader.php:34
+msgid "Uploads"
+msgstr ""
+
+#: ../admin/uploader.php:36
+msgid "Upload files directly to DreamObjects."
+msgstr ""
+
+#: ../admin/uploader.php:62
+msgid "Select from your pre-existing buckets."
+msgstr ""
+
+#: ../admin/uploader.php:71
+msgid "Privacy"
+msgstr ""
+
+#: ../admin/uploader.php:72
+msgid "Private Uploads"
+msgstr ""
+
+#: ../admin/uploader.php:73
+msgid ""
+"Designate if your uploads are public or private. If checked, all uploads are "
+"private. Be advised, the links to your uploads below will not work "
+"publically if you chose this."
+msgstr ""
+
+#: ../admin/uploader.php:85
+msgid "Upload File"
+msgstr ""
+
+#: ../admin/uploader.php:92
+msgid ""
+"Please select a file by clicking the 'Browse' button and press 'Upload' to "
+"start uploading your file."
+msgstr ""
+
+#: ../admin/uploader.php:103
+msgid "Available Files"
+msgstr ""
+
+#: ../admin/uploader.php:105
+msgid ""
+"The files listed below are all linked using the public URL. If an image has "
+"been uploaded with 'private' permissions, it will not display for anyone, "
+"not even you."
+msgstr ""
+
+#: ../admin/uploader.php:108
+msgid ""
+"To publically display the list of uploaded files, use the shortcode <code>"
+"[dreamobjects]</code> in a post or page. It will show the same list as you "
+"see below to any site visitor."
+msgstr ""
+
+#: ../admin/uploader.php:118
+#, php-format
+msgid "Uploaded on %s"
+msgstr ""

@@ -87,7 +87,7 @@ class DHDO {
 'dreamobjects-menu-backup' || $_GET['page'] ==
 'dreamobjects-menu-uploader' ) ) add_action('admin_notices', array('DHDO','updateMessage'));
 
-        // Backup Noe
+        // Backup Now
         if ( isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
             wp_schedule_single_event( time()+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDO','backupMessage'));

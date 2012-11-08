@@ -41,7 +41,7 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
 					<?php wp_nonce_field('update-options'); ?>
 					<input type="hidden" name="page_options" value="dh-do-key,dh-do-secretkey" />
 
-					<p><?php _e('DreamObjects™ is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
+					<p><?php _e('DreamObjects is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
 					<p><?php _e('Once you\'ve configured your keypair here, you\'ll be able to use the features of this plugin.', dreamobjects); ?></p>
 
 <table class="form-table">
