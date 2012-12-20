@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
-
+    
 */
 
 if (!defined('ABSPATH')) {
@@ -29,34 +29,57 @@ function dreamobjects_add_shortcodes() {
 }
 
 
-// [dreamobjects show="uploads|backups" role="rolename"]
+// [dreamobjects folder="folder" prefix="prefix"]
 function dreamobjects_func( $atts ) {
 	extract( shortcode_atts( array(
-		'role' => 'author',
-		'show' => 'uploads',
+		'folder' => 'XXXX', // $folder
+		'prefix' => 'XXXX', // $prefix
 	), $atts ) );
 
-	//return "foo = {$foo}";
+	// Prefix - http://ceph.com/docs/master/radosgw/s3/bucketops/
+	$nobucket = "<p><strong>".__('Error!', dreamobjects)."</strong> ".__('DreamObjects Bucket not available.', dreamobjects)."</p>";
+/*
+	if ( is_null({$prefix}) ) {
 
+		if folder is empty AND options are not set then use prefix
+		
+		if folder is set, use that
+		
+		if folder is empty and options are set, use that
+		
+		if nothing is set OR if both prefix and folder are set, fail.
+*/
+	if ( $prefix = "XXXX") {
 
-//if ($show = 'uploads') {
+	    if ( $folder != "XXXX") {
+	    	$bucket = $folder; 
+	    }
+	    elseif ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
+	    	$bucket = get_option('dh-do-bucketup');
+	    }
+	    else {
+	    	return $nobucket;
+	    }
 
-    if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
-        include_once( PLUGIN_DIR. '/lib/S3.php');
+	    include_once( PLUGIN_DIR. '/lib/S3.php');	
+	    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
 
-        $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
-        $bucket = get_option('dh-do-bucketup');
-        
-        $return = '<ul>';
-            if (($uploads = $s3->getBucket( $bucket ) ) !== false) {
-                krsort($uploads);
-                foreach ($uploads as $object) {
-                $return .= "<li><a href=\"https://objects.dreamhost.com/".$bucket."/".$object['name']."\">".$object['name']."</a></li>";
-                }
-            }
-        $return .= '</ul>';       
+	    $return = '<ul>';
+	        if (($uploads = $s3->getBucket( $bucket ) ) !== false) {
+	            krsort($uploads);
+	            foreach ($uploads as $object) {
+	            $return .= "<li><a href=\"https://objects.dreamhost.com/".$bucket."/".$object['name']."\">".$object['name']."</a></li>";
+	            }
+	        }
+	    $return .= '</ul>';       
+	    return $return;
+	} elseif ( $prefix != "XXXX") {
+	
+		// Do Prefix Checks here
+		return "This is a temp file"
+		
+	} else {
+	    return $nobucket;
+	}
 
-        return $return;
-    } 
-// }
 }

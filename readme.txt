@@ -83,6 +83,12 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 <pre>wp dreamobjects backup</pre>
 
+= Where's the Database in the zip? =
+
+I admit, it's in a weird spot: /wp-content/upgrade/dreamobject-db-backup.sql
+
+Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future.
+
 = Do you work for DreamHost? =
 
 Yes, but this isn't an official DreamHost plugin at this time. It just works.
