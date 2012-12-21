@@ -108,7 +108,7 @@ class DHDO {
 
 	function backupMessage() {
 	   $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
-	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings). Do not hit refresh!', dreamobjects), date('h:i a', $timestamp) );
+	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings). Do not hit refresh!', dreamobjects), date_i18n('h:i a', $timestamp) );
 	   echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
 		}
 
@@ -233,7 +233,7 @@ class DHDO {
 			
 			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 			$upload = $s3->inputFile($file);
-			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date('Y-m-d-His') . '.zip');
+			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date_i18n('Y-m-d-His') . '.zip');
 			@unlink($file);
 			@unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
 		}

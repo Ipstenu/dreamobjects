@@ -99,7 +99,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 				</select>
 				<?php
                   $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
-                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) );
+                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), get_date_from_gmt( date_i18n('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) );
             ?>
             <p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
             <?php if ( get_option('dh-do-schedule') != "disabled" ) {?>
@@ -152,7 +152,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
         krsort($backups);
         $count = 0;
         foreach ($backups as $object) {
-            $object['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), date('F j, Y h:i a', $object['time']) );
+            $object['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), date_i18n('F j, Y h:i a', $object['time']) );
             $object = apply_filters('dh-do-backup-item', $object);
 								
 			if ( ($num_backups != 'WP') && ( ++$count > $num_backups) ) break;
@@ -171,7 +171,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
     <p><?php _e('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site.', dreamobjects); ?></p>
 
     <?php $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
-            $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', dreamobjects), date('F j, Y h:i a', $timestamp) ); 
+            $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', dreamobjects), date_i18n('F j, Y h:i a', $timestamp) ); 
             ?>
     <?php if ( get_option('dh-do-schedule') != "disabled" ) {?>
     <p><?php echo $nextbackup; ?></p>
