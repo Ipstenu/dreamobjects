@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 2.0
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -102,6 +102,12 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= Version 2.1 =
+Dec 21, 2012 by Ipstenu
+
+* Made a change to how times are generated (using current_time correctly, vs time)
+* Provided this isn't the end of the world...
 
 = Version 2.0 =
 Nov 1, 2012 by Ipstenu

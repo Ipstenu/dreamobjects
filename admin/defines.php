@@ -21,9 +21,17 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+if (!defined('dreamobjects')) {
+  define('dreamobjects', 'dreamobjects');
+}
+
 define( 'DHDO', true);
-define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
-define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+if (!defined('WP_CONTENT_URL')) {
+	define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
+}
+if (!defined('WP_CONTENT_DIR')) {
+	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+}
 
 defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
