@@ -27,6 +27,8 @@ DreamObjects™ is an inexpensive, scalable object storage service that was deve
 
 = To Do =
 * CDN (when available)
+* Better <code>[dreamobjects]</code> support for folders
+* Logging
 
 == Installation ==
 
@@ -106,8 +108,8 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 = Version 2.1 =
 Dec 21, 2012 by Ipstenu
 
-* Made a change to how times are generated (using current_time correctly, vs time)
-* Changed date() to date_i18n() (thank you @Rarst!)
+* Made a change to how times are generated using current_time correctly, vs time (props Regan, a DreamHost customer, for letting me log into your site!)
+* Changed date() to date_i18n() (thank you @Rarst for your 'tsk' - it lights a fire)
 * Cleaning up debug errors
 
 = Version 2.0 =
