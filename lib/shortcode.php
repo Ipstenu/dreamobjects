@@ -76,7 +76,7 @@ function dreamobjects_func( $atts ) {
 	} elseif ( $prefix != "XXXX") {
 	
 		// Do Prefix Checks here
-		return "This is a temp file"
+		return "This is a temp file";
 		
 	} else {
 	    return $nobucket;

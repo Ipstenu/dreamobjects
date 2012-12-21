@@ -99,8 +99,8 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 Dec 21, 2012 by Ipstenu
 
 * Made a change to how times are generated (using current_time correctly, vs time)
+* Changed date() to date_i18n() (thank you @Rarst!)
 * Provided this isn't the end of the world...
-
 
 ### Version 2.0 ###
 Nov 1, 2012 by Ipstenu

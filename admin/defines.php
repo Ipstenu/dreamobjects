@@ -63,7 +63,8 @@ add_action('dh-do-upload', array('DHDO', 'uploader'));
 add_action('init', array('DHDO', 'init'));
 add_action('admin_print_styles', array('DHDO', 'stylesheet'));
 
-if ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) {
+
+if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
 	wp_enqueue_script('jquery');
 }
 
