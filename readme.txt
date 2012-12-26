@@ -111,6 +111,7 @@ Dec 21, 2012 by Ipstenu
 * Made a change to how times are generated using current_time correctly, vs time (props Regan, a DreamHost customer, for letting me log into your site!)
 * Changed date() to date_i18n() (thank you @Rarst for your 'tsk' - it lights a fire)
 * Cleaning up debug errors
+* Fixed uninstall
 
 = Version 2.0 =
 Nov 1, 2012 by Ipstenu

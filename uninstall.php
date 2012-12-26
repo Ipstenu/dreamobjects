@@ -30,30 +30,30 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	        foreach($blogs as $blog) {
 	            switch_to_blog($blog['blog_id']);
 
-                    unregister_setting( 'dh-do-backupsection', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-bucketcdn', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-bucketup', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-cdn', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-key', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-section', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
-                    unregister_setting( 'dh-do-uploadview', 'dreamobj_settings' );
+                    delete_option( 'dh-do-backupsection' );
+                    delete_option( 'dh-do-bucket' );
+                    delete_option( 'dh-do-bucketcdn' );
+                    delete_option( 'dh-do-bucketup' );
+                    delete_option( 'dh-do-cdn' );
+                    delete_option( 'dh-do-key' );
+                    delete_option( 'dh-do-schedule' );
+                    delete_option( 'dh-do-secretkey' );
+                    delete_option( 'dh-do-section' );
+                    delete_option( 'dh-do-uploader' );
+                    delete_option( 'dh-do-uploadview' );
 	        }
 	        restore_current_blog();
 	    }
 	} else {
-        unregister_setting( 'dh-do-backupsection', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-bucket', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-bucketcdn', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-bucketup', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-cdn', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-key', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-schedule', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-secretkey', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-section', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-uploader', 'dreamobj_settings' );
-        unregister_setting( 'dh-do-uploadview', 'dreamobj_settings' );
+        delete_option( 'dh-do-backupsection' );
+        delete_option( 'dh-do-bucket' );
+        delete_option( 'dh-do-bucketcdn' );
+        delete_option( 'dh-do-bucketup' );
+        delete_option( 'dh-do-cdn' );
+        delete_option( 'dh-do-key' );
+        delete_option( 'dh-do-schedule' );
+        delete_option( 'dh-do-secretkey' );
+        delete_option( 'dh-do-section' );
+        delete_option( 'dh-do-uploader' );
+        delete_option( 'dh-do-uploadview' );
 }

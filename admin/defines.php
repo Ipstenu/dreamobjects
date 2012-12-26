@@ -21,22 +21,12 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-if (!defined('dreamobjects')) {
-  define('dreamobjects', 'dreamobjects');
-}
-
 define( 'DHDO', true);
-if (!defined('WP_CONTENT_URL')) {
-	define( 'WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
-}
-if (!defined('WP_CONTENT_DIR')) {
-	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-}
-
 defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
+define( 'PLUGIN_VERSION', '2.1' ); 
 
-define( 'PLUGIN_VERSION', '1.0-beta' ); 
-
+if (!defined('dreamobjects'))
+	{define('dreamobjects','dreamobjects');}
 
 add_theme_support( 'hybrid-core-shortcodes' );
 
@@ -62,7 +52,6 @@ add_action('dh-do-upload', array('DHDO', 'uploader'));
 
 add_action('init', array('DHDO', 'init'));
 add_action('admin_print_styles', array('DHDO', 'stylesheet'));
-
 
 if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
 	wp_enqueue_script('jquery');
