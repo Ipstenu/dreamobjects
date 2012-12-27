@@ -233,7 +233,7 @@ class DHDO {
 			
 			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 			$upload = $s3->inputFile($file);
-			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date_i18n('Y-m-d-His') . '.zip');
+			$s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip');
 			@unlink($file);
 			@unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
 		}

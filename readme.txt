@@ -105,6 +105,11 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
 == Changelog ==
 
+= Version 2.2 =
+Dec 26, 2012 by Ipstenu
+
+* Fixed date/time issue with backups displaying wrong (did not impact functionality, just bad date conversion)
+
 = Version 2.1 =
 Dec 21, 2012 by Ipstenu
 

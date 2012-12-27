@@ -63,7 +63,7 @@ if (!defined('ABSPATH')) {
 							</select>
             <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
             <?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
-                $alreadyusing = sprintf(__('You are current using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
+                $alreadyusing = sprintf(__('You are currently using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
                 echo '<p class="description">' . $alreadyusing . '</p>';
             } ?>            
 
@@ -99,7 +99,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 				</select>
 				<?php
                   $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
-                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), get_date_from_gmt( date_i18n('Y-m-d H:i:s', $timestamp) , 'F j, Y h:i a' ) );
+                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), date_i18n('F j, Y h:i a', $timestamp) );
             ?>
             <p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
             <?php if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) { ?>
@@ -152,7 +152,9 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
         krsort($backups);
         $count = 0;
         foreach ($backups as $object) {
-            $object['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), date_i18n('F j, Y h:i a', $object['time']) );
+            $offset = get_option( 'gmt_offset' ) * 60 * 60; // Time offset in seconds
+            $ziptime = $object['time'] + $offset; // Converting to local time
+            $object['label'] = sprintf(__('WordPress Backup from %s', dreamobjects), date_i18n('F j, Y h:i a', $ziptime) );
             $object = apply_filters('dh-do-backup-item', $object);
 								
 			if ( ($num_backups != 'WP') && ( ++$count > $num_backups) ) break;
