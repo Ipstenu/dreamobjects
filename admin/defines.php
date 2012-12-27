@@ -21,14 +21,20 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+// Set up defaults
 define( 'DHDO', true);
 defined('PLUGIN_DIR') || define('PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
-define( 'PLUGIN_VERSION', '2.1' ); 
+define( 'PLUGIN_VERSION', '2.2' ); 
 
-if (!defined('dreamobjects'))
-	{define('dreamobjects','dreamobjects');}
-
-add_theme_support( 'hybrid-core-shortcodes' );
+if ( !defined('dreamobjects')) {define('dreamobjects','dreamobjects');} // Translation
+if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
+if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
+if ( !get_option('dh-do-bucketup')) {update_option( 'dh-do-bucketup', 'XXXX' );}
+if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}
+if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled' );}
+if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
+if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '15' );}
+if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'no' );}
 
 // Shortcode
 if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
@@ -45,11 +51,9 @@ add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
 
 // Etc
 add_action('admin_menu', array('DHDO', 'add_settings_page'));
-
 add_action('dh-do-backup', array('DHDO', 'backup'));
 add_action('dh-do-backupnow', array('DHDO', 'backup'));
 add_action('dh-do-upload', array('DHDO', 'uploader'));
-
 add_action('init', array('DHDO', 'init'));
 add_action('admin_print_styles', array('DHDO', 'stylesheet'));
 

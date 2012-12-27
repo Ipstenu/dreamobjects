@@ -95,8 +95,27 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
         <input type="hidden" name="action" value="update" />
         <?php wp_nonce_field('update-options'); ?>
         <input type="text" name="do-do-new-bucket" id="new-bucket" value="<?php echo $_GET['do-do-new-bucket']; ?>" />
-        <p class="submit"><input class='button-secondary' type='Submit' name='backup' value='<?php _e("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
+        <p class="submit"><input class='button-secondary' type='Submit' name='newbucket' value='<?php _e("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
     </form>
+<!--
+    <h3><?php _e('Logging', dreamobjects); ?></h3>
+
+    <form  method="post" action="options.php">
+        <?php wp_nonce_field('update-options'); ?>
+        <p class="description"><label for="dh-do-logging"><input <?php if ( get_option('dh-do-logging') == 'yes' ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-logging" value="yes" id="dh-do-logging" /></label> <?php _e('Having issues with backups? Turn on logging.', dreamobjects); ?></p>
+
+        <input type="hidden" name="action" value="update" />
+
+        <p class="submit"><input class='button-secondary' type='Submit' name='logging' value='<?php _e("Enable Logging", dreamobjects); ?>' id='submitbutton' /></p>
+    </form>
+
+    <?php if ( get_option('dh-do-logging') == 'yes') {
+        
+        // Show Log
+        
+    }
+    ?>
+-->
     <?php
     
 else:

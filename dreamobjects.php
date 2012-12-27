@@ -255,10 +255,5 @@ class DHDO {
             }
 		}
 	}
-	
-	function cron_schedules($schedules) {
-		$schedules['weekly'] = array('interval'=>604800, 'display' => 'Once Weekly');
-		$schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');
-		return $schedules;
-	}
+
 }
