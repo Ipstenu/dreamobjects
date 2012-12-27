@@ -91,9 +91,19 @@ I admit, it's in a weird spot: /wp-content/upgrade/dreamobject-db-backup.sql
 
 Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future.
 
+= What's this S3 error? =
+
+The following error means your keys aren't correct, and the connection to DreamObjects is failing. Make sure the keys have access to that bucket.
+
+<code>
+"warning: S3::listBuckets(): [403] 
+Unexpected HTTP status in /wp-content/plugins/dreamobjects/lib/S3.php on line 249"
+</code>
+
 = Do you work for DreamHost? =
 
 Yes, but this isn't an official DreamHost plugin at this time. It just works.
+
 
 == Screenshots ==
 1. DreamObjects Private Key
