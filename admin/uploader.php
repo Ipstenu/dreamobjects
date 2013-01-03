@@ -93,6 +93,7 @@ endif; // Manage Options ?>
            	<form action="" method="post" enctype="multipart/form-data" name="uploader" id="uploader">
               <input name="theFile" type="file" />
               <input name="Submit" type="submit" value="Upload">
+              <?php wp_nonce_field('dhdo-uploader'); ?>
         	</form>
         	</td>
         </tr>

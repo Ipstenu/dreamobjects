@@ -148,7 +148,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 					<?php 
 						if ( get_option('dh-do-bucket') ) {
 						    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
-    if (($backups = $s3->getBucket(get_option('dh-do-bucket'), next(explode('//', get_bloginfo('siteurl'))) ) ) !== false) {
+    if (($backups = $s3->getBucket(get_option('dh-do-bucket'), next(explode('//', home_url())) ) ) !== false) {
         krsort($backups);
         $count = 0;
         foreach ($backups as $object) {
@@ -168,9 +168,9 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 
 			<form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">
     <input type="hidden" name="action" value="backup" />
-    <?php wp_nonce_field('backup-now'); ?>
+    <?php wp_nonce_field('dhdo-backupnow'); ?>
     <h3><?php _e('Backup ASAP!', dreamobjects); ?></h3>
-    <p><?php _e('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site.', dreamobjects); ?></p>
+    <p><?php _e('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', dreamobjects); ?></p>
 
     <?php
      	$timestamp = wp_next_scheduled( 'dh-do-backup' ); 
