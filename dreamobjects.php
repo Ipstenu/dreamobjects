@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects Connection
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 2.2
+Version: 2.3
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -61,9 +61,9 @@ class DHDO {
 	       }
 
 		// RESET
-        if ( current_user_can('manage_options') && isset($_POST['do-do-reset']) ) {
+        if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
+        
             check_admin_referer( 'update-options');
-            // I wish I could call uninstall.php here and not have TWO places to keep track of, but damn it...
             delete_option( 'dh-do-backupsection' );
             delete_option( 'dh-do-bucket' );
             delete_option( 'dh-do-bucketcdn' );
@@ -75,7 +75,8 @@ class DHDO {
             delete_option( 'dh-do-section' );
             delete_option( 'dh-do-uploader' );
             delete_option( 'dh-do-uploadview' );
-	        DHDO::logger('reset');
+            delete_option( 'dh-do-logging' );
+            DHDO::logger('reset');
 	       }
 
 	    // LOGGER: Wipe logger if blank
@@ -173,9 +174,12 @@ class DHDO {
 
 		global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
 	    $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
-		$dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
-		$dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
-		// $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));
+	    
+	    if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) {
+ 		     $dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
+ 		     $dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
+ 		     // $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));   	    
+	    }
 	}
 
 	// And now styles
@@ -191,26 +195,47 @@ class DHDO {
 	 */
 	 
 	function settings_page() {
-	   // Main Settings
-		include_once( PLUGIN_DIR . '/admin/settings.php');
+		include_once( PLUGIN_DIR . '/admin/settings.php');// Main Settings
 	}
 	
 	function backup_page() {
-	   // Backup Settings
-    	include_once( PLUGIN_DIR . '/admin/backups.php');
+    	include_once( PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
 	}
 	
 	function cdn_page() {
-	   // CDN Settings
-    	include_once( PLUGIN_DIR . '/admin/cdn.php');
+        include_once( PLUGIN_DIR . '/admin/cdn.php'); // CDN Settings
 	}
 
 	function uploader_page() {
-	   // Upload Settings
-    	include_once( PLUGIN_DIR . '/admin/uploader.php');
+    	include_once( PLUGIN_DIR . '/admin/uploader.php'); // Upload Settings
 	}
-	
-	
+
+	/**
+	 * Logging function
+	 *
+	 */
+
+    // Acutal logging function
+    function logger($msg) {
+       $file = PLUGIN_DIR."/debug.txt"; 
+	   if ($msg == "reset") {
+    	   $fd = fopen($file, "w+");
+    	   $str = "";
+	   }
+	   elseif ( get_option('dh-do-logging') == 'on') {	
+    	   $fd = fopen($file, "a");
+    	   $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
+       }
+   	   fwrite($fd, $str);
+   	   fclose($fd);
+	}
+
+	/**
+	 * Generate Backups and the functions needed for that to run
+	 *
+	 */
+		
+	// Scan folders to collect all the filenames
 	function rscandir($base='') {
 		$data = array_diff(scandir($base), array('.', '..'));
 	
@@ -228,22 +253,10 @@ class DHDO {
 			$data = array_merge($data, $sub);
 		}
 		return $data;
-	}
-
-	function logger($msg) {
-       $file = PLUGIN_DIR."/debug.txt"; 
-	   if ($msg == "reset") {
-    	   $fd = fopen($file, "w+");
-    	   $str = "";
-	   }
-	   elseif ( get_option('dh-do-logging') == 'on') {	
-    	   $fd = fopen($file, "a");
-    	   $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
-       }
-   	   fwrite($fd, $str);
-   	   fclose($fd);
+		DHDO::logger('Scanned folders and files to generate list for backup.');
 	}
 	
+	// The actual backup
 	function backup() {
 		global $wpdb;
 		require_once('lib/S3.php');
@@ -262,7 +275,7 @@ class DHDO {
 		// All me files!
 		if ( in_array('files', $sections) ) {
 		    $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
-		    DHDO::logger('Files added to zip.');
+		    DHDO::logger('List of files added to the zip.');
 		} 
 		
 		// And me DB!
@@ -270,17 +283,20 @@ class DHDO {
 		
 			$tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
 			$result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
-			DHDO::logger('SQL file created.');
-			$backups[] = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
-			DHDO::logger('SQL added to zip.');
+			$sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
+			$sqlsize = size_format( @filesize($sqlfile) );
+			DHDO::logger('SQL file created ('. $sqlsize .').');
+			$backups[] = $sqlfile;
+			DHDO::logger('SQL filename added to zip.');
 		}
 		
 		if ( !empty($backups) ) {
 			$zip->create($backups, '', ABSPATH);
-			
-			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
+			$zipsize = size_format( @filesize($file) );
+			DHDO::logger('Zip generated ('. $zipsize .').');
 			
 			// Upload
+			$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
 			$upload = $s3->inputFile($file);
 			if ($s3->putObject($upload, get_option('dh-do-bucket'), next(explode('//', home_url())) . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip') ) {
     			DHDO::logger('Copying backup to DreamObjects.');
