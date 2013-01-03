@@ -217,17 +217,20 @@ class DHDO {
 
     // Acutal logging function
     function logger($msg) {
-       $file = PLUGIN_DIR."/debug.txt"; 
-	   if ($msg == "reset") {
-    	   $fd = fopen($file, "w+");
-    	   $str = "";
-	   }
-	   elseif ( get_option('dh-do-logging') == 'on') {	
-    	   $fd = fopen($file, "a");
-    	   $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
-       }
-   	   fwrite($fd, $str);
-   	   fclose($fd);
+    
+    if ( get_option('dh-do-logging') == 'on' ) {
+           $file = PLUGIN_DIR."/debug.txt"; 
+    	   if ($msg == "reset") {
+        	   $fd = fopen($file, "w+");
+        	   $str = "";
+    	   }
+    	   elseif ( get_option('dh-do-logging') == 'on') {	
+        	   $fd = fopen($file, "a");
+        	   $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
+           }
+       	   fwrite($fd, $str);
+       	   fclose($fd);
+   	   }
 	}
 
 	/**
