@@ -109,17 +109,18 @@ class DHDO {
             $s3->enable_path_style();
           
             if ( get_option('dh-do-uploadpub') != 1 )
-              {   $acl = 'AmazonS3::ACL_PUBLIC';
+              {   $acl = AmazonS3::ACL_PUBLIC;
                   DHDO::logger('Upload will be public.');
               }
             else
-              {   $acl = 'AmazonS3::ACL_PRIVATE';
+              {   $acl = AmazonS3::ACL_PRIVATE;
                   DHDO::logger('Upload will be public.');
               }
             $bucket = get_option('dh-do-bucketup');
               
             $mpupload = $s3->create_object($bucket, $fileName, array (
-                        'fileUpload'  => $fileTempName,
+                        //'fileUpload'  => $fileTempName,
+                        'body'        => file_get_contents($fileTempName),
                         'contentType' => $fileType,
                         'acl'         => $acl,
                         'storage'     => AmazonS3::STORAGE_STANDARD

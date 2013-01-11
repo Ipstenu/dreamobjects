@@ -175,12 +175,12 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 == Changelog ==
 
 = Version 2.4 =
-XXX, 2012 by Ipstenu
+XXX, 2013 by Ipstenu
 
-* Change to using the full SDK, in order to allow for multipart uploads.
+* Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class
 
 = Version 2.3 =
-Jan 3, 2012 by Ipstenu
+Jan 3, 2013 by Ipstenu
 
 * Optional logging (good for debugging)
 * No longer takes a backup right away when saving settings (good for testing lots of stuff)
