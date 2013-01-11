@@ -38,14 +38,18 @@ include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
 
     if (current_user_can('manage_options') ) {
 ?>
+
+<table class="form-table">
+    <tbody>
+        <tr valign="top">
+            <td>
 	<h3><?php _e('Settings', dreamobjects); ?></h3>
+
+
 	<form method="post" action="options.php">
 		<input type="hidden" name="action" value="update" />
 		<?php wp_nonce_field('update-options'); ?>
 		<input type="hidden" name="page_options" value="dh-do-bucketup,dh-do-uploadpub" />
-
-<table class="form-table">
-    <tbody>
 <?php
 	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
 	$s3->set_hostname('objects.dreamhost.com');
@@ -56,9 +60,8 @@ include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
     $buckets = $ListResponse->body->Buckets->Bucket;
 
 ?>
-        <tr valign="top">
-            <th scope="row"><label for="dh-do-bucketup"><?php _e('Bucket Name', dreamobjects); ?></label></th>
-            <td><select name="dh-do-bucketup">
+            <h4><label for="dh-do-bucketup"><?php _e('Bucket Name', dreamobjects); ?></label></h4>
+            <select name="dh-do-bucketup">
                                     <option value="XXXX">(select a bucket)</option>
 		<?php foreach ( $buckets as $b ) : ?>
 <option <?php if ( $b->Name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
@@ -69,70 +72,71 @@ include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
                 $alreadyusing = sprintf(__('You are already using the bucket "%s" for backups. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
                 echo '<p class="description">' . $alreadyusing . '</p>';
             } ?>            
+            <h4><label for="dh-do-uploadpub"><?php _e('Privacy', dreamobjects); ?></label></h4>
+            <input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php _e('Private Uploads', dreamobjects); ?>
+            <p class="description"><?php _e('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p>
+
+            <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
+            </form>
+            <?php } ?>
+
+            <?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
+            	<h3><?php _e('Upload File', dreamobjects); ?></h3>
+            
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                    <tr valign="top">
+                        <td>
+                        <p><?php _e('Please select a file by clicking the \'Browse\' button and press \'Upload\' to start uploading your file.', dreamobjects); ?></p>
+                       	<form action="" method="post" enctype="multipart/form-data" name="uploader" id="uploader">
+                          <input name="theFile" type="file" />
+                          <input name="Submit" type="submit" value="Upload">
+                          <?php wp_nonce_field('dhdo-uploader'); ?>
+                    	</form>
+                    	</td>
+                    </tr>
+                 </tbody>
+            </table>
+            <?php endif; // if bucketup ?>
             </td>
-        </tr>
+            <td>
+            <div id="uploaders">
+            <?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
+            <h3><?php _e('Available Files', dreamobjects); ?></h3>
+            
+            <p><?php _e('The files listed below are all linked using the public URL. If an image has been uploaded with \'private\' permissions, it will not display for anyone, not even you.', dreamobjects); ?></p>
+            
+            <?php if (current_user_can('manage_options') ) {
+                ?><p><?php _e('To publically display the list of uploaded files, use the shortcode <code>[dreamobjects]</code> in a post or page. It will show the same list as you see below to any site visitor.', dreamobjects); ?></p><?php
+            } ?>
+
+            <ul><?php 
+                if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
         
-        <tr valign="top">
-            <th scope="row"><label for="dh-do-uploadpub"><?php _e('Privacy', dreamobjects); ?></label></th>
-            <td><input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php _e('Private Uploads', dreamobjects); ?>
-            <p class="description"><?php _e('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p></td>
+                	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+                	$s3->set_hostname('objects.dreamhost.com');
+                	$s3->allow_hostname_override(false);
+                	$s3->enable_path_style();
+                    $bucket = get_option('dh-do-bucketup');
+                    $uploads = $s3->get_object_list( $bucket );
+                		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
+                    		krsort($uploads);
+                            foreach ($uploads as $object) {
+                                $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
+                                echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
+                            }
+                        }
+        		} // if you picked a bucket
+        					?>
+             </ul>
+            </div>
+            <?php endif; // if bucketup ?>
+            </td>
         </tr>
 </tbody>
 </table>
 
-<p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
-	</form>
-<?php }
-
-endif; // Manage Options ?>
-
-<?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
-	<h3><?php _e('Upload File', dreamobjects); ?></h3>
-
-<table class="form-table">
-    <tbody>
-        <tr>
-        <tr valign="top">
-            <td>
-            <p><?php _e('Please select a file by clicking the \'Browse\' button and press \'Upload\' to start uploading your file.', dreamobjects); ?></p>
-           	<form action="" method="post" enctype="multipart/form-data" name="uploader" id="uploader">
-              <input name="theFile" type="file" />
-              <input name="Submit" type="submit" value="Upload">
-              <?php wp_nonce_field('dhdo-uploader'); ?>
-        	</form>
-        	</td>
-        </tr>
-     </tbody>
-</table>       
-
-<div id="uploaders">
-<h3><?php _e('Available Files', dreamobjects); ?></h3>
-
-<p><?php _e('The files listed below are all linked using the public URL. If an image has been uploaded with \'private\' permissions, it will not display for anyone, not even you.', dreamobjects); ?></p>
-
-<?php if (current_user_can('manage_options') ) {
-    ?><p><?php _e('To publically display the list of uploaded files, use the shortcode <code>[dreamobjects]</code> in a post or page. It will show the same list as you see below to any site visitor.', dreamobjects); ?></p><?php
-} ?>
-
-    <ul><?php 
-        if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
-
-        	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-        	$s3->set_hostname('objects.dreamhost.com');
-        	$s3->allow_hostname_override(false);
-        	$s3->enable_path_style();
-            $bucket = get_option('dh-do-bucketup');
-            $uploads = $s3->get_object_list( $bucket );
-        		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
-            		krsort($uploads);
-                    foreach ($uploads as $object) {
-                           ?><li>&bull; <a href="https://objects.dreamhost.com/<?php echo $bucket .'/'. $object; ?>"><?php echo $object; ?></a></li><?php
-                    }
-                }
-		} // if you picked a bucket
-					?>
-     </ul>
-</div>
-<?php endif; // if bucketup ?>
+<?php endif; // Manage Options ?>
 
 </div>

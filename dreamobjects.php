@@ -38,32 +38,32 @@ class DHDO {
 
     function init() {
         // SCHEDULER
-		if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
-			wp_clear_scheduled_hook('dh-do-backup');
-			if ( $_POST['dh-do-schedule'] != 'disabled' ) {
-				wp_schedule_event(current_time('timestamp')+86400, $_POST['dh-do-schedule'], 'dh-do-backup');
-				$nextbackup = sprintf(__('Next backup: %s', dreamobjects), date_i18n('F j, Y h:i a', current_time('timestamp')+86400) );
-				DHDO::logger('Scheduled '.$_POST['dh-do-schedule'].' backup. ' .$nextbackup);
-			}
-		}
+        if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
+            wp_clear_scheduled_hook('dh-do-backup');
+            if ( $_POST['dh-do-schedule'] != 'disabled' ) {
+                wp_schedule_event(current_time('timestamp')+86400, $_POST['dh-do-schedule'], 'dh-do-backup');
+                $nextbackup = sprintf(__('Next backup: %s', dreamobjects), date_i18n('F j, Y h:i a', current_time('timestamp')+86400) );
+                DHDO::logger('Scheduled '.$_POST['dh-do-schedule'].' backup. ' .$nextbackup);
+            }
+        }
 
-		// CREATE NEW BUCKET
+        // CREATE NEW BUCKET
         if ( current_user_can('manage_options') && isset($_POST['do-do-new-bucket']) && !empty($_POST['do-do-new-bucket']) ) {
         
             check_admin_referer( 'update-options');
-	        require_once 'AWSSDKforPHP/sdk.class.php';
-	        $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
-	        $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-	        $s3->set_hostname('objects.dreamhost.com');
-	        $s3->allow_hostname_override(false);
-	        $s3->enable_path_style();
-	        if ($s3->create_bucket($_POST['do-do-new-bucket'], AmazonS3::REGION_US_E1))
-	           {add_action('admin_notices', array('DHDO','newBucketMessage'));}
-	        else
-	           {add_action('admin_notices', array('DHDO','newBucketError'));}
-	       }
+            require_once 'AWSSDKforPHP/sdk.class.php';
+            $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
+            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            $s3->set_hostname('objects.dreamhost.com');
+            $s3->allow_hostname_override(false);
+            $s3->enable_path_style();
+            if ($s3->create_bucket($_POST['do-do-new-bucket'], AmazonS3::REGION_US_E1))
+               {add_action('admin_notices', array('DHDO','newBucketMessage'));}
+            else
+               {add_action('admin_notices', array('DHDO','newBucketError'));}
+           }
 
-		// RESET
+        // RESET
         if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
         
             check_admin_referer( 'update-options');
@@ -80,10 +80,10 @@ class DHDO {
             delete_option( 'dh-do-uploadview' );
             delete_option( 'dh-do-logging' );
             DHDO::logger('reset');
-	       }
+           }
 
-	    // LOGGER: Wipe logger if blank
-	    if ( current_user_can('manage_options') && isset($_POST['dhdo-logchange']) && $_POST['dhdo-logchange'] == 'Y' ) {
+        // LOGGER: Wipe logger if blank
+        if ( current_user_can('manage_options') && isset($_POST['dhdo-logchange']) && $_POST['dhdo-logchange'] == 'Y' ) {
             check_admin_referer( 'update-options');
             if ( !isset($_POST['dh-do-logging'])) {
                 DHDO::logger('reset');
@@ -97,35 +97,38 @@ class DHDO {
 
           check_admin_referer( 'dhdo-uploader');
 
-		  $fileName = sanitize_file_name( $_FILES['theFile']['name']);
-		  $fileTempName = realpath($_FILES['theFile']['tmp_name']);
-		  $fileType = $_FILES['theFile']['type'];
-		  
-		  DHDO::logger('Preparing to upload '. $fileName .' to DreamObjects. Temp data stored as '. $fileTempName .'.');
-
-		  require_once 'AWSSDKforPHP/sdk.class.php';
-	        $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-	        $s3->set_hostname('objects.dreamhost.com');
-	        $s3->allow_hostname_override(false);
-	        $s3->enable_path_style();
-		  
-		  if ( get_option('dh-do-uploadpub') != 1 )
-		      { $acl = 'AmazonS3::ACL_PUBLIC';}
-		  else
-		      { $acl = 'AmazonS3::ACL_PRIVATE';}
-		  $bucket = get_option('dh-do-bucketup');
-		      
-		  $mpupload = $s3->create_object($bucket, $fileName, array (
-                        'body'        => file_get_contents($fileTempName),
+          $fileName = sanitize_file_name( $_FILES['theFile']['name']);
+          $fileTempName = realpath($_FILES['theFile']['tmp_name']);
+          $fileType = $_FILES['theFile']['type'];
+          DHDO::logger('Preparing to upload '. $fileName .' to DreamObjects. Temp data stored as '. $fileTempName .'.');
+            
+          require_once 'AWSSDKforPHP/sdk.class.php';
+            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            $s3->set_hostname('objects.dreamhost.com');
+            $s3->allow_hostname_override(false);
+            $s3->enable_path_style();
+          
+            if ( get_option('dh-do-uploadpub') != 1 )
+              {   $acl = 'AmazonS3::ACL_PUBLIC';
+                  DHDO::logger('Upload will be public.');
+              }
+            else
+              {   $acl = 'AmazonS3::ACL_PRIVATE';
+                  DHDO::logger('Upload will be public.');
+              }
+            $bucket = get_option('dh-do-bucketup');
+              
+            $mpupload = $s3->create_object($bucket, $fileName, array (
+                        'fileUpload'  => $fileTempName,
                         'contentType' => $fileType,
                         'acl'         => $acl,
-                        'storage'     => AmazonS3::STORAGE_STANDARD,
+                        'storage'     => AmazonS3::STORAGE_STANDARD
                         ));
             $result=(array)$mpupload;
 
-			if ( $result["status"]>=200 and $result["status"]<300 ) {
-			    add_action('admin_notices', array('DHDO','uploaderMessage'));
-			    DHDO::logger('Copied '. $fileName .' to DreamObjects.');
+            if ( $result["status"]>=200 and $result["status"]<300 ) {
+                add_action('admin_notices', array('DHDO','uploaderMessage'));
+                DHDO::logger('Copied '. $fileName .' to DreamObjects.');
             } else {
                 add_action('admin_notices', array('DHDO','uploaderError'));
                 DHDO::logger('File failed to copy '. $fileTempName .' to DreamObjects as '. $fileName .'. Error: '. $result["Code"] .' '. $result["MESSAGE"] .' '. $result["status"] .'.');
@@ -133,7 +136,7 @@ class DHDO {
         }
         
         // Update messgae
-		if ( isset($_GET['settings-updated']) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' || $_GET['page'] == 'dreamobjects-menu-uploader' ) ) add_action('admin_notices', array('DHDO','updateMessage'));
+        if ( isset($_GET['settings-updated']) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' || $_GET['page'] == 'dreamobjects-menu-uploader' ) ) add_action('admin_notices', array('DHDO','updateMessage'));
 
         // Backup Now
         if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
@@ -147,219 +150,219 @@ class DHDO {
         if ( wp_next_scheduled( 'dh-do-backupnow' ) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' ) ) {
             add_action('admin_notices', array('DHDO','backupMessage'));
         }
-	}
+    }
 
     // Messages (used by INIT)
-	function updateMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
-		}
+    function updateMessage() {
+        echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
+        }
 
-	function backupMessage() {
-	   $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
-	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), date_i18n('h:i a', $timestamp) );
-	   echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
-		}
+    function backupMessage() {
+       $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
+       $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), date_i18n('h:i a', $timestamp) );
+       echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
+        }
 
-	function uploaderMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Your file was successfully uploaded.', dreamobjects)."</strong></p></div>";
-		}
-		
-	function uploaderError() {
-		echo "<div id='message' class='error fade'><p><strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
-		}
+    function uploaderMessage() {
+        echo "<div id='message' class='updated fade'><p><strong>".__('Your file was successfully uploaded.', dreamobjects)."</strong></p></div>";
+        }
+        
+    function uploaderError() {
+        echo "<div id='message' class='error fade'><p><strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
+        }
 
-	function newBucketMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Your new bucket has been created.', dreamobjects)."</strong></p></div>";
-		}
-		
-	function newBucketError() {
-		echo "<div id='message' class='error fade'><p><strong>".__('Error: Unable to create bucket (it may already exist and/or be owned by someone else)', dreamobjects)."</strong></p></div>";
-		}
+    function newBucketMessage() {
+        echo "<div id='message' class='updated fade'><p><strong>".__('Your new bucket has been created.', dreamobjects)."</strong></p></div>";
+        }
+        
+    function newBucketError() {
+        echo "<div id='message' class='error fade'><p><strong>".__('Error: Unable to create bucket (it may already exist and/or be owned by someone else)', dreamobjects)."</strong></p></div>";
+        }
 
-	// Return the filesystem path that the plugin lives in.
-	function getPath() {
-		return dirname(__FILE__) . '/';
-	}
-	
-	// Returns the URL of the plugin's folder.
-	function getURL() {
-		return WP_CONTENT_URL.'/plugins/'.basename(dirname(__FILE__)) . '/';
-	}
+    // Return the filesystem path that the plugin lives in.
+    function getPath() {
+        return dirname(__FILE__) . '/';
+    }
+    
+    // Returns the URL of the plugin's folder.
+    function getURL() {
+        return WP_CONTENT_URL.'/plugins/'.basename(dirname(__FILE__)) . '/';
+    }
 
      // Sets up the settings page
-	function add_settings_page() {
-		load_plugin_textdomain(dreamobjects, DHDO::getPath() . 'i18n');
+    function add_settings_page() {
+        load_plugin_textdomain(dreamobjects, DHDO::getPath() . 'i18n');
 
-		global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
-	    $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
-	    
-	    if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) {
- 		     $dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
- 		     $dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
- 		     // $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));   	    
-	    }
-	}
+        global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
+        $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
+        
+        if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) {
+              $dreamhost_dreamobjects_backups_page = add_submenu_page('dreamobjects-menu', __('Backups'), __('Backups'), 'manage_options', 'dreamobjects-menu-backup', array('DHDO', 'backup_page'));
+              $dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
+              // $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));           
+        }
+    }
 
-	// And now styles
+    // And now styles
     function stylesheet() {
         wp_register_style( 'dreamobj-style', plugins_url('dreamobjects.css?'. PLUGIN_VERSION, __FILE__) );
         wp_enqueue_style( 'dreamobj-style' );
     }
 
-	
-	/**
-	 * Generates the settings page
-	 *
-	 */
-	 
-	function settings_page() {
-		include_once( PLUGIN_DIR . '/admin/settings.php');// Main Settings
-	}
-	
-	function backup_page() {
-    	include_once( PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
-	}
-	
-	function cdn_page() {
+    
+    /**
+     * Generates the settings page
+     *
+     */
+     
+    function settings_page() {
+        include_once( PLUGIN_DIR . '/admin/settings.php');// Main Settings
+    }
+    
+    function backup_page() {
+        include_once( PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
+    }
+    
+    function cdn_page() {
         include_once( PLUGIN_DIR . '/admin/cdn.php'); // CDN Settings
-	}
+    }
 
-	function uploader_page() {
-    	include_once( PLUGIN_DIR . '/admin/uploader.php'); // Upload Settings
-	}
+    function uploader_page() {
+        include_once( PLUGIN_DIR . '/admin/uploader.php'); // Upload Settings
+    }
 
-	/**
-	 * Logging function
-	 *
-	 */
+    /**
+     * Logging function
+     *
+     */
 
     // Acutal logging function
     function logger($msg) {
     
     if ( get_option('dh-do-logging') == 'on' ) {
            $file = PLUGIN_DIR."/debug.txt"; 
-    	   if ($msg == "reset") {
-        	   $fd = fopen($file, "w+");
-        	   $str = "";
-    	   }
-    	   elseif ( get_option('dh-do-logging') == 'on') {	
-        	   $fd = fopen($file, "a");
-        	   $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
+           if ($msg == "reset") {
+               $fd = fopen($file, "w+");
+               $str = "";
            }
-       	   fwrite($fd, $str);
-       	   fclose($fd);
-   	   }
-	}
+           elseif ( get_option('dh-do-logging') == 'on') {    
+               $fd = fopen($file, "a");
+               $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
+           }
+              fwrite($fd, $str);
+              fclose($fd);
+          }
+    }
 
-	/**
-	 * Generate Backups and the functions needed for that to run
-	 *
-	 */
-		
-	// Scan folders to collect all the filenames
-	function rscandir($base='') {
-		$data = array_diff(scandir($base), array('.', '..'));
-	
-		$subs = array();
-		foreach($data as $key => $value) :
-			if ( is_dir($base . '/' . $value) ) :
-				unset($data[$key]);
-				$subs[] = DHDO::rscandir($base . '/' . $value);
-			elseif ( is_file($base . '/' . $value) ) :
-				$data[$key] = $base . '/' . $value;
-			endif;
-		endforeach;
-	
-		foreach ( $subs as $sub ) {
-			$data = array_merge($data, $sub);
-		}
-		return $data;
-		DHDO::logger('Scanned folders and files to generate list for backup.');
-	}
-	
-	// The actual backup
-	function backup() {
-		global $wpdb;
-		require_once 'AWSSDKforPHP/sdk.class.php';
-		require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
+    /**
+     * Generate Backups and the functions needed for that to run
+     *
+     */
+        
+    // Scan folders to collect all the filenames
+    function rscandir($base='') {
+        $data = array_diff(scandir($base), array('.', '..'));
+    
+        $subs = array();
+        foreach($data as $key => $value) :
+            if ( is_dir($base . '/' . $value) ) :
+                unset($data[$key]);
+                $subs[] = DHDO::rscandir($base . '/' . $value);
+            elseif ( is_file($base . '/' . $value) ) :
+                $data[$key] = $base . '/' . $value;
+            endif;
+        endforeach;
+    
+        foreach ( $subs as $sub ) {
+            $data = array_merge($data, $sub);
+        }
+        return $data;
+        DHDO::logger('Scanned folders and files to generate list for backup.');
+    }
+    
+    // The actual backup
+    function backup() {
+        global $wpdb;
+        require_once 'AWSSDKforPHP/sdk.class.php';
+        require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
 
-		// Pull in data for what to backup
-		$sections = get_option('dh-do-backupsection');
-		if ( !$sections ) {
-			$sections = array();
-		}
-		
-		$file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
-		$zip = new PclZip($file);
-		$backups = array();
+        // Pull in data for what to backup
+        $sections = get_option('dh-do-backupsection');
+        if ( !$sections ) {
+            $sections = array();
+        }
+        
+        $file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
+        $zip = new PclZip($file);
+        $backups = array();
 
-		// All me files!
-		if ( in_array('files', $sections) ) {
-		    $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
-		    DHDO::logger('List of files added to the zip.');
-		} 
-		
-		// And me DB!
-		if ( in_array('database', $sections) ) {
-		
-			$tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
-			$result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
-			$sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
-			$sqlsize = size_format( @filesize($sqlfile) );
-			DHDO::logger('SQL file created ('. $sqlsize .').');
-			$backups[] = $sqlfile;
-			DHDO::logger('SQL filename added to zip.');
-		}
-		
-		if ( !empty($backups) ) {
-			$zip->create($backups, '', ABSPATH);
-			$zipsize = size_format( @filesize($file) );
-			DHDO::logger('Zip generated ('. $zipsize .').');
-			
-			// Upload
-        	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-        	$s3->set_hostname('objects.dreamhost.com');
-        	$s3->allow_hostname_override(false);
-        	$s3->enable_path_style();
+        // All me files!
+        if ( in_array('files', $sections) ) {
+            $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
+            DHDO::logger('List of files added to the zip.');
+        } 
+        
+        // And me DB!
+        if ( in_array('database', $sections) ) {
+        
+            $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
+            $result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
+            $sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
+            $sqlsize = size_format( @filesize($sqlfile) );
+            DHDO::logger('SQL file created ('. $sqlsize .').');
+            $backups[] = $sqlfile;
+            DHDO::logger('SQL filename added to zip.');
+        }
+        
+        if ( !empty($backups) ) {
+            $zip->create($backups, '', ABSPATH);
+            $zipsize = size_format( @filesize($file) );
+            DHDO::logger('Zip generated ('. $zipsize .').');
+            
+            // Upload
+            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            $s3->set_hostname('objects.dreamhost.com');
+            $s3->allow_hostname_override(false);
+            $s3->enable_path_style();
             $bucket = get_option('dh-do-bucket');
             $newname = next(explode('//', home_url())) . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
-            $fileOpen = fopen($file, "r");
             
-            $mpupload = $s3->create_mpu_object($bucket, $newname, array(
-            //$mpupload = $s3->create_object($bucket, $newname, array (
-                        'fileUpload'  => $file,
-                        //'body'        => file_get_contents($file),
+            //$mpupload = $s3->create_mpu_object($bucket, $newname, array(
+            $mpupload = $s3->create_object($bucket, $newname, array (
+                        //'fileUpload'  => fopen($file, "r"),
+                        'length'      => filesize($file),
+                        'body'        => file_get_contents($file),
                         'contentType' => 'application/zip',
                         'acl'         => AmazonS3::ACL_PRIVATE,
-                        'storage'     => AmazonS3::STORAGE_STANDARD,
+                        'storage'     => AmazonS3::STORAGE_STANDARD
                         ));
             $result=(array)$mpupload;
 
-			if ( $result["status"]>=200 and $result["status"]<300 ) {
-    			DHDO::logger('Copying backup to DreamObjects. Status: '. $result["status"] .'.');
+            if ( $result["status"]>=200 and $result["status"]<300 ) {
+                DHDO::logger('Creating backup file '. $newname .' in DreamObjects. Status: '. $result["status"] .'.');
             } else {
-                DHDO::logger('File failed to copy '. $file .'  to DreamObjects as '. $newname .'. Status: '. $result["Code"] .' '. $result["MESSAGE"] .' '. $result["status"] .'.');
+                DHDO::logger('File failed to create '. $file .' in DreamObjects as '. $newname .'. Status: '. $result["status"] .'.');
             }
 
-			// Cleanup
-			@unlink($file);
-			DHDO::logger('Deleting zip.');
-			@unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
-			DHDO::logger('Deleting SQL dump.');
-		}
-		
-		
-		// Cleanup Old Backups
-		if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
-		    $num_backups = get_option('dh-do-retain');
+            // Cleanup
+            @unlink($file);
+            DHDO::logger('Deleting zip.');
+            @unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
+            DHDO::logger('Deleting SQL dump.');
+        }
+        
+        
+        // Cleanup Old Backups
+        if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
+            $num_backups = get_option('dh-do-retain');
 
-        	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-        	$s3->set_hostname('objects.dreamhost.com');
-        	$s3->allow_hostname_override(false);
-        	$s3->enable_path_style();
+            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            $s3->set_hostname('objects.dreamhost.com');
+            $s3->allow_hostname_override(false);
+            $s3->enable_path_style();
             $bucket = get_option('dh-do-bucket');
             $backups = $s3->get_object_list( $bucket, array( 'delimiter' => '/') );
-		    
+            
             if (($backups = $s3->get_object_list( $bucket ) ) !== false) {
                 krsort($backups);
                 $count = 0;
@@ -370,12 +373,12 @@ class DHDO {
                     }    
                 }
             }
-		}
-	}
-	function cron_schedules($schedules) {
-		$schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');
-		$schedules['weekly'] = array('interval'=>604800, 'display' => 'Once Weekly');
-		$schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');
-		return $schedules;
-	}
+        }
+    }
+    function cron_schedules($schedules) {
+        $schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');
+        $schedules['weekly'] = array('interval'=>604800, 'display' => 'Once Weekly');
+        $schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');
+        return $schedules;
+    }
 }

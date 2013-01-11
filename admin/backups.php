@@ -162,8 +162,8 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
         		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
             		krsort($uploads);
                     foreach ($uploads as $object) {
-                    $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
-                           echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
+                        $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
+                        echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
                     }
                 }
 		} // if you picked a bucket
