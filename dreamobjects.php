@@ -362,9 +362,10 @@ class DHDO {
             $s3->allow_hostname_override(false);
             $s3->enable_path_style();
             $bucket = get_option('dh-do-bucket');
-            $backups = $s3->get_object_list( $bucket, array( 'delimiter' => '/') );
-            
-            if (($backups = $s3->get_object_list( $bucket ) ) !== false) {
+
+            $prefix = next(explode('//', home_url()));
+            $backups = $s3->get_object_list( $bucket, array( 'prefix' => $prefix ) );
+            if ($backups !== false) {
                 krsort($backups);
                 $count = 0;
                 foreach ($backups as $object) {

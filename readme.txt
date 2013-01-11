@@ -178,6 +178,9 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 XXX, 2013 by Ipstenu
 
 * Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class
+* - Added /AWSSDKforPHP
+* - Removed /lib/S3.php
+* Added checks for deletion (aka: Now it's safe to use one bucket for multiple site backups)
 
 = Version 2.3 =
 Jan 3, 2013 by Ipstenu

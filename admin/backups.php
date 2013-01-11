@@ -158,8 +158,9 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
         	$s3->allow_hostname_override(false);
         	$s3->enable_path_style();
             $bucket = get_option('dh-do-bucket');
-            $uploads = $s3->get_object_list( $bucket, array( 'delimiter' => '/') );
-        		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
+            $prefix = next(explode('//', home_url()));
+            $uploads = $s3->get_object_list( $bucket, array( 'prefix' => $prefix ) );
+        		if ($uploads !== false) {
             		krsort($uploads);
                     foreach ($uploads as $object) {
                         $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
