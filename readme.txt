@@ -1,9 +1,9 @@
 === DreamObjects Connection ===
 Contributors: Ipstenu, DanCoulter
-Tags: cloud, dreamhost, dreamobjects
+Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 * CDN (when available)
 * Better <code>[dreamobjects]</code> support for folders
 * Multipart file uploads to avoid large file upload problems (either get <a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/LLuploadFilePHP.html">multipart fileupload</a> working or <a href="http://superuser.com/questions/336219/how-do-i-split-a-zip-file-into-multiple-segments">split the zip</a>)
+* Option to email results (if logging, email log? Have to split up by attempt for that)
 
 == Installation ==
 
@@ -155,6 +156,14 @@ That's actually not an error. WordPress kicks off cron jobs when someone visits 
 
 You can enable logging on the main DreamObjects screen. This is intended to be temporary (i.e. for debugging weird issues) rather than something you leave on forever. If you turn off logging, the log wipes itself for your protection.
 
+<strong>Nothings happening when I press the backup ASAP button.</strong>
+
+First turn on logging, then run it again. If it gives output, then it's running.
+
+Second, try <em>just</em> backing up SQL. You may have a very large site, which has known to be problematic.
+
+Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
+
 == Screenshots ==
 1. DreamObjects Private Key
 1. Your DreamObjects Public Key
@@ -164,6 +173,11 @@ You can enable logging on the main DreamObjects screen. This is intended to be t
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= Version 2.4 =
+XXX, 2012 by Ipstenu
+
+* Change to using the full SDK, in order to allow for multipart uploads.
 
 = Version 2.3 =
 Jan 3, 2012 by Ipstenu

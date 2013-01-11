@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 //DHDOU::backup()
-        include_once( PLUGIN_DIR. '/lib/S3.php');
+        include_once( PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
@@ -50,15 +50,20 @@ if (!defined('ABSPATH')) {
     <tbody>
 
 						<?php
-							$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
-							$buckets = $s3->listBuckets();
+    						$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+    						$s3->set_hostname('objects.dreamhost.com');
+    						$s3->allow_hostname_override(false);
+    						$s3->enable_path_style();
+ 
+    						$ListResponse = $s3->list_buckets();
+							$buckets = $ListResponse->body->Buckets->Bucket;
 						?>
         <tr valign="top">
             <th scope="row"><label for="dh-do-bucket"><?php _e('Bucket Name', dreamobjects); ?></label></th>
             <td><select name="dh-do-bucket">
                                     <option value="XXXX">(select a bucket)</option>
 								<?php foreach ( $buckets as $b ) : ?>
-									<option <?php if ( $b == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b ?></option>
+									<option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
 								<?php endforeach; ?>
 							</select>
             <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
@@ -144,10 +149,31 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
 				<p><?php _e('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
 
 				<div id="backups">
-				    <ol>
+
+    <ul><?php 
+        if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) {
+
+        	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+        	$s3->set_hostname('objects.dreamhost.com');
+        	$s3->allow_hostname_override(false);
+        	$s3->enable_path_style();
+            $bucket = get_option('dh-do-bucket');
+            $uploads = $s3->get_object_list( $bucket, array( 'delimiter' => '/') );
+        		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
+            		krsort($uploads);
+                    foreach ($uploads as $object) {
+                    $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
+                           echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
+                    }
+                }
+		} // if you picked a bucket
+					?>
+     </ul>
+     			    <ol>
 					<?php 
+/*
 						if ( get_option('dh-do-bucket') ) {
-						    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
+						    $s3 = new AmazonS3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
     if (($backups = $s3->getBucket(get_option('dh-do-bucket'), next(explode('//', home_url())) ) ) !== false) {
         krsort($backups);
         $count = 0;
@@ -162,8 +188,9 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
         }
     }
 						} // if you picked a bucket
-					?>
+*/					?>
 				    </ol>
+
 				</div>
 
 			<form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">

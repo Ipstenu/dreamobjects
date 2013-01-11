@@ -36,6 +36,8 @@ if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', 
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '15' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
 
+define('MB', 1024 * 1024);
+
 // Shortcode
 if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
     include_once( PLUGIN_DIR . '/lib/shortcode.php');

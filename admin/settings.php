@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 
-include_once (PLUGIN_DIR . '/lib/S3.php');
+include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
@@ -56,16 +56,20 @@ include_once (PLUGIN_DIR . '/lib/S3.php');
     
     <ul>
     <?php
-    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
-    $buckets = $s3->listBuckets();
+    $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+    $s3->set_hostname('objects.dreamhost.com');
+    $s3->allow_hostname_override(false);
+    $s3->enable_path_style();
 
+    $ListResponse = $s3->list_buckets();
+    $buckets = $ListResponse->body->Buckets->Bucket;
     if ( !empty($buckets) ) :
         foreach ( $buckets as $b ) :
-            echo "<li>".$b;
-            if ( $b == get_option('dh-do-bucket') ) 
+            echo "<li>".$b->Name;
+            if ( $b->Name == get_option('dh-do-bucket') ) 
                 {$string = ' <strong>'. __(' - Used for Backups', dreamobjects).'</strong>';
                 echo $string;}
-            elseif ( $b == get_option('dh-do-bucketup') ) 
+            elseif ( $b->Name == get_option('dh-do-bucketup') ) 
                 {$string = ' <strong>'. __(' - Used for Uploads', dreamobjects).'</strong>';
                 echo $string;
                 }

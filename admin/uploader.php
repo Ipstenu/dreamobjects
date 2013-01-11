@@ -20,8 +20,7 @@
 if (!defined('ABSPATH')) {
     die();
 }
-
-include_once( PLUGIN_DIR. '/lib/S3.php');
+include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
 ?>
 
 <script type="text/javascript">
@@ -48,15 +47,21 @@ include_once( PLUGIN_DIR. '/lib/S3.php');
 <table class="form-table">
     <tbody>
 <?php
-	$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
-	$buckets = $s3->listBuckets();
+	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+	$s3->set_hostname('objects.dreamhost.com');
+	$s3->allow_hostname_override(false);
+	$s3->enable_path_style();
+
+    $ListResponse = $s3->list_buckets();
+    $buckets = $ListResponse->body->Buckets->Bucket;
+
 ?>
         <tr valign="top">
             <th scope="row"><label for="dh-do-bucketup"><?php _e('Bucket Name', dreamobjects); ?></label></th>
             <td><select name="dh-do-bucketup">
                                     <option value="XXXX">(select a bucket)</option>
 		<?php foreach ( $buckets as $b ) : ?>
-<option <?php if ( $b == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b ?></option>
+<option <?php if ( $b->Name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
 		<?php endforeach; ?>
 	</select>
             <p class="description"><?php _e('Select from your pre-existing buckets.', dreamobjects); ?></p>
@@ -111,13 +116,17 @@ endif; // Manage Options ?>
 
     <ul><?php 
         if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
-            $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
+
+        	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+        	$s3->set_hostname('objects.dreamhost.com');
+        	$s3->allow_hostname_override(false);
+        	$s3->enable_path_style();
             $bucket = get_option('dh-do-bucketup');
-        		if (($uploads = $s3->getBucket( $bucket ) ) !== false) {
+            $uploads = $s3->get_object_list( $bucket );
+        		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
             		krsort($uploads);
                     foreach ($uploads as $object) {
-                           $object['label'] = sprintf(__('Uploaded on %s', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $object['time']) , 'F j, Y h:i a' ) );
-                        ?><li><a href="https://objects.dreamhost.com/<?php echo $bucket .'/'. $object[name]; ?>"><?php echo $object['name']; ?></a> - <?php echo $object['label']; ?></li><?php
+                           ?><li>&bull; <a href="https://objects.dreamhost.com/<?php echo $bucket .'/'. $object; ?>"><?php echo $object; ?></a></li><?php
                     }
                 }
 		} // if you picked a bucket

@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-include_once( PLUGIN_DIR. '/lib/S3.php');
+include_once( PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 $cdnsections = get_option('dh-do-cdnsection');
     if ( !$cdnsections ) {
@@ -31,7 +31,7 @@ $cdnsections = get_option('dh-do-cdnsection');
 
 <script type="text/javascript">
 	var ajaxTarget = "<?php echo self::getURL() ?>backup.ajax.php";
-	var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
+	var nonce = "<?php echo wp_create_nonce('dhdocdn'); ?>";
 </script>
 
 <div class="wrap">
@@ -53,15 +53,20 @@ $cdnsections = get_option('dh-do-cdnsection');
 
 <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 <?php
-	$s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey')); 
-	$buckets = $s3->listBuckets();
+    $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+    $s3->set_hostname('objects.dreamhost.com');
+    $s3->allow_hostname_override(false);
+    $s3->enable_path_style();
+ 
+    $ListResponse = $s3->list_buckets();
+    $buckets = $ListResponse->body->Buckets->Bucket;
 ?>
         <tr valign="top">
             <th scope="row"><label for="dh-do-bucketcdn"><?php _e('Bucket Name', dreamobjects); ?></label></th>
             <td><select name="dh-do-bucketcdn">
                                     <option value="XXXX">(select a bucket)</option>
 		<?php foreach ( $buckets as $b ) : ?>
-<option <?php if ( $b == get_option('dh-do-bucketcdn') ) echo 'selected="selected"' ?>><?php echo $b ?></option>
+<option <?php if ( $b->Name == get_option('dh-do-bucketcdn') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
 		<?php endforeach; ?>
 	</select>
             <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
