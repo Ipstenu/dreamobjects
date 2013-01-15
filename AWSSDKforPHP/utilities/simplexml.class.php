@@ -161,7 +161,7 @@ class CFSimpleXML extends SimpleXMLIterator
 	 */
 	public function to_string()
 	{
-		$s = parent::__toString();
+		$s = (string) $this;
 
 		if ($this->attributes())
 		{
