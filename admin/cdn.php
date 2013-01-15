@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-include_once( PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
+include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 $cdnsections = get_option('dh-do-cdnsection');
     if ( !$cdnsections ) {

@@ -61,7 +61,7 @@ DreamObjects Connection connects your WordPress site to your DreamObjects cloud 
 
 Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
-<strong>Do I have to host my  DreamHost?</strong>
+<strong>Do I have to host my website on DreamHost?</strong>
 
 Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts.
 
@@ -75,7 +75,7 @@ Not at this time. Backups for Multisite are a little messier, and I'm not sure h
 
 <strong>How big a site can this back up?</strong>
 
-The hard limit is 2G. The practical limit is 200megs.
+The hard limit is 2G. The practical limit is 50megs.
 
 <strong>Why does my backup run but not back anything up?</strong>
 
@@ -92,9 +92,9 @@ There are a few things at play here:
 3. The amount of server memory
 4. The amount of available CPU
 
-In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, but once you hit a few hundred megs, everything else starts getting weird.
+In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, but once you hit 50 megs, everything else starts getting weird.
 
-The fix would be to do multipart file uploads.
+The fix would be to do multipart file uploads, and I'm working with engineering at DreamHost to make that happen for everyone.
 
 <strong>Where's the Database in the zip?</strong>
 
@@ -158,7 +158,7 @@ You can enable logging on the main DreamObjects screen. This is intended to be t
 
 <strong>Nothings happening when I press the backup ASAP button.</strong>
 
-First turn on logging, then run it again. If it gives output, then it's running.
+First turn on logging, then run it again. If it gives output, then it's running, so read the log to see what the error is. If it just 'stops', then it's a bug. If it says it can't upload the file to DreamObjects, it's probably size.
 
 Second, try <em>just</em> backing up SQL. You may have a very large site, which has known to be problematic.
 
@@ -177,9 +177,11 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 = Version 2.4 =
 XXX, 2013 by Ipstenu
 
-* Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class (Thank you Stephon, Shredder, and Justin at DreamHost)
+* Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class (Thank you Stephon, Shredder/@GetSource, and Justin at DreamHost)
 * Security level up: Using register settings and the nonces the way WP intended (thank you @no_fear_inc, @rarst, @trepmal)
 * Logging now covers uploads, plus has more information for debugging.
+* Moving DHDO::, messages, registering settings, and many other things to their own files.
+* Fixed lingering debug warning with translations.
 
 = Version 2.3 =
 Jan 3, 2013 by Ipstenu

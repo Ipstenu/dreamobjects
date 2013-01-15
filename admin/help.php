@@ -21,9 +21,6 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-
-global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
-
 $screen = get_current_screen();
 
 // For the DreamObjects Page

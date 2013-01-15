@@ -22,14 +22,14 @@ if (!defined('ABSPATH')) {
 }
 
 
-include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
+include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
 		}
 		?>
 			<script type="text/javascript">
-				var ajaxTarget = "<?php echo self::getURL() ?>backup.ajax.php";
+				var ajaxTarget = "<?php echo DHDO::getURL() ?>backup.ajax.php";
 				var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
 			</script>
 			<div class="wrap">

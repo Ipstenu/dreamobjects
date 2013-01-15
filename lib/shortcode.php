@@ -48,6 +48,8 @@ function dreamobjects_func( $atts ) {
 		if folder is empty and options are set, use that
 		
 		if nothing is set OR if both prefix and folder are set, fail.
+		
+		FWIW, none of this really works yet
 */
 	if ( $prefix = "XXXX") {
 
@@ -61,7 +63,7 @@ function dreamobjects_func( $atts ) {
 	    	return $nobucket;
 	    }
 
-	    include_once( PLUGIN_DIR. '/lib/S3.php');	
+	    include_once( DHDO_PLUGIN_DIR. '/lib/S3.php');	
 	    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
 
 	    $return = '<ul>';

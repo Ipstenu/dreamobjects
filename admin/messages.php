@@ -21,21 +21,20 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+function updateMessage() {
+    echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
+}
 
-	function updateMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Options Updated!', dreamobjects)."</strong></p></div>";
-		}
+function backupMessage() {
+    $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
+    $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings). Do not hit refresh!', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'h:i a' ) );
+    echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
+}
 
-	function backupMessage() {
-	   $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
-	   $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s (time based on WP time/date settings). Do not hit refresh!', dreamobjects), get_date_from_gmt( date('Y-m-d H:i:s', $timestamp) , 'h:i a' ) );
-	   echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
-		}
-
-	function uploaderMessage() {
-		echo "<div id='message' class='updated fade'><p><strong>".__('Your file was successfully uploaded.', dreamobjects)."</strong></p></div>";
-		}
+function uploaderMessage() {
+    echo "<div id='message' class='updated fade'><p><strong>".__('Your file was successfully uploaded.', dreamobjects)."</strong></p></div>";
+}
 		
-	function uploaderError() {
-		echo "<div id='message' class='error fade'><p><strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
-		}
+function uploaderError() {
+    echo "<div id='message' class='error fade'><p><strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
+}

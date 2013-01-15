@@ -20,11 +20,11 @@
 if (!defined('ABSPATH')) {
     die();
 }
-include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
+include_once( DHDO_PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
 ?>
 
 <script type="text/javascript">
-	var ajaxTarget = "<?php echo self::getURL() ?>uploader.ajax.php";
+	var ajaxTarget = "<?php echo DHDO::getURL() ?>uploader.ajax.php";
 	var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
 </script>
 
@@ -43,46 +43,14 @@ include_once( PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');
     <tbody>
         <tr valign="top">
             <td>
-                <h3><?php _e('Uploader Settings', dreamobjects); ?></h3>
-                <p><?php _e('The options below will let you configure your uploads to go to a specific bucket on DreamObjects. While you can use any bucket you want, it\'s best to use one dedicated to uploads. Since you can host any file you want on DreamObjects, there are no checks for filetype.', dreamobjects); ?></p>
-
                 <form method="post" action="options.php">
                 <?php
                     settings_fields( 'dh-do-uploader-settings' );
                     do_settings_sections( 'dh-do-uploader_page' );               
                 ?>
                 <input type="hidden" name="page_options" value="dh-do-bucketup,dh-do-uploadpub" />
-                <?php
-                	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-                	$s3->set_hostname('objects.dreamhost.com');
-                	$s3->allow_hostname_override(false);
-                	$s3->enable_path_style();
-            
-                    $ListResponse = $s3->list_buckets();
-                    $buckets = $ListResponse->body->Buckets->Bucket;
-                
-                ?>
-                    <h4><label for="dh-do-bucketup"><?php _e('Select Your Bucket', dreamobjects); ?></label></h4>
-                    <select name="dh-do-bucketup">
-                        <option value="XXXX">(select a bucket)</option>
-                        <?php foreach ( $buckets as $b ) : ?>
-                            <option <?php if ( $b->Name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    
-                    <p class="description"><?php _e('Select from your pre-existing buckets.', dreamobjects); ?></p>
-                    
-                    <?php if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) { 
-                        $alreadyusing = sprintf(__('You are already using the bucket "%s" for backups. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
-                        echo '<p class="description">' . $alreadyusing . '</p>';
-                    } ?>
-                    
-                    <h4><label for="dh-do-uploadpub"><?php _e('Privacy', dreamobjects); ?></label></h4>
-                    <input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php _e('Private Uploads', dreamobjects); ?>
-                    <p class="description"><?php _e('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p>
-        
-                    <?php submit_button('Save Settings'); ?>
-                    </form>
+                <?php submit_button('Save Settings'); ?>
+                </form>
             <?php } ?>
 
             <?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
