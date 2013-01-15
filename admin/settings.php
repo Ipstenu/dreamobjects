@@ -106,7 +106,7 @@ include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 					<?php settings_fields( 'dh-do-reset-settings' ); ?>
 					<input type="hidden" name="page_options" value="dh-do-reset" />
 					<input type="hidden" name="dhdo-reset" value="Y">
-                    <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Reset Options", dreamobjects); ?>' id='submitbutton' /></p>
+					<?php submit_button('Reset Options', 'primary'); ?>
                     </form>
     
     <?php

@@ -233,20 +233,87 @@ class DHDO {
         add_settings_section( 'dh-do-backuper_id', '', '', 'dh-do-backuper_page' );
         
         register_setting( 'dh-do-backuper-settings','dh-do-bucket');
-        add_settings_field( 'dh-do-bucket_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
-        register_setting( 'dh-do-backuper-settings','dh-do-schedule');
-        add_settings_field( 'dh-do-schedule_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+        add_settings_field( 'dh-do-bucket_id', 'Bucket Name', 'backup_bucket_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
         register_setting( 'dh-do-backuper-settings','dh-do-backupsection');
-        add_settings_field( 'dh-do-backupsection_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
-
+        add_settings_field( 'dh-do-backupsection_id', 'What to Backup', 'backup_what_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+        register_setting( 'dh-do-backuper-settings','dh-do-schedule');
+        add_settings_field( 'dh-do-schedule_id', 'Schedule', 'backup_schedule_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+        register_setting( 'dh-do-backuper-settings','dh-do-retain');
+        add_settings_field( 'dh-do-backupretain_id', 'Backup Retention', 'backup_retain_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
         function dhdobackuper_callback() { 
             echo '';
         }
-      
-    // This is all on the main setting page - Too lazy to do that for the one-offs
-        register_setting( 'dh-do-retain-settings', 'dh-do-retain');
-        register_setting( 'dh-do-logging-settings', 'dh-do-logging');
+        function backup_bucket_callback() {
+            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            $s3->set_hostname('objects.dreamhost.com');
+            $s3->allow_hostname_override(false);
+            $s3->enable_path_style();
+ 
+            $ListResponse = $s3->list_buckets();
+            $buckets = $ListResponse->body->Buckets->Bucket;
+            
+            ?> <select name="dh-do-bucket">
+                    <option value="XXXX">(select a bucket)</option>
+                    <?php foreach ( $buckets as $b ) : ?>
+                    <option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
+                    <?php endforeach; ?>
+                </select>
+				<p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
+				<?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
+    				$alreadyusing = sprintf(__('You are currently using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
+    				echo '<p class="description">' . $alreadyusing . '</p>';
+                }
+    	}
+
+    	function backup_what_callback() {
+        	$sections = get_option('dh-do-backupsection');
+    		if ( !$sections ) {
+    			$sections = array();
+    		}
+        	?><p><label for="dh-do-backupsection-files">
+				<input <?php if ( in_array('files', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="files" id="dh-do-backupsection-files" />
+				<?php _e('All Files', dreamobjects); ?>
+				</label><br />
+				<label for="dh-do-backupsection-database">
+				<input <?php if ( in_array('database', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="database" id="dh-do-backupsection-database" />
+				<?php _e('Database', dreamobjects); ?>
+				</label><br />
+				</p>
+				<p class="description"><?php _e('You can select portions of your site to backup.', dreamobjects); ?></p><?php
+        }
+    	function backup_retain_callback() {
+            ?><select name="dh-do-retain">
+				    <?php foreach ( array('15','30','60','90','all') as $s ) : ?>
+				        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
+				    <?php endforeach; ?>
+				</select>	
+				<p class="description"><?php _e('How many many backups do you want to keep? 30 is recommended.', dreamobjects); ?></p>
+				<p class="description"><strong><?php _e('NOTICE!', dreamobjects); ?></strong> <?php _e('DreamObjects charges you based on diskspace used. Setting to \'All\' will retain your backups forwever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p><?
+    	
+    	}
+    	
+    	function backup_schedule_callback() {
+    	
+            ?><select name="dh-do-schedule">
+				<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
+				<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-schedule') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
+				<?php endforeach; ?>
+				</select>
+				<?php
+                  $timestamp = wp_next_scheduled( 'dh-do-backup' ); 
+                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), date_i18n('F j, Y h:i a', $timestamp) );
+            ?>
+            <p class="description"><?php _e('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
+            <?php if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) { ?>
+            <p class="description"><?php echo $nextbackup; ?></p>
+            <?php }
+    	}
+
+    // Reset Settings
         register_setting( 'dh-do-reset-settings', 'dh-do-reset');
+    // Logging Settings
+        register_setting( 'dh-do-logging-settings', 'dh-do-logging');
+    // Backup Bucket Settings
         register_setting( 'do-do-new-bucket-settings', 'dh-do-new-bucket');
     }
 
