@@ -36,6 +36,11 @@ require_once dirname(__FILE__) . '/lib/dhdo.php';
 require_once dirname(__FILE__) . '/lib/messages.php';
 require_once dirname(__FILE__) . '/lib/settings.php';
 
+// WP-CLI
+if ( defined('WP_CLI') && WP_CLI ) {
+	include( dirname(__FILE__) . '/lib/wp-cli.php' );
+}
+
 // Stylesheets
 function dreamobjects_stylesheet() {
     wp_register_style( 'dreamobj-style', plugins_url('dreamobjects.css', __FILE__) );

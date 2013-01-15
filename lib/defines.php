@@ -59,8 +59,3 @@ add_action('init', array('DHDO', 'init'));
 if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
 	wp_enqueue_script('jquery');
 }
-
-// WP-CLI
-if ( defined('WP_CLI') && WP_CLI ) {
-	include( DHDO_PLUGIN_DIR . '/lib/wp-cli.php' );
-}
