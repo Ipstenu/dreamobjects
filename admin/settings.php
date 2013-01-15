@@ -45,9 +45,8 @@ include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 
     <p><?php _e('If you need to create a new bucket, just enter the name and click Create Bucket.', dreamobjects); ?>
     <br /><?php _e('All buckets are created as "private" buckets.', dreamobjects); ?></p>
-    <form  method="post" action="options.php">
-        <input type="hidden" name="action" value="update" />
-        <?php wp_nonce_field('update-options'); ?>
+    <form method="post" action="options.php">
+        <?php settings_fields( 'do-do-new-bucket-settings' ); ?>
         <input type="text" name="do-do-new-bucket" id="new-bucket" value="" />
         <p class="submit"><input class='button-secondary' type='Submit' name='newbucket' value='<?php _e("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
     </form></td>
@@ -86,9 +85,8 @@ include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
     <p><?php _e('If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time.', dreamobjects); ?></p>
     <p><?php _e('When you turn off logging, the file will wipe itself out for your protection.', dreamobjects); ?></p>
 
-    <form  method="post" action="options.php">
-        <input type="hidden" name="action" value="update" />
-        <?php wp_nonce_field('update-options'); ?>
+    <form method="post" action="options.php">
+        <?php settings_fields( 'dh-do-logging-settings' ); ?>
         <input type="checkbox" name="dh-do-logging" <?php checked( get_option('dh-do-logging') == 'on',true); ?> /> <?php _e('Enable logging (if checked)', dreamobjects); ?>
         <input type="hidden" name="dhdo-logchange" value="Y">
         <input type="hidden" name="page_options" value="dh-do-logging" />
@@ -105,43 +103,27 @@ include_once (PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
                     <h3><?php _e('Reset Options', dreamobjects); ?></h3>
                     <p><?php _e('Click the button to wipe out all settings. This will reset your keypair, as well as all plugin options including the debug log. It will <em>not</em> remove any backups.', dreamobjects); ?></p>
      				<form method="post" action="options.php">
-					<input type="hidden" name="action" value="update" />
-					<?php wp_nonce_field('update-options'); ?>
+					<?php settings_fields( 'dh-do-reset-settings' ); ?>
 					<input type="hidden" name="page_options" value="dh-do-reset" />
 					<input type="hidden" name="dhdo-reset" value="Y">
                     <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Reset Options", dreamobjects); ?>' id='submitbutton' /></p>
-			</form>
+                    </form>
     
     <?php
     
 else:
 
-    ?><p><?php _e('Once you\'ve configured your keypair here, you\'ll be able to use the features of this plugin.', dreamobjects); ?></p>
+    ?>
      				<form method="post" action="options.php">
-					<input type="hidden" name="action" value="update" />
-					<?php wp_nonce_field('update-options'); ?>
-					<input type="hidden" name="page_options" value="dh-do-key,dh-do-secretkey" />
-
-                    <table class="form-table">
-                        <tbody>
-                            <tr valign="top"><th colspan="2"><h3><?php _e('DreamObject Settings', dreamobjects); ?></h3></th></tr>
-                            <tr valign="top">
-                                <th scope="row"><label for="dh-do-key"><?php _e('Access Key', dreamobjects); ?></label></th>
-                                <td><input type="text" name="dh-do-key" value="<?php echo get_option('dh-do-key'); ?>" class="regular-text"/></td>
-                            </tr>
-                    
-                            <tr valign="top">
-                                <th scope="row"><label for="dh-do-secretkey"><?php _e('Secret Key', dreamobjects); ?></label></th>
-                                <td><input type="text" name="dh-do-secretkey" value="<?php echo get_option('dh-do-secretkey'); ?>" class="regular-text"/></td>
-                            </tr>
-                    </tbody>
-                    </table>
-
-                    <p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
+					<?php
+                        settings_fields( 'dh-do-keypair-settings' );
+                        do_settings_sections( 'dh-do-keypair_page' );
+                        submit_button();
+					?>
                     </form>
 
     <?php
 
-endif; // Show backup settings
+endif;
 ?>
 			</div>

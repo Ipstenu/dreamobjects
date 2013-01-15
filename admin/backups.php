@@ -42,12 +42,13 @@ if (!defined('ABSPATH')) {
 
 				<h3><?php _e('Settings', dreamobjects); ?></h3>
 				<form method="post" action="options.php">
-					<input type="hidden" name="action" value="update" />
-					<?php wp_nonce_field('update-options'); ?>
-					<input type="hidden" name="page_options" value="dh-do-bucket,dh-do-backupsection,dh-do-schedule,dh-do-retain" />
+				<?php
+				    settings_fields( 'dh-do-backuper-settings' );
+                    do_settings_sections( 'dh-do-backuper_page' );
+                ?>
 
-<table class="form-table">
-    <tbody>
+                <table class="form-table">
+                    <tbody>
 
 						<?php
     						$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
@@ -58,22 +59,22 @@ if (!defined('ABSPATH')) {
     						$ListResponse = $s3->list_buckets();
 							$buckets = $ListResponse->body->Buckets->Bucket;
 						?>
-        <tr valign="top">
-            <th scope="row"><label for="dh-do-bucket"><?php _e('Bucket Name', dreamobjects); ?></label></th>
-            <td><select name="dh-do-bucket">
-                                    <option value="XXXX">(select a bucket)</option>
+                    <tr valign="top">
+                        <th scope="row"><label for="dh-do-bucket"><?php _e('Bucket Name', dreamobjects); ?></label></th>
+                        <td><select name="dh-do-bucket">
+                                <option value="XXXX">(select a bucket)</option>
 								<?php foreach ( $buckets as $b ) : ?>
-									<option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
+								    <option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
 								<?php endforeach; ?>
 							</select>
-            <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
-            <?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
-                $alreadyusing = sprintf(__('You are currently using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
-                echo '<p class="description">' . $alreadyusing . '</p>';
-            } ?>            
-
-            </td>
-        </tr>
+				        <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
+				        <?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
+    				            $alreadyusing = sprintf(__('You are currently using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
+    				    echo '<p class="description">' . $alreadyusing . '</p>';
+    				    } ?>            
+            
+                        </td>
+                    </tr>
 
 <?php  // BEGIN Show Bucket List 
 if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) :?>
@@ -208,8 +209,7 @@ if ( get_option('dh-do-bucket') && (get_option('dh-do-bucket') != "XXXX") && !is
     <p><?php echo $nextbackup; ?></p>
     <?php } ?>
 
-
-    <p class="submit"><input class='button-primary' type='Submit' name='backup' value='<?php _e("Backup ASAP", dreamobjects); ?>' id='submitbutton' /></p>
+    <?php submit_button( 'Backup ASAP', 'primary'); ?>
                 </form>
             <?php
         } else {

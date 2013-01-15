@@ -49,8 +49,6 @@ class DHDO {
 
         // CREATE NEW BUCKET
         if ( current_user_can('manage_options') && isset($_POST['do-do-new-bucket']) && !empty($_POST['do-do-new-bucket']) ) {
-        
-            check_admin_referer( 'update-options');
             require_once 'AWSSDKforPHP/sdk.class.php';
             $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
             $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
@@ -65,8 +63,6 @@ class DHDO {
 
         // RESET
         if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
-        
-            check_admin_referer( 'update-options');
             delete_option( 'dh-do-backupsection' );
             delete_option( 'dh-do-bucket' );
             delete_option( 'dh-do-bucketcdn' );
@@ -84,19 +80,14 @@ class DHDO {
 
         // LOGGER: Wipe logger if blank
         if ( current_user_can('manage_options') && isset($_POST['dhdo-logchange']) && $_POST['dhdo-logchange'] == 'Y' ) {
-            check_admin_referer( 'update-options');
             if ( !isset($_POST['dh-do-logging'])) {
                 DHDO::logger('reset');
             }
         }       
 
-
         // UPLOADER
         if( current_user_can('manage_options') && isset($_POST['Submit']) && isset($_FILES['theFile']) && $_GET['page'] ==
 'dreamobjects-menu-uploader' ) {
-
-          check_admin_referer( 'dhdo-uploader');
-
           $fileName = sanitize_file_name( $_FILES['theFile']['name']);
           $fileTempName = realpath($_FILES['theFile']['tmp_name']);
           $fileType = $_FILES['theFile']['type'];
@@ -141,7 +132,6 @@ class DHDO {
 
         // Backup Now
         if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
-            check_admin_referer( 'dhdo-backupnow' );
             wp_schedule_single_event( current_time('timestamp')+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDO','backupMessage'));
             DHDO::logger('Scheduled ASAP backup.');
@@ -192,8 +182,8 @@ class DHDO {
 
      // Sets up the settings page
     function add_settings_page() {
-        load_plugin_textdomain(dreamobjects, DHDO::getPath() . 'i18n');
-
+        load_plugin_textdomain(dreamobjects, DHDO::getPath() . 'i18n', 'i18n');
+        add_action('admin_init', array('DHDO', 'add_register_settings'));
         global $dreamhost_dreamobjects_settings_page, $dreamhost_dreamobjects_backups_page;
         $dreamhost_dreamobjects_settings_page = add_menu_page(__('DreamObjects Settings'), __('DreamObjects'), 'manage_options', 'dreamobjects-menu', array('DHDO', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
         
@@ -202,6 +192,62 @@ class DHDO {
               $dreamhost_dreamobjects_uploader_page = add_submenu_page('dreamobjects-menu', __('Uploader'), __('Uploader'), 'upload_files', 'dreamobjects-menu-uploader', array('DHDO', 'uploader_page'));
               // $dreamhost_dreamobjects_cdn_page = add_submenu_page('dreamobjects-menu', __('CDN'), __('CDN'), 'manage_options', 'dreamobjects-menu-cdn', array('DHDO', 'cdn_page'));           
         }
+    }
+
+     // Sets up the settings page
+    function add_register_settings() {
+
+     // Keypair settings
+        add_settings_section( 'dh-do-keypair_id', 'DreamObject Settings', 'dhdokeypair_callback', 'dh-do-keypair_page' );
+        
+        register_setting( 'dh-do-keypair-settings','dh-do-key');
+        add_settings_field( 'dh-do-key_id', 'Access Key', 'dhdokey_callback', 'dh-do-keypair_page', 'dh-do-keypair_id' );
+        
+        register_setting( 'dh-do-keypair-settings','dh-do-secretkey');
+        add_settings_field( 'dh-do-secretkey_id', 'Secret Key', 'dhdosecretkey_callback', 'dh-do-keypair_page', 'dh-do-keypair_id' );
+
+        function dhdokeypair_callback() { 
+            echo '<p>'. _e("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
+        }
+    	function dhdokey_callback() {
+        	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text"/>';
+    	}
+    	function dhdosecretkey_callback() {
+        	echo '<input type="text" name="dh-do-secretkey" value="'. get_option('dh-do-secretkey') .'" class="regular-text"/>';
+    	}
+
+     // Uploader settings
+        add_settings_section( 'dh-do-uploader_id', '', '', 'dh-do-uploader_page' );
+        
+        register_setting( 'dh-do-uploader-settings','dh-do-bucketup');
+        add_settings_field( 'dh-do-bucketup_id', '', 'dhdouploader_callback', 'dh-do-uploader_page', 'dh-do-uploader_id' );
+        
+        register_setting( 'dh-do-uploader-settings','dh-do-uploadpub');
+        add_settings_field( 'dh-do-uploadpub_id', '', 'dhdouploader_callback', 'dh-do-uploader_page', 'dh-do-uploader_id' );
+
+        function dhdouploader_callback() { 
+            echo '';
+        }
+
+     // Backup Settings
+        add_settings_section( 'dh-do-backuper_id', '', '', 'dh-do-backuper_page' );
+        
+        register_setting( 'dh-do-backuper-settings','dh-do-bucket');
+        add_settings_field( 'dh-do-bucket_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+        register_setting( 'dh-do-backuper-settings','dh-do-schedule');
+        add_settings_field( 'dh-do-schedule_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+        register_setting( 'dh-do-backuper-settings','dh-do-backupsection');
+        add_settings_field( 'dh-do-backupsection_id', '', 'dhdobackuper_callback', 'dh-do-backuper_page', 'dh-do-backuper_id' );
+
+        function dhdobackuper_callback() { 
+            echo '';
+        }
+      
+    // This is all on the main setting page - Too lazy to do that for the one-offs
+        register_setting( 'dh-do-retain-settings', 'dh-do-retain');
+        register_setting( 'dh-do-logging-settings', 'dh-do-logging');
+        register_setting( 'dh-do-reset-settings', 'dh-do-reset');
+        register_setting( 'do-do-new-bucket-settings', 'dh-do-new-bucket');
     }
 
     // And now styles
@@ -330,9 +376,10 @@ class DHDO {
             
             //$mpupload = $s3->create_mpu_object($bucket, $newname, array(
             $mpupload = $s3->create_object($bucket, $newname, array (
-                        //'fileUpload'  => fopen($file, "r"),
-                        'length'      => filesize($file),
                         'body'        => file_get_contents($file),
+                        //'fileUpload'  => $file,
+                        'length'      => filesize($file),
+                        'curlopts' => array(CURLOPT_VERBOSE => TRUE),
                         'contentType' => 'application/zip',
                         'acl'         => AmazonS3::ACL_PRIVATE,
                         'storage'     => AmazonS3::STORAGE_STANDARD
