@@ -232,12 +232,8 @@ class DHDO {
             $bucket = get_option('dh-do-bucket');
             $newname = next(explode('//', home_url())) . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             
-            //$mpupload = $s3->create_mpu_object($bucket, $newname, array(
-            $mpupload = $s3->create_object($bucket, $newname, array (
-                        'body'        => file_get_contents($file),
-                        //'fileUpload'  => $file,
-                        'length'      => filesize($file),
-                        'curlopts'    => array(CURLOPT_VERBOSE => TRUE),
+            $mpupload = $s3->create_mpu_object($bucket, $newname, array(
+                        'fileUpload'  => $file,
                         'contentType' => 'application/zip',
                         'acl'         => AmazonS3::ACL_PRIVATE,
                         'storage'     => AmazonS3::STORAGE_STANDARD

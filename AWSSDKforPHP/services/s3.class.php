@@ -790,7 +790,7 @@ class AmazonS3 extends CFRuntime
 				}
 			}
 
-			$headers['Content-Length'] = $request->read_stream_size;
+			//$headers['Content-Length'] = $request->read_stream_size;
 			$headers['Content-MD5'] = '';
 		}
 
