@@ -96,12 +96,11 @@ class DHDO {
                   DHDO::logger('Upload will be public.');
               }
             $bucket = get_option('dh-do-bucketup');
-              
-            $mpupload = $s3->create_object($bucket, $fileName, array (
-                        //'fileUpload'  => $fileTempName,
-                        'body'        => file_get_contents($fileTempName),
+ 
+             $mpupload = $s3->create_mpu_object($bucket, $fileName, array(
+                        'fileUpload'  => $fileTempName,
                         'contentType' => $fileType,
-                        'acl'         => $acl,
+                        'acl'         =>$acl,
                         'storage'     => AmazonS3::STORAGE_STANDARD
                         ));
             $result=(array)$mpupload;
@@ -214,15 +213,17 @@ class DHDO {
             $result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
             $sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
             $sqlsize = size_format( @filesize($sqlfile) );
-            DHDO::logger('SQL file created ('. $sqlsize .').');
+            DHDO::logger('SQL file created: '. $sqlfile .' ('. $sqlsize .').');
             $backups[] = $sqlfile;
             DHDO::logger('SQL filename added to zip.');
         }
         
         if ( !empty($backups) ) {
-            $zip->create($backups, '', ABSPATH);
+            DHDO::logger('Creating zip file ...');
+            $zip->create($backups);
+            DHDO::logger('Calculating zip file size ...');
             $zipsize = size_format( @filesize($file) );
-            DHDO::logger('Zip generated ('. $zipsize .').');
+            DHDO::logger('Zip file generated: '. $file .' ('. $zipsize .').');
             
             // Upload
             $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
@@ -230,8 +231,15 @@ class DHDO {
             $s3->allow_hostname_override(false);
             $s3->enable_path_style();
             $bucket = get_option('dh-do-bucket');
-            $newname = next(explode('//', home_url())) . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             
+            $parseUrl = parse_url(trim(home_url()));
+            $url = $parseUrl['host'];
+            if( isset($parseUrl['path']) ) 
+                { $url .= $parseUrl['path']; }
+            
+            $newname = $url . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
+            
+            DHDO::logger('New filename '. $newname .'.');
             $mpupload = $s3->create_mpu_object($bucket, $newname, array(
                         'fileUpload'  => $file,
                         'contentType' => 'application/zip',
@@ -247,13 +255,16 @@ class DHDO {
             }
 
             // Cleanup
-            @unlink($file);
-            DHDO::logger('Deleting temporary zip file.');
-            @unlink(WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
-            DHDO::logger('Deleting SQL dump.');
+            if(file_exists($file)) { 
+                @unlink($file);
+                DHDO::logger('Deleting zip file: '.$file.' ...');
+            }
+            if(file_exists($sqlfile)) { 
+                @unlink($sqlfile);
+                DHDO::logger('Deleting SQL file: '.$sqlfile.' ...');
+            }
             DHDO::logger('Backup Complete.');
         }
-        
         
         // Cleanup Old Backups
         if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
