@@ -267,8 +267,6 @@ class DHDO {
                 @unlink($sqlfile);
                 DHDO::logger('Deleting SQL file: '.$sqlfile.' ...');
             }
-            DHDO::logger('Backup Complete.');
-            DHDO::logger('');
         }
         
         // Cleanup Old Backups
@@ -294,6 +292,8 @@ class DHDO {
                 }
             }
         }
+        DHDO::logger('Backup Complete.');
+        DHDO::logger('');
     }
     function cron_schedules($schedules) {
         $schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');
