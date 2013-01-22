@@ -220,10 +220,7 @@ class DHDO {
         }
         
         if ( !empty($backups) ) {
-<<<<<<< HEAD
             set_time_limit(180); 
-=======
->>>>>>> 9edbe1f062bd8b25e8c53148b3f9a9a7006fd99f
             DHDO::logger('Creating zip file ...');
             $zip->create($backups);
             DHDO::logger('Calculating zip file size ...');
@@ -245,10 +242,8 @@ class DHDO {
             $newname = $url . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             
             DHDO::logger('New filename '. $newname .'.');
-<<<<<<< HEAD
             set_time_limit(180); 
-=======
->>>>>>> 9edbe1f062bd8b25e8c53148b3f9a9a7006fd99f
+            //$s3->debug_mode = true;
             $mpupload = $s3->create_mpu_object($bucket, $newname, array(
                         'fileUpload'  => $file,
                         'contentType' => 'application/zip',
@@ -273,6 +268,7 @@ class DHDO {
                 DHDO::logger('Deleting SQL file: '.$sqlfile.' ...');
             }
             DHDO::logger('Backup Complete.');
+            DHDO::logger('');
         }
         
         // Cleanup Old Backups
