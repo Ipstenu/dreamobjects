@@ -845,7 +845,7 @@ class AmazonS3 extends CFRuntime
 		if (isset($opt['body']))
 		{
 			$request->set_body($opt['body']);
-			$headers['Content-Length'] = strlen($opt['body']);
+			//$headers['Content-Length'] = strlen($opt['body']);
 
 			if ($headers['Content-Type'] === 'application/x-www-form-urlencoded')
 			{
@@ -3377,7 +3377,7 @@ class AmazonS3 extends CFRuntime
 		// Handle content length. Can also be passed as an HTTP header.
 		if (isset($opt['length']))
 		{
-			$opt['headers']['Content-Length'] = $opt['length'];
+			//$opt['headers']['Content-Length'] = $opt['length'];
 			unset($opt['length']);
 		}
 
