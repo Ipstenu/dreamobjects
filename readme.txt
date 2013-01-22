@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 2.3
+Stable tag: 3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,7 +30,6 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 = To Do =
 * CDN (when available)
 * Better <code>[dreamobjects]</code> support for folders
-* Multipart file uploads to avoid large file upload problems (either get <a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/LLuploadFilePHP.html">multipart fileupload</a> working or <a href="http://superuser.com/questions/336219/how-do-i-split-a-zip-file-into-multiple-segments">split the zip</a>)
 * Option to email results (if logging, email log? Have to split up by attempt for that)
 
 == Installation ==
@@ -75,7 +74,7 @@ Not at this time. Backups for Multisite are a little messier, and I'm not sure h
 
 <strong>How big a site can this back up?</strong>
 
-The hard limit is 2G. The practical limit is 50megs.
+The hard limit is 2G. The practical limit is less (depending on your setup).
 
 <strong>Why does my backup run but not back anything up?</strong>
 
@@ -92,15 +91,21 @@ There are a few things at play here:
 3. The amount of server memory
 4. The amount of available CPU
 
-In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, but once you hit 50 megs, everything else starts getting weird.
+In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, but once you hit 100 megs, everything else starts getting weird.
 
-The fix would be to do multipart file uploads, and I'm working with engineering at DreamHost to make that happen for everyone.
+The fix is to do multipart file uploads, which was added in to version 3.0. The catch? This doesn't work for everyone. The larger your site, again, the more likely issues becuase PHP runs out of time (you don't leave processes running forever after all).
 
 <strong>Where's the Database in the zip?</strong>
 
 I admit, it's in a weird spot: /wp-content/upgrade/dreamobject-db-backup.sql
 
 Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future.
+
+<strong>My backup is small, but it won't back up!</strong>
+
+Did you use defines for your HOME_URL and/or SITE_URL?
+
+For some reason, PHP gets bibbeldy about that. I'm working on a solution!
 
 = Using the Plugin =
 
@@ -133,9 +138,12 @@ If you chose 'all' then yes, however this is not recommended. DreamObjects (like
 Anyone who can upload media can upload files, so this generally covers Authors and up. Only the Administrators can set the upload bucket, however.
 
 <strong>How do I use the CLI?</strong>
+
 If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> installed on your server (which DreamHost servers do), you can use the following commands:
 
 <pre>wp dreamobjects backup</pre>
+
+That runs an immediate backup and is great if you're going to, say, upgrade WP. Then you backup, upgrade your site, and everything is happy!
 
 = Errors =
 <strong>What's this <code>S3::listBuckets()</code> error?</strong>
@@ -174,14 +182,21 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 
 == Changelog ==
 
-= Version 2.4 =
-XXX, 2013 by Ipstenu
+= Version 3.1 =
+Jan XX, 2013 by Ipstenu
+
+* Fixing timeout with large zips
+* Alas, still having a problem -uploading- 100+ megs.
+
+= Version 3.0 =
+Jan 16, 2013 by Ipstenu
 
 * Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class (Thank you Stephon, Shredder/@GetSource, and Justin at DreamHost)
 * Security level up: Using register settings and the nonces the way WP intended (thank you @no_fear_inc, @rarst, @trepmal)
 * Logging now covers uploads, plus has more information for debugging.
 * Moving DHDO::, messages, registering settings, and many other things to their own files.
 * Fixed lingering debug warning with translations.
+* Using the MultiPart uploader, which should handle larger files.
 
 = Version 2.3 =
 Jan 3, 2013 by Ipstenu
@@ -236,3 +251,4 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
+This is a MAJOR update to the plugin (hence the version bump) and now includes the full SDK with more features. No settings changes should be lost.
