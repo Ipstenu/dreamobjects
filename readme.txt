@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 3.0
+Stable tag: 3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 * CDN (when available)
 * Better <code>[dreamobjects]</code> support for folders
 * Option to email results (if logging, email log? Have to split up by attempt for that)
+* Better advanced logging via s3's debug.
 
 == Installation ==
 
@@ -74,13 +75,11 @@ Not at this time. Backups for Multisite are a little messier, and I'm not sure h
 
 <strong>How big a site can this back up?</strong>
 
-The hard limit is 2G. The practical limit is less (depending on your setup).
+The hard limit is 2G. I've personally tested up to 250MB without any issues.
 
 <strong>Why does my backup run but not back anything up?</strong>
 
-Size. It's actually running the backup, but code that copies code up to DreamObjects has some limitations that happen on Amazon as well. Basically, the larger your backup, the more likely it is to decide it doesn't want to copy the file up without killing your server. Since the code is smart enough, it won't thrash your server, but it will magically decide to not copy files up.
-
-You can test if this is happening by trying to only backup the SQL. If that works, then it's the size of your total backup. 
+In pre 3.1 versions, that happened because of size. A quick way to test if this is happeneing still is by trying to only backup the SQL. If that works, then it's the size of your total backup.
 
 <strong>Wait, you said it could back up 2G! What gives?</strong>
 
@@ -91,9 +90,9 @@ There are a few things at play here:
 3. The amount of server memory
 4. The amount of available CPU
 
-In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, but once you hit 100 megs, everything else starts getting weird.
+In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increase_Filesize_Upload_Limit">PHP filesize upload limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. The DreamObjects itself can handle 2G, PHP may not make it.
 
-The fix is to do multipart file uploads, which was added in to version 3.0. The catch? This doesn't work for everyone. The larger your site, again, the more likely issues becuase PHP runs out of time (you don't leave processes running forever after all).
+I have, personally, verified a 250MB zip file, with no timeouts, no server thrashing, and no PHP errors, so if this is still happening, turn on debugging and check the log. If the log stalls on creating the zip, then you've hit the memory wall. It's possible to increase your memory limit via PHP, <em>however</em> doing this on a shared server means you're probably getting too big for this sort of backup solution in the first place. If your site is over 500megs and you're still on shared, you need to seriously think about your future. This will be much less of an issue on VPS and dedi boxes, where you don't have the same limits.
 
 <strong>Where's the Database in the zip?</strong>
 
@@ -116,6 +115,10 @@ You can schedule them daily, weekly, or monthly.
 <strong>Can I force a backup to run now?</strong>
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
+
+<strong>I disabled wp-cron. Will this work?</strong>
+
+Yes, <em>provided</em> you still call cron via a grown up cron job (i.e. 'curl http://domain.com/wp-cron.php'). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
 
 <strong>I kicked off an ASAP backup, but it says don't refresh the page. How do I know it's done?</strong>
 
@@ -146,6 +149,10 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 That runs an immediate backup and is great if you're going to, say, upgrade WP. Then you backup, upgrade your site, and everything is happy!
 
 = Errors =
+<strong>Can I see a log of what happens?</strong>
+
+You can enable logging on the main DreamObjects screen. This is intended to be temporary (i.e. for debugging weird issues) rather than something you leave on forever. If you turn off logging, the log wipes itself for your protection.
+
 <strong>What's this <code>S3::listBuckets()</code> error?</strong>
 
 Any time you see an error like this, it means the plugin can't talk to your DreamObjects buckets:
@@ -156,19 +163,32 @@ Unexpected HTTP status in /wp-content/plugins/dreamobjects/lib/S3.php on line 24
 
 Reasons why include the key/secretkey pair aren't actually setup correctly, the bucket was deleted after adding it to the plugin, or your DreamObjects account is disabled. Double check that your keys are correct and the bucket exists.
 
+<strong>My backups don't work, and when I turned on debugging, I see a 'failed' message</strong>
+
+Example error:
+<code>
+[2013/01/22 08:58:17] File failed to create /home/name/domain.com/wp-content/upgrade/dreamobject-backups.zip 
+in DreamObjects as domain.com/2013-01-22-085817.zip. Status: .
+</code>
+
+This means the file was zipped up, but could not copy up to the server.
+
+Right now, the only way to debug this is to edit the plugin (I know, I'm sorry). Go to <code>dreamobjects/lib/dhdo.php</code> and edit line #246 to remove the two backslashes:
+<code>
+            //$s3->debug_mode = true;
+</code>
+
+The via command line, run the backup <code>wp dreamobjects backup</code>
+
+That will output a whole mess of code. Save that output and post in the forums that this is happening. I'll get in touch with you so you can email me that privately. 
+
 <strong>The automated backup is set to run at 3am but it didn't run till 8am!</strong>
 
 That's actually not an error. WordPress kicks off cron jobs when someone visits your site, so if no one visted the site from 3am to 8am, then the job to backup wouldn't run until then.
 
-<strong>Can I see a log of what happens?</strong>
-
-You can enable logging on the main DreamObjects screen. This is intended to be temporary (i.e. for debugging weird issues) rather than something you leave on forever. If you turn off logging, the log wipes itself for your protection.
-
 <strong>Nothings happening when I press the backup ASAP button.</strong>
 
 First turn on logging, then run it again. If it gives output, then it's running, so read the log to see what the error is. If it just 'stops', then it's a bug. If it says it can't upload the file to DreamObjects, it's probably size.
-
-Second, try <em>just</em> backing up SQL. You may have a very large site, which has known to be problematic.
 
 Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 
@@ -183,10 +203,10 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 == Changelog ==
 
 = Version 3.1 =
-Jan XX, 2013 by Ipstenu
+Jan 23, 2013 by Ipstenu
 
 * Fixing timeout with large zips
-* Alas, still having a problem -uploading- 100+ megs.
+* Fixed Multipart for files over 100megs (props Stephon)
 
 = Version 3.0 =
 Jan 16, 2013 by Ipstenu
@@ -251,4 +271,4 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
-This is a MAJOR update to the plugin (hence the version bump) and now includes the full SDK with more features. No settings changes should be lost.
+3.0 is a MAJOR update to the plugin (hence the version bump) and now includes the full SDK with more features. No settings changes should be lost. 3.1 fixes (more of) the large file backup problem.
