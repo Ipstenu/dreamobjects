@@ -63,18 +63,24 @@ function dreamobjects_func( $atts ) {
 	    	return $nobucket;
 	    }
 
-	    include_once( DHDO_PLUGIN_DIR. '/lib/S3.php');	
-	    $s3 = new S3(get_option('dh-do-key'), get_option('dh-do-secretkey'));
+	    include_once( DHDO_PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');	
 
-	    $return = '<ul>';
-	        if (($uploads = $s3->getBucket( $bucket ) ) !== false) {
-	            krsort($uploads);
-	            foreach ($uploads as $object) {
-	            $return .= "<li><a href=\"https://objects.dreamhost.com/".$bucket."/".$object['name']."\">".$object['name']."</a></li>";
-	            }
-	        }
-	    $return .= '</ul>';       
-	    return $return;
+        $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+    	$s3->set_hostname('objects.dreamhost.com');
+    	$s3->allow_hostname_override(false);
+    	$s3->enable_path_style();
+        $bucket = get_option('dh-do-bucketup');
+        $uploads = $s3->get_object_list( $bucket );
+        $return = '<ul>';
+    		if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
+        		krsort($uploads);
+                foreach ($uploads as $object) {
+                    $objecturl = $s3->get_object_url( $bucket , $object );
+                    $return .= '<li><a href="'. $objecturl .'">'. $object .'</a></li>';
+                }
+            }
+        $return .= '</ul>';
+        return $return;
 	} elseif ( $prefix != "XXXX") {
 	
 		// Do Prefix Checks here
