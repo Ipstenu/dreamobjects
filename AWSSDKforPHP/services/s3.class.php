@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2010-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2010-2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License").
  * You may not use this file except in compliance with the License.
@@ -602,7 +602,7 @@ class AmazonS3 extends CFRuntime
 		$scheme = $this->use_ssl ? 'https://' : 'http://';
 		if ($bucket_name_may_cause_ssl_wildcard_failures || $this->resource_prefix || $this->path_style)
 		{
-            // Use bucket-in-path method
+			// Use bucket-in-path method
 			$hostname = $this->hostname . $this->resource_prefix . (($bucket === '' || $this->resource_prefix === '/' . $bucket) ? '' : ('/' . $bucket));
 		}
 		else
@@ -2363,7 +2363,7 @@ class AmazonS3 extends CFRuntime
 	 * @param string $bucket (Required) The name of the bucket to use.
 	 * @param string $filename (Required) The file name for the object.
 	 * @param boolean $friendly_format (Optional) A value of <code>true</code> will format the return value to 2 decimal points using the largest possible unit (i.e., 3.42 GB). A value of <code>false</code> will format the return value as the raw number of bytes.
-	 * @return integer|string The number of bytes as an integer, or the friendly format as a string.
+	 * @return integer|string|boolean The number of bytes as an integer, or the friendly format as a string. Returns false if the request failed.
 	 */
 	public function get_object_filesize($bucket, $filename, $friendly_format = false)
 	{
@@ -2372,12 +2372,12 @@ class AmazonS3 extends CFRuntime
 			throw new S3_Exception(__FUNCTION__ . '() cannot be batch requested');
 		}
 
-		$object = $this->get_object_headers($bucket, $filename);
-        if ($object->isOK()) {
-		    $filesize = (integer) $object->header['content-length'];
-		} else {
-		    $filesize = 0;
+		$response = $this->get_object_headers($bucket, $filename);
+		if (!$response->isOK()) {
+			return false;
 		}
+
+		//$filesize = (integer) $response->header['content-length'];
 
 		if ($friendly_format)
 		{
@@ -2529,6 +2529,10 @@ class AmazonS3 extends CFRuntime
 			do
 			{
 				$list = $this->list_objects($bucket, $opt);
+				if (is_string($list->body))
+				{
+					$list->body = new CFSimpleXML($list->body);
+				}
 				if ($keys = $list->body->query('descendant-or-self::Key')->map_string($pcre))
 				{
 					$objects = array_merge($objects, $keys);
@@ -2553,6 +2557,10 @@ class AmazonS3 extends CFRuntime
 			do
 			{
 				$list = $this->list_objects($bucket, $opt);
+				if (is_string($list->body))
+				{
+					$list->body = new CFSimpleXML($list->body);
+				}
 				$keys = $list->body->query('descendant-or-self::Key')->map_string($pcre);
 
 				if ($count = count($keys))
@@ -4166,7 +4174,7 @@ class AmazonS3 extends CFRuntime
 	 *
 	 * @param string $bucket (Required) The name of the bucket to use.
 	 * @param string $filename (Required) The file name for the object.
-	 * @param integer $days (Required) The number of days until the targetted objects are to be moved or expired from the bucket. Must be a positive integer.
+	 * @param integer $days (Required) The number of days until the targeted objects are to be moved or expired from the bucket. Must be a positive integer.
 	 * @param array $opt (Optional) An associative array of parameters that can have the following keys: <ul>
 	 * 	<li><code>curlopts</code> - <code>array</code> - Optional - A set of values to pass directly into <code>curl_setopt()</code>, where the key is a pre-defined <code>CURLOPT_*</code> constant.</li>
 	 * 	<li><code>returnCurlHandle</code> - <code>boolean</code> - Optional - A private toggle specifying that the cURL handle be returned rather than actually completing the request. This toggle is useful for manually managed batch requests.</li></ul>
@@ -4176,6 +4184,7 @@ class AmazonS3 extends CFRuntime
 	{
 		if (!$opt) $opt = array();
 		$opt['verb'] = 'POST';
+		$opt['resource'] = $filename;
 		$opt['sub_resource'] = 'restore';
 		$opt['headers'] = array(
 			'Content-Type' => 'application/xml'

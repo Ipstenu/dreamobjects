@@ -35,6 +35,7 @@ if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled'
 if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '15' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
+if ( !get_option('dh-do-debugging')) {update_option( 'dh-do-debugging', 'off' );}
     
 // Shortcode
 if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {

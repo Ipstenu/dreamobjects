@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.5
-Stable tag: 3.1.1
+Stable tag: 3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,9 +63,13 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
 <strong>Do I have to host my website on DreamHost?</strong>
 
-Yes and no. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts.
+No, but it's unsupported. 
+
+You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts. 
 
 <strong>Can I use this on a Windows Server?</strong>
+
+This is unsupported.
 
 You can try, and let me know how it goes. I built this for DreamHost, so it has only been tested on Linux boxes.
 
@@ -118,7 +122,7 @@ Yep! It actually sets it to run in 60 seconds, but works out the same.
 
 <strong>I disabled wp-cron. Will this work?</strong>
 
-Yes, <em>provided</em> you still call cron via a grown up cron job (i.e. 'curl http://domain.com/wp-cron.php'). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
+Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. 'curl http://domain.com/wp-cron.php'). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
 
 <strong>I kicked off an ASAP backup, but it says don't refresh the page. How do I know it's done?</strong>
 
@@ -149,6 +153,11 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 That runs an immediate backup and is great if you're going to, say, upgrade WP. Then you backup, upgrade your site, and everything is happy!
 
 = Errors =
+
+<strong>It's reporting page not found when I access the pages</strong>
+
+Upgrade to version 3.2 and tell PHP it's drunk.
+
 <strong>Can I see a log of what happens?</strong>
 
 You can enable logging on the main DreamObjects screen. This is intended to be temporary (i.e. for debugging weird issues) rather than something you leave on forever. If you turn off logging, the log wipes itself for your protection.
@@ -173,14 +182,11 @@ in DreamObjects as domain.com/2013-01-22-085817.zip. Status: .
 
 This means the file was zipped up, but could not copy up to the server.
 
-Right now, the only way to debug this is to edit the plugin (I know, I'm sorry). Go to <code>dreamobjects/lib/dhdo.php</code> and edit line #246 to remove the two backslashes:
-<code>
-            //$s3->debug_mode = true;
-</code>
+Turn on debug mode, and then turn on verbose debugging. 
 
-The via command line, run the backup <code>wp dreamobjects backup</code>
+Then, via command line, run the backup <code>wp dreamobjects backup</code>
 
-That will output a whole mess of code. Save that output and post in the forums that this is happening. I'll get in touch with you so you can email me that privately. 
+That will output a whole mess of code. Save that output and post in the forums that this is happening. I'll get in touch with you so you can email me the output privately. 
 
 <strong>The automated backup is set to run at 3am but it didn't run till 8am!</strong>
 
@@ -201,6 +207,12 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= Version 3.2 =
+Mar 19, 2013 by Ipstenu
+
+* PHP 5.4 support required updating the AWSSDK
+* Added in an actual checkbox for super debug mode
 
 = Version 3.1.1 =
 Feb 11, 2013 by Ipstenu

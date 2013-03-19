@@ -45,13 +45,6 @@ class DreamObjects_Command extends WP_CLI_Command {
 		do_action('dh-do-backup', array('DHDO', 'backup'));
 		WP_CLI::success( 'Backup Complete' );
 	}
-	
-	function schedule( $args = array(), $vars = array() ) {
-		// take a variable here
-		// schedule [daily|weekly|monthly|disable]
-		WP_CLI::success( 'If this was written, it would work.' );
-	}
-	
 
 	/**
 	 * Help function for this command
@@ -65,12 +58,3 @@ EOB
 	);
 	}
 }
-
-/* Old
-usage: wp dreamobjects [backup|schedule]
-
-Available sub-commands:
-	backup    run a backup now
-	schedule  [daily|weekly|monthly|disable]
-EOB
-*/

@@ -22,12 +22,14 @@ if (!defined('ABSPATH')) {
 }
 
 
+
 include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
 		}
 		?>
+
 			<script type="text/javascript">
 				var ajaxTarget = "<?php echo DHDO::getURL() ?>backup.ajax.php";
 				var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
@@ -40,7 +42,7 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 
 <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
     <h3><?php _e('The Bucket Stuff', dreamobjects); ?></h3>
-     <table class="form-table"><tr valign="top">
+    <table class="form-table"><tr valign="top">
     <td width="50%"><h4><?php _e('Create A New Bucket', dreamobjects); ?></h4>
 
     <p><?php _e('If you need to create a new bucket, just enter the name and click Create Bucket.', dreamobjects); ?>
@@ -62,19 +64,21 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 
     $ListResponse = $s3->list_buckets();
     $buckets = $ListResponse->body->Buckets->Bucket;
+
     if ( !empty($buckets) ) :
-        foreach ( $buckets as $b ) :
-            echo "<li>".$b->Name;
-            if ( $b->Name == get_option('dh-do-bucket') ) 
+        foreach ( $buckets as $b ) {
+            echo "<li>";
+            if(isset($b->Name)) {$name = $b->Name;}
+            printf($name);
+            if ( $name == get_option('dh-do-bucket') ) 
                 {$string = ' <strong>'. __(' - Used for Backups', dreamobjects).'</strong>';
                 echo $string;}
-            elseif ( $b->Name == get_option('dh-do-bucketup') ) 
+            elseif ( $name == get_option('dh-do-bucketup') ) 
                 {$string = ' <strong>'. __(' - Used for Uploads', dreamobjects).'</strong>';
                 echo $string;
                 }
-
             echo "</li>";
-        endforeach;
+        }
     endif;
     ?>
     </ul></td>
@@ -87,18 +91,23 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 
     <form method="post" action="options.php">
         <?php settings_fields( 'dh-do-logging-settings' ); ?>
-        <input type="checkbox" name="dh-do-logging" <?php checked( get_option('dh-do-logging') == 'on',true); ?> /> <?php _e('Enable logging (if checked)', dreamobjects); ?>
+        <p><input type="checkbox" name="dh-do-logging" <?php checked( get_option('dh-do-logging') == 'on',true); ?> /> <?php _e('Enable logging (if checked)', dreamobjects); ?> <?php
+    if ( get_option('dh-do-logging') == 'on' ) { ?>&mdash; <span class="description"><?php _e('Your logfile is located at ', dreamobjects); ?><a href="<?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></span></p>
+        <?php
+    }
+    ?>
+        <?php
+            if ( get_option('dh-do-logging') == 'on' ) {
+            ?><p><input type="checkbox" name="dh-do-debugging" <?php checked( get_option('dh-do-debugging') == 'on',true); ?> /> <?php _e('Enable verbose debugging (if checked)', dreamobjects); ?> &mdash; <span class="description"><?php _e('This will only provide output via the WP-CLI interface.', dreamobjects); ?></span></p>
+            <input type="hidden" name="dhdo-debugchange" value="Y">
+            <input type="hidden" name="page_options" value="dh-do-debugging" />
+            <?php }
+        ?>
         <input type="hidden" name="dhdo-logchange" value="Y">
         <input type="hidden" name="page_options" value="dh-do-logging" />
         <p class="submit"><input class='button-secondary' type='Submit' name='logging' value='<?php _e("Configure Logging", dreamobjects); ?>' id='submitbutton' /></p>
     </form>
-    <?php
-    if ( get_option('dh-do-logging') == 'on' ) {
-        ?>
-            <p><?php _e('Your logfile is located at ', dreamobjects); ?><a href="<?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></p>
-        <?php
-    }
-    ?>
+    
 
                     <h3><?php _e('Reset Options', dreamobjects); ?></h3>
                     <p><?php _e('Click the button to wipe out all settings. This will reset your keypair, as well as all plugin options including the debug log. It will <em>not</em> remove any backups.', dreamobjects); ?></p>

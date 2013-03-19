@@ -64,6 +64,7 @@ class DHDO {
             delete_option( 'dh-do-uploader' );
             delete_option( 'dh-do-uploadview' );
             delete_option( 'dh-do-logging' );
+            delete_option( 'dh-do-debugging' );
             DHDO::logger('reset');
            }
 
@@ -242,8 +243,8 @@ class DHDO {
             $newname = $url . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             
             DHDO::logger('New filename '. $newname .'.');
-            set_time_limit(180); 
-            //$s3->debug_mode = true;
+            set_time_limit(180);
+            if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
             $mpupload = $s3->create_mpu_object($bucket, $newname, array(
                         'fileUpload'  => $file,
                         'contentType' => 'application/zip',

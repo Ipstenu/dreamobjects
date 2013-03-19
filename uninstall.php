@@ -34,3 +34,4 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
         delete_option( 'dh-do-uploader' );
         delete_option( 'dh-do-uploadview' );
         delete_option( 'dh-do-logging' );
+        delete_option( 'dh-do-debugging' );

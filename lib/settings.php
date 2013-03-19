@@ -21,6 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+
 include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 class DHDOSET {
@@ -106,8 +107,10 @@ class DHDOSET {
             ?>
             <select name="dh-do-bucketup">
                 <option value="XXXX">(select a bucket)</option>
-                <?php foreach ( $buckets as $b ) : ?>
-                    <option <?php if ( $b->Name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
+                <?php foreach ( $buckets as $b ) : 
+                      if(isset($b->Name)) {$name = $b->Name;}
+                ?>
+                    <option <?php if ( $name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
                 <?php endforeach; ?>
             </select>
                     
@@ -214,6 +217,7 @@ class DHDOSET {
         register_setting( 'dh-do-reset-settings', 'dh-do-reset');
     // Logging Settings
         register_setting( 'dh-do-logging-settings', 'dh-do-logging');
+        register_setting( 'dh-do-logging-settings', 'dh-do-debugging');
     // Backup Bucket Settings
         register_setting( 'do-do-new-bucket-settings', 'dh-do-new-bucket');
     }
