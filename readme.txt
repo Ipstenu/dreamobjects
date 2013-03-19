@@ -211,8 +211,9 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 = Version 3.2 =
 Mar 19, 2013 by Ipstenu
 
-* PHP 5.4 support required updating the AWSSDK
+* PHP 5.4 support required updating the AWSSDK (props Shredder)
 * Added in an actual checkbox for super debug mode
+* Edited AWSSDKforPHP/services/s3.class.php to work with CEPH
 
 = Version 3.1.1 =
 Feb 11, 2013 by Ipstenu
@@ -288,4 +289,4 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
-3.0 is a MAJOR update to the plugin (hence the version bump) and now includes the full SDK with more features. No settings changes should be lost. 3.1 fixes (more of) the large file backup problem.
+3.2 is a requirement if you want to use PHP 5.4
