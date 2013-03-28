@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects Connection
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 3.2b
+Version: 3.2.1b
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 
@@ -30,6 +30,15 @@ Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 /**
  * @package dh-do-backups
  */
+ 
+// First we check to make sure you meet the requirements
+global $wp_version;
+$exit_msg_version = 'This plugin is not supported on pre-3.5 WordPress installs.';
+if (version_compare($wp_version,"3.5","<")) { exit($exit_msg_version); }
+$exit_msg_multisite = 'This plugin is not supported on Multisite.';
+if( is_multisite() ) { exit($exit_msg_multisite); }
+$exit_msg_php = 'This plugin is not supported on PHP 5.2 and older. Please upgrade to at least 5.3.';
+if(version_compare(PHP_VERSION, '5.3.0') >= 0) { exit($exit_msg_php); }
 
 require_once dirname(__FILE__) . '/lib/defines.php';
 require_once dirname(__FILE__) . '/lib/dhdo.php';

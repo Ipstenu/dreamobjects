@@ -2,7 +2,7 @@
 **Tags:** cloud, dreamhost, dreamobjects, backup  
 **Requires at least:** 3.4  
 **Tested up to:** 3.5  
-**Stable tag:** 3.2
+**Stable tag:** 3.2.1
 **License:** GPLv2 or later  
 **License URI:** http://www.gnu.org/licenses/gpl-2.0.html  
 
@@ -12,13 +12,13 @@ Connect your WordPress site to DreamHost's DreamObjects.
 
 This is the GitHome of DreamObjects, and is where I do the dev work. Betas are pushed here as soon as they work, and when there's 'enough' to push a new version, it goes to WordPress Plugins SVN.
 
-## 19 March 2013 ##
+## 28 March 2013 ##
 
-Currently we're on version 3.2 
+Currently we're on version 3.2.1
 
 <em>What's New...</em>
 
-PHP 5.4 support!
+PHP 5.4 support! Dropping PHP 5.2 (not me, it's Amazon).
 
 <em>Remaining Issues...</em>
 
