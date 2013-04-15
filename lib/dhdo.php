@@ -94,7 +94,7 @@ class DHDO {
               }
             else
               {   $acl = AmazonS3::ACL_PRIVATE;
-                  DHDO::logger('Upload will be public.');
+                  DHDO::logger('Upload will be private.');
               }
             $bucket = get_option('dh-do-bucketup');
  
