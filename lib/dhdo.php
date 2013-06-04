@@ -204,7 +204,7 @@ class DHDO {
 
         // All me files!
         if ( in_array('files', $sections) ) {
-            $backups = array_merge($backups, DHDO::rscandir(ABSPATH));
+            $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
             DHDO::logger('List of files added to the zip.');
         } 
         

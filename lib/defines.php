@@ -25,6 +25,9 @@ if (!defined('ABSPATH')) {
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
+// Standard content folder defines.
+if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+
 // Setting Options
 if ( !defined('dreamobjects')) {define('dreamobjects','dreamobjects');} // Translation
 if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
