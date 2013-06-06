@@ -210,7 +210,7 @@ class DHDO {
         
         // And me DB!
         if ( in_array('database', $sections) ) {
-            set_time_limit(90);
+            set_time_limit(180);
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
             $result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
             $sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';

@@ -218,6 +218,7 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 June 3, 2013 by Ipstenu
 
 * Changing how the backup is done to make it smaller but also to support more configurations. Now it only backs up wp-content.
+* Increased timeouts for SQL
 
 = 3.2.1 =
 Mar 28, 2013 by Ipstenu
