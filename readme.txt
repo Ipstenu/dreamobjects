@@ -215,7 +215,7 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 == Changelog ==
 
 = 3.3 =
-June 3, 2013 by Ipstenu
+June 24, 2013 by Ipstenu
 
 * Changing how the backup is done to make it smaller but also to support more configurations. Now it only backs up wp-content.
 * Increased timeouts for SQL
@@ -306,4 +306,4 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
-3.2 is a requirement if you want to use PHP 5.4
+PHP 5.2 is no longer supported. Also now only wp-content/uploads is backed up (in the effort of making this smaller)
