@@ -74,7 +74,7 @@ class DHDOSET {
         add_settings_field( 'secretkey_id', __('Secret Key', 'dreamobjects'), 'secretkey_callback', 'dh-do-keypair_page', 'keypair_id' );
 
         function keypair_callback() { 
-            echo '<p>'. _e("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
+            echo '<p>'. __("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
         }
     	function key_callback() {
         	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text"/>';

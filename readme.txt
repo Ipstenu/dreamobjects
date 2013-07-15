@@ -2,7 +2,7 @@
 Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: 3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -69,15 +69,11 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
 <strong>Do I have to host my website on DreamHost?</strong>
 
-No, but using it anywhere else is unsupported. 
-
-You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts. 
+No, but using it anywhere else is unsupported. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts. 
 
 <strong>Can I use this on a Windows Server?</strong>
 
-This is unsupported.
-
-You can try, and let me know how it goes. I built this for DreamHost, so it has only been tested on Linux boxes.
+This is unsupported. You can try, and let me know how it goes. I built this for DreamHost, so it has only been tested on Linux boxes.
 
 <strong>Can I use this on Multisite?</strong>
 
@@ -168,6 +164,16 @@ Upgrade to version 3.2 and tell PHP it's drunk.
 
 You can enable logging on the main DreamObjects screen. This is intended to be temporary (i.e. for debugging weird issues) rather than something you leave on forever. If you turn off logging, the log wipes itself for your protection.
 
+<strong>Why don't my buckets list?</strong>
+
+Do you see an error like this?
+
+<code>
+Fatal error:  Call to undefined method SimpleXMLIterator::__toString() in /wp-content/plugins/dreamobjects/AWSSDKforPHP/utilities/simplexml.class.php on line 164
+</code>
+
+If so, you're on PHP 5.2 and you need to upgrade to 5.3 or higher. AWSSDK dropped support for 5.2 when it added 5.4, so it was either support 5.2 and 5.3 OR 5.3 and 5.4. I went with the future.
+
 <strong>What's this <code>S3::listBuckets()</code> error?</strong>
 
 Any time you see an error like this, it means the plugin can't talk to your DreamObjects buckets:
@@ -213,6 +219,11 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 3.4 =
+XXX, 2013 by Ipstenu
+
+* Typo in echo -- _e() should be __() (props Marko and Shredder)
 
 = 3.3 =
 June 24, 2013 by Ipstenu
