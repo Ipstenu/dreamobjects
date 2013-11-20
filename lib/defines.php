@@ -25,6 +25,12 @@ if (!defined('ABSPATH')) {
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
+// Error for PHP 5.2
+if (version_compare(phpversion(), '5.3', '<')) {
+    add_action('admin_notices', array('DHDOMESS','oldPHPError'));
+    return;
+}
+
 // Standard content folder defines.
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 

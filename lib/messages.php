@@ -29,8 +29,8 @@ class DHDOMESS {
     }
     
     function backupMessage() {
-        $timestamp = wp_next_scheduled( 'dh-do-backupnow' );
-        $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), date_i18n('h:i a', $timestamp) );
+        $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backupnow' ) ), get_option('time_format') );
+        $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), $timestamp );
         echo "<div id='message' class='updated fade'><p><strong>".$string."</strong></p></div>";
     }
     
@@ -49,5 +49,10 @@ class DHDOMESS {
     function newBucketError() {
         echo "<div id='message' class='error fade'><p><strong>".__('Error: Unable to create bucket (it may already exist and/or be owned by someone else)', dreamobjects)."</strong></p></div>";
     }
+
+    function oldPHPError() {
+        echo "<div id='message' class='error fade'><p><strong>".__('Error: The DreamObjects Connection plugin requires PHP 5.3 or higher to run. Please upgrade your PHP or this plugin will not function correctly.)', dreamobjects)."</strong></p></div>";
+    }
+
 
 }

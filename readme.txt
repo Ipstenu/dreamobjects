@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.7
-Stable tag: 3.3
+Stable tag: 3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -221,9 +221,15 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 == Changelog ==
 
 = 3.4 =
-XXX, 2013 by Ipstenu
+Nov 20, 2013 by Ipstenu
 
-* Typo in echo -- _e() should be __() (props Marko and Shredder)
+* Wrong use of echo -- _e() should be __() (props Marko and Shredder)
+* TARDIS error. Any time you pick a timezone that was +GMT, it mathed out totally wrong (props DreamHost customer Jeremy C!)
+* Clean up scheduled hooks on uninstall
+* Error message for PHP less than 5.3
+* Outright failure to activate on Multisite (this is intentional, it's NOT supported)
+* Added cache-buster for compatibility with DreamPress/Varnish
+* MP6 ready (aka will look nice on WP 3.8)
 
 = 3.3 =
 June 24, 2013 by Ipstenu

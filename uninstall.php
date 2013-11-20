@@ -22,16 +22,20 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	exit ();
 
 // Deregister
-        delete_option( 'dh-do-backupsection' );
-        delete_option( 'dh-do-bucket' );
-        delete_option( 'dh-do-bucketcdn' );
-        delete_option( 'dh-do-bucketup' );
-        delete_option( 'dh-do-cdn' );
-        delete_option( 'dh-do-key' );
-        delete_option( 'dh-do-schedule' );
-        delete_option( 'dh-do-secretkey' );
-        delete_option( 'dh-do-section' );
-        delete_option( 'dh-do-uploader' );
-        delete_option( 'dh-do-uploadview' );
-        delete_option( 'dh-do-logging' );
-        delete_option( 'dh-do-debugging' );
+    delete_option( 'dh-do-backupsection' );
+    delete_option( 'dh-do-bucket' );
+    delete_option( 'dh-do-bucketcdn' );
+    delete_option( 'dh-do-bucketup' );
+    delete_option( 'dh-do-cdn' );
+    delete_option( 'dh-do-key' );
+    delete_option( 'dh-do-schedule' );
+    delete_option( 'dh-do-secretkey' );
+    delete_option( 'dh-do-section' );
+    delete_option( 'dh-do-uploader' );
+    delete_option( 'dh-do-uploadview' );
+    delete_option( 'dh-do-logging' );
+    delete_option( 'dh-do-debugging' );
+
+// Unschedule
+    wp_clear_scheduled_hook( 'dh-do-backupnow');
+    wp_clear_scheduled_hook( 'dh-do-backup');

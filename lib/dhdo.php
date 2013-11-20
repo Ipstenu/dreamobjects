@@ -31,8 +31,9 @@ class DHDO {
         if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
             wp_clear_scheduled_hook('dh-do-backup');
             if ( $_POST['dh-do-schedule'] != 'disabled' ) {
-                wp_schedule_event(current_time('timestamp')+86400, $_POST['dh-do-schedule'], 'dh-do-backup');
-                $nextbackup = sprintf(__('Next backup: %s', dreamobjects), date_i18n('F j, Y h:i a', current_time('timestamp')+86400) );
+                wp_schedule_event(current_time('timestamp',true)+86400, $_POST['dh-do-schedule'], 'dh-do-backup');
+                $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option('time_format') );
+                $nextbackup = sprintf(__('Next backup: %s', dreamobjects), $timestamp );
                 DHDO::logger('Scheduled '.$_POST['dh-do-schedule'].' backup. ' .$nextbackup);
             }
         }
@@ -120,7 +121,7 @@ class DHDO {
 
         // BACKUP ASAP
         if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
-            wp_schedule_single_event( current_time('timestamp')+60, 'dh-do-backupnow');
+            wp_schedule_single_event( current_time('timestamp', true)+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDOMESS','backupMessage'));
             DHDO::logger('Scheduled ASAP backup.');
         }

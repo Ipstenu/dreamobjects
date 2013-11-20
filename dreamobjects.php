@@ -7,6 +7,7 @@ Description: Connect your WordPress install to your DreamHost DreamObjects bucke
 Version: 3.4b
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
+Network: false
 
 Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 
@@ -43,7 +44,7 @@ if ( defined('WP_CLI') && WP_CLI ) {
 
 // Stylesheets
 function dreamobjects_stylesheet() {
-    wp_register_style( 'dreamobj-style', plugins_url('dreamobjects.css', __FILE__) );
+    wp_register_style( 'dreamobj-style', plugins_url('dreamobjects.css', __FILE__), '', '3.4' );
     wp_enqueue_style( 'dreamobj-style' );
 }
 add_action('admin_print_styles', 'dreamobjects_stylesheet');
