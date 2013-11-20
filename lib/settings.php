@@ -93,7 +93,7 @@ class DHDOSET {
         add_settings_field( 'uploadpub_id', __('Privacy', 'dreamobjects'), 'privacyup_callback', 'dh-do-uploader_page', 'uploader_id' );
 
          function uploader_callback() { 
-            ?><p><?php __('The options below will let you configure your uploads to go to a specific bucket on DreamObjects. While you can use any bucket you want, it\'s best to use one dedicated to uploads. Since you can host any file you want on DreamObjects, there are no checks for filetype.', dreamobjects); ?></p><?php
+            ?><p><?php echo __('The options below will let you configure your uploads to go to a specific bucket on DreamObjects. While you can use any bucket you want, it\'s best to use one dedicated to uploads. Since you can host any file you want on DreamObjects, there are no checks for filetype.', dreamobjects); ?></p><?php
         }
 
         function bucketup_callback() { 
@@ -114,7 +114,7 @@ class DHDOSET {
                 <?php endforeach; ?>
             </select>
                     
-            <p class="description"><?php __('Select from your pre-existing buckets.', dreamobjects); ?></p>
+            <p class="description"><?php echo __('Select from your pre-existing buckets.', dreamobjects); ?></p>
                     
             <?php if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || get_option('dh-do-bucket') != "XXXX" ) ) { 
                 $alreadyusing = sprintf(__('You are already using the bucket "%s" for backups. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
@@ -124,8 +124,8 @@ class DHDOSET {
 
         function privacyup_callback() { 
             ?>
-            <input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php __('Private Uploads', dreamobjects); ?>
-            <p class="description"><?php __('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p>
+            <input type="checkbox" name="dh-do-uploadpub" id="dh-do-uploadpub" value="1" <?php checked( '1' == get_option('dh-do-uploadpub') ); ?> /> <?php echo __('Private Uploads', dreamobjects); ?>
+            <p class="description"><?php echo __('Designate if your uploads are public or private. If checked, all uploads are private. Be advised, the links to your uploads below will not work publically if you chose this.', dreamobjects); ?></p>
             <?php
         }
 
@@ -162,7 +162,7 @@ class DHDOSET {
                     <option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
                     <?php endforeach; ?>
                 </select>
-				<p class="description"><?php __('Select from pre-existing buckets.', dreamobjects); ?></p>
+				<p class="description"><?php echo __('Select from pre-existing buckets.', dreamobjects); ?></p>
 				<?php if ( get_option('dh-do-bucketup') && ( !get_option('dh-do-bucketup') || (get_option('dh-do-bucketup') != "XXXX") ) ) { 
     				$alreadyusing = sprintf(__('You are currently using the bucket "%s" for Uploads. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucketup')  );
     				echo '<p class="description">' . $alreadyusing . '</p>';
@@ -176,14 +176,14 @@ class DHDOSET {
     		}
         	?><p><label for="dh-do-backupsection-files">
 				<input <?php if ( in_array('files', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="files" id="dh-do-backupsection-files" />
-				<?php __('All Files', dreamobjects); ?>
+				<?php echo __('All Files', dreamobjects); ?>
 				</label><br />
 				<label for="dh-do-backupsection-database">
 				<input <?php if ( in_array('database', $sections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="database" id="dh-do-backupsection-database" />
-				<?php __('Database', dreamobjects); ?>
+				<?php echo __('Database', dreamobjects); ?>
 				</label><br />
 				</p>
-				<p class="description"><?php __('You can select portions of your site to backup.', dreamobjects); ?></p><?php
+				<p class="description"><?php echo __('You can select portions of your site to backup.', dreamobjects); ?></p><?php
         }
     	function backup_retain_callback() {
             ?><select name="dh-do-retain">
@@ -191,8 +191,8 @@ class DHDOSET {
 				        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 				    <?php endforeach; ?>
 				</select>	
-				<p class="description"><?php __('How many many backups do you want to keep? 30 is recommended.', dreamobjects); ?></p>
-				<p class="description"><strong><?php __('NOTICE!', dreamobjects); ?></strong> <?php __('DreamObjects charges you based on diskspace used. Setting to \'All\' will retain your backups forwever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p><?
+				<p class="description"><?php echo __('How many many backups do you want to keep? 30 is recommended.', dreamobjects); ?></p>
+				<p class="description"><strong><?php echo __('NOTICE!', dreamobjects); ?></strong> <?php echo __('DreamObjects charges you based on diskspace used. Setting to \'All\' will retain your backups forwever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p><?
     	
     	}
     	
@@ -207,7 +207,7 @@ class DHDOSET {
                   $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );
                   $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), $timestamp );
             ?>
-            <p class="description"><?php __('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
+            <p class="description"><?php echo __('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
             <?php if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) { ?>
             <p class="description"><?php echo $nextbackup; ?></p>
             <?php }

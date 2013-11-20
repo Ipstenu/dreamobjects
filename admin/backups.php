@@ -30,7 +30,7 @@ include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 <div class="wrap">
     <div id="icon-dreamobjects" class="icon32"></div>
-    <h2><?php __("Backups", dreamobjects); ?></h2>
+    <h2><?php echo __("Backups", dreamobjects); ?></h2>
 
     <div id="dho-primary">
     	<div id="dho-content">
@@ -52,7 +52,7 @@ include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
                     ?>
                     
                     <h3><?php echo $show_backup_header; ?></h3>
-                    <p><?php __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
+                    <p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
                 
                     <div id="backups">
                         <ul><?php 
@@ -80,8 +80,8 @@ include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
                      <form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">
                          <input type="hidden" name="action" value="backup" />
                          <?php wp_nonce_field('dhdo-backupnow'); ?>
-                         <h3><?php __('Backup ASAP!', dreamobjects); ?></h3>
-                         <p><?php __('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', dreamobjects); ?></p>
+                         <h3><?php echo __('Backup ASAP!', dreamobjects); ?></h3>
+                         <p><?php echo __('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', dreamobjects); ?></p>
                 
                          <?php
                              $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );

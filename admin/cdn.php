@@ -31,7 +31,7 @@ $cdnsections = get_option('dh-do-cdnsection');
 
 <script type="text/javascript">
 	var ajaxTarget = "<?php echo self::getURL() ?>backup.ajax.php";
-	var nonce = "<?php echo wp_create_nonce('dhdocdn'); ?>";
+	var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
 </script>
 
 <div class="wrap">
@@ -40,64 +40,25 @@ $cdnsections = get_option('dh-do-cdnsection');
 	
 	<p><?php _e("Configure your site to use DreamObjects for CDN.", dreamobjects); ?></p>
 	
-	<p>CDN Doesn't actually work right now, but we're stubbing it out to test.</p>
+	<p>CDN Doesn't actually work right now. Why are you here?</p>
 
-	<h3><?php _e('Settings', dreamobjects); ?></h3>
-	<form method="post" action="options.php">
-		<input type="hidden" name="action" value="update" />
-		<?php wp_nonce_field('update-options'); ?>
-		<input type="hidden" name="page_options" value="dh-do-bucketcdn,dh-do-cdn" />
-
-<table class="form-table">
-    <tbody>
-
-<?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
-<?php
-    $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-    $s3->set_hostname('objects.dreamhost.com');
-    $s3->allow_hostname_override(false);
-    $s3->enable_path_style();
- 
-    $ListResponse = $s3->list_buckets();
-    $buckets = $ListResponse->body->Buckets->Bucket;
-?>
-        <tr valign="top">
-            <th scope="row"><label for="dh-do-bucketcdn"><?php _e('Bucket Name', dreamobjects); ?></label></th>
-            <td><select name="dh-do-bucketcdn">
-                                    <option value="XXXX">(select a bucket)</option>
-		<?php foreach ( $buckets as $b ) : ?>
-<option <?php if ( $b->Name == get_option('dh-do-bucketcdn') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
-		<?php endforeach; ?>
-	</select>
-            <p class="description"><?php _e('Select from pre-existing buckets.', dreamobjects); ?></p>
-            <?php if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) { 
-                $alreadyusing = sprintf(__('You are already using the bucket "%s" for backups. While you can reuse this bucket, it would be best not to.', dreamobjects), get_option('dh-do-bucket')  );
-                echo '<p class="description">' . $alreadyusing . '</p>';
-            } ?>            
-            </td>
-        </tr>
-
-<?php if ( get_option('dh-do-bucketcdn') && (get_option('dh-do-bucketcdn') != "XXXX") && !is_null(get_option('dh-do-bucketcdn')) ) : ?>
-        <tr valign="top">
-            <th scope="row"><label for="dh-do-whatcdn"><?php _e('What to move to CDN', dreamobjects); ?></label></th>
-            <td>
-								<p><label for="dh-do-cdnsection-theme">
-								<input <?php if ( in_array('theme', $cdnsections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-cdnsection[]" value="files" id="dh-do-cdnsection-theme" />
-								<?php _e('Theme Files', dreamobjects); ?>
-							</label><br />
-							<label for="dh-do-cdnsection-images">
-								<input <?php if ( in_array('images', $cdnsections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-cdnsection[]" value="database" id="dh-do-cdnsection-images" />
-								<?php _e('Images', dreamobjects); ?>
-							</label><br />
-						</p>
-				<p class="description"><?php _e('You can select portions of your site to backup.', dreamobjects); ?></p>
-				</td>
-        </tr>        
-
-<?php endif; // Show backup settings ?>
-        
-<?php endif; // Show bucket list ?>
-</tbody>
-</table>
-
-<p class="submit"><input class='button-primary' type='Submit' name='update' value='<?php _e("Update Options", dreamobjects); ?>' id='submitbutton' /></p>
+    <div id="dho-primary">
+    	<div id="dho-content">
+    		<div id="dho-leftcol">
+    		    <p>Options will be set here</p>
+                    <form method="post" action="options.php">
+                        <?php
+                            settings_fields( 'dh-do-cdner-settings' );
+                            do_settings_sections( 'dh-do-cdner_page' );
+                            submit_button(__('Update Options','dreamobjects'), 'primary');
+                        ?>
+                    </form>
+    			</div>
+    			<div id="dho-rightcol">
+                    <?php if ( get_option('dh-do-bucketcdn') && ( !get_option('dh-do-bucketcdn') || (get_option('dh-do-bucketcdn') != "XXXX") ) ) { ?>
+                    <p>List some things here</p>
+                    <?php } ?>
+    		</div>
+    	</div>
+    </div>
+</div>
