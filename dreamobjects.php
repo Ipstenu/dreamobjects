@@ -4,10 +4,12 @@
 Plugin Name: DreamObjects Connection
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 3.4b
+Version: 3.4
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
+Text Domain: dreamobjects
+Domain Path: /i18n
 
 Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 

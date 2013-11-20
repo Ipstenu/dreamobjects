@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: DreamObjects\n"
-"POT-Creation-Date: 2013-03-19 14:45-0800\n"
-"PO-Revision-Date: 2013-03-19 14:45-0800\n"
+"POT-Creation-Date: 2013-11-20 12:03-0800\n"
+"PO-Revision-Date: 2013-11-20 12:03-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.7\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;__\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
@@ -21,22 +21,22 @@ msgstr ""
 msgid "Update Options"
 msgstr ""
 
-#: ../admin/backups.php:52
+#: ../admin/backups.php:51
 #, php-format
 msgid "Latest %s Backups"
 msgstr ""
 
-#: ../admin/backups.php:56
+#: ../admin/backups.php:55
 msgid ""
 "All backups can be downloaded from this page without logging in to "
 "DreamObjects."
 msgstr ""
 
-#: ../admin/backups.php:84
+#: ../admin/backups.php:83
 msgid "Backup ASAP!"
 msgstr ""
 
-#: ../admin/backups.php:85
+#: ../admin/backups.php:84
 msgid ""
 "Oh you really want to do a backup right now? Schedule your backup to start "
 "in a minute. Be careful! This may take a while, and slow your site down, if "
@@ -44,12 +44,12 @@ msgid ""
 "and click \"Update Options\" before running this."
 msgstr ""
 
-#: ../admin/backups.php:89
+#: ../admin/backups.php:88
 #, php-format
 msgid "Keep in mind, your next scheduled backup is at %s"
 msgstr ""
 
-#: ../admin/backups.php:95
+#: ../admin/backups.php:94
 msgid "Backup ASAP"
 msgstr ""
 
@@ -255,25 +255,6 @@ msgid ""
 "private uploads, they will become private and the provided URL will not work."
 msgstr ""
 
-#: ../admin/messages.php:25 ../lib/messages.php:28
-msgid "Options Updated!"
-msgstr ""
-
-#: ../admin/messages.php:30
-#, php-format
-msgid ""
-"You have an ad-hoc backup scheduled for today at %s (time based on WP time/"
-"date settings). Do not hit refresh!"
-msgstr ""
-
-#: ../admin/messages.php:35 ../lib/messages.php:38
-msgid "Your file was successfully uploaded."
-msgstr ""
-
-#: ../admin/messages.php:39 ../lib/messages.php:42
-msgid "Error: Something went wrong while uploading your file."
-msgstr ""
-
 #: ../admin/settings.php:39 ../lib/settings.php:37
 msgid "DreamObjects"
 msgstr ""
@@ -282,80 +263,80 @@ msgstr ""
 msgid "The Bucket Stuff"
 msgstr ""
 
-#: ../admin/settings.php:46
+#: ../admin/settings.php:49
 msgid "Create A New Bucket"
 msgstr ""
 
-#: ../admin/settings.php:48
+#: ../admin/settings.php:51
 msgid ""
 "If you need to create a new bucket, just enter the name and click Create "
 "Bucket."
 msgstr ""
 
-#: ../admin/settings.php:49
+#: ../admin/settings.php:52
 msgid "All buckets are created as \"private\" buckets."
 msgstr ""
 
-#: ../admin/settings.php:53
+#: ../admin/settings.php:56
 msgid "Create Bucket"
 msgstr ""
 
-#: ../admin/settings.php:56
+#: ../admin/settings.php:61
 msgid "Bucket List"
 msgstr ""
 
-#: ../admin/settings.php:74
+#: ../admin/settings.php:79
 msgid " - Used for Backups"
 msgstr ""
 
-#: ../admin/settings.php:77
+#: ../admin/settings.php:82
 msgid " - Used for Uploads"
 msgstr ""
 
-#: ../admin/settings.php:87
+#: ../admin/settings.php:94
 msgid " Debug Logging"
 msgstr ""
 
-#: ../admin/settings.php:89
+#: ../admin/settings.php:96
 msgid ""
 "If you're trying to troubleshoot problems, like why backups only work for "
 "SQL, you can turn on logging to see what's being kicked off and when. "
 "Generally you should not leave this on all the time."
 msgstr ""
 
-#: ../admin/settings.php:90
+#: ../admin/settings.php:97
 msgid ""
 "When you turn off logging, the file will wipe itself out for your protection."
 msgstr ""
 
-#: ../admin/settings.php:94
+#: ../admin/settings.php:101
 msgid "Enable logging (if checked)"
 msgstr ""
 
-#: ../admin/settings.php:95
+#: ../admin/settings.php:102
 msgid "Your logfile is located at "
 msgstr ""
 
-#: ../admin/settings.php:101
+#: ../admin/settings.php:108
 msgid "Enable verbose debugging (if checked)"
 msgstr ""
 
-#: ../admin/settings.php:101
+#: ../admin/settings.php:108
 msgid "This will only provide output via the WP-CLI interface."
 msgstr ""
 
-#: ../admin/settings.php:108
+#: ../admin/settings.php:115
 msgid "Configure Logging"
 msgstr ""
 
-#: ../admin/settings.php:112
+#: ../admin/settings.php:119
 msgid "Reset Options"
 msgstr ""
 
-#: ../admin/settings.php:113
+#: ../admin/settings.php:120
 msgid ""
 "Click the button to wipe out all settings. This will reset your keypair, as "
-"well as all plugin options including the debug log. It will <em>not</em> "
+"well as all plugin options and wipe the debug log. It will <em>not</em> "
 "remove any backups."
 msgstr ""
 
@@ -395,9 +376,13 @@ msgid ""
 "see below to any site visitor."
 msgstr ""
 
-#: ../lib/dhdo.php:35
+#: ../lib/dhdo.php:36
 #, php-format
 msgid "Next backup: %s"
+msgstr ""
+
+#: ../lib/messages.php:28
+msgid "Options Updated!"
 msgstr ""
 
 #: ../lib/messages.php:33
@@ -408,6 +393,14 @@ msgid ""
 "will run behind the scenes."
 msgstr ""
 
+#: ../lib/messages.php:38
+msgid "Your file was successfully uploaded."
+msgstr ""
+
+#: ../lib/messages.php:42
+msgid "Error: Something went wrong while uploading your file."
+msgstr ""
+
 #: ../lib/messages.php:46
 msgid "Your new bucket has been created."
 msgstr ""
@@ -416,6 +409,12 @@ msgstr ""
 msgid ""
 "Error: Unable to create bucket (it may already exist and/or be owned by "
 "someone else)"
+msgstr ""
+
+#: ../lib/messages.php:54
+msgid ""
+"Error: The DreamObjects Connection plugin requires PHP 5.3 or higher to run. "
+"Please upgrade your PHP or this plugin will not function correctly.)"
 msgstr ""
 
 #: ../lib/settings.php:37
