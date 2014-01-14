@@ -2,8 +2,8 @@
 Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
-Tested up to: 3.7
-Stable tag: 3.4
+Tested up to: 3.8
+Stable tag: 3.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -219,6 +219,11 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 3.4.1 = 
+Nov 21, 2013 by Ipstenu
+
+* Change blindness. What happens when you copy the wrong file over and don't even notice. (Props <a href="http://wordpress.org/support/topic/uploader-page-not-showing">araucaria</a>)
 
 = 3.4 =
 Nov 20, 2013 by Ipstenu

@@ -30,71 +30,80 @@ include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 <div class="wrap">
     <div id="icon-dreamobjects" class="icon32"></div>
-    <h2><?php echo __("Backups", dreamobjects); ?></h2>
+    <h2><?php _e("Uploads", dreamobjects); ?></h2>
+    
+    <p><?php _e("Upload files directly to DreamObjects.", dreamobjects); ?></p>
+
+    <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : // If the keys are set (standard check) ?>
 
     <div id="dho-primary">
     	<div id="dho-content">
     		<div id="dho-leftcol">
-                    <form method="post" action="options.php">
-                        <?php
-                            settings_fields( 'dh-do-backuper-settings' );
-                            do_settings_sections( 'dh-do-backuper_page' );
-                            submit_button(__('Update Options','dreamobjects'), 'primary');
-                        ?>
-                    </form>
+    		<?php if (current_user_can('manage_options') ) { ?>
+                <form method="post" action="options.php">
+                  <?php
+                      settings_fields( 'dh-do-uploader-settings' );
+                      do_settings_sections( 'dh-do-uploader_page' );               
+                  ?>
+                  <input type="hidden" name="page_options" value="dh-do-bucketup,dh-do-uploadpub" />
+                  <?php submit_button('Save Settings'); ?>
+                  </form>
+              <?php } 
+              
+              if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
+              <h3><?php _e('Upload File', dreamobjects); ?></h3>
+              
+              <table class="form-table">
+                  <tbody>
+                      <tr>
+                      <tr valign="top">
+                          <td>
+                          <p><?php _e('Please select a file by clicking the \'Browse\' button and press \'Upload\' to start uploading your file.', dreamobjects); ?></p>
+                           <form action="" method="post" enctype="multipart/form-data" name="uploader" id="uploader">
+                            <input name="theFile" type="file" />
+                            <input name="Submit" type="submit" value="Upload">
+                            <?php wp_nonce_field('dhdo-uploader'); ?>
+                        </form>
+                        </td>
+                      </tr>
+                   </tbody>
+              </table>
+              <?php endif; // if bucketup ?>
     			</div>
     			<div id="dho-rightcol">
-                    <?php if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) { ?>
-                    <?php 
-                        $num_backups = get_option('dh-do-retain');
-                        if ( $num_backups == 'all') { $num_backups = 'WP';}
-                        $show_backup_header = sprintf(__('Latest %s Backups', dreamobjects),$num_backups ); 
+                    <div id="uploaders">
+              <?php if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) : ?>
+              <h3><?php _e('Available Files', dreamobjects); ?></h3>
+              
+              <p><?php _e('The files listed below are all linked using the public URL. If an image has been uploaded with \'private\' permissions, it will not display for anyone, not even you.', dreamobjects); ?></p>
+              
+              <?php if (current_user_can('manage_options') ) {
+                  ?><p><?php _e('To publically display the list of uploaded files, use the shortcode <code>[dreamobjects]</code> in a post or page. It will show the same list as you see below to any site visitor.', dreamobjects); ?></p><?php
+              } ?>
+
+              <ul><?php 
+                  if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
+          
+                    $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+                    $s3->set_hostname('objects.dreamhost.com');
+                    $s3->allow_hostname_override(false);
+                    $s3->enable_path_style();
+                      $bucket = get_option('dh-do-bucketup');
+                      $uploads = $s3->get_object_list( $bucket );
+                      if (($uploads = $s3->get_object_list( $bucket ) ) !== false) {
+                          krsort($uploads);
+                              foreach ($uploads as $object) {
+                                  $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
+                                  echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
+                              }
+                          }
+              } // if you picked a bucket
                     ?>
-                    
-                    <h3><?php echo $show_backup_header; ?></h3>
-                    <p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
-                
-                    <div id="backups">
-                        <ul><?php 
-                            if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) {
-                    
-                            	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-                            	$s3->set_hostname('objects.dreamhost.com');
-                            	$s3->allow_hostname_override(false);
-                            	$s3->enable_path_style();
-                                $bucket = get_option('dh-do-bucket');
-                                $prefix = next(explode('//', home_url()));
-                                $uploads = $s3->get_object_list( $bucket, array( 'prefix' => $prefix ) );
-                            		if ($uploads !== false) {
-                                		krsort($uploads);
-                                        foreach ($uploads as $object) {
-                                            $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
-                                            echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
-                                        }
-                                    }
-                    		} // if you picked a bucket
-                    					?>
-                         </ul>
-                     </div>
-                
-                     <form method="post" action="admin.php?page=dreamobjects-menu-backup&backup-now=true">
-                         <input type="hidden" name="action" value="backup" />
-                         <?php wp_nonce_field('dhdo-backupnow'); ?>
-                         <h3><?php echo __('Backup ASAP!', dreamobjects); ?></h3>
-                         <p><?php echo __('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', dreamobjects); ?></p>
-                
-                         <?php
-                             $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );
-                             $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', dreamobjects), $timestamp ); 
-                         
-                        if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) {?>
-                         <p><?php echo $nextbackup; ?></p>
-                         <?php } 
-                         
-                         submit_button( __('Backup ASAP','dreamobjects'), 'secondary'); ?>
-                    </form>
-                    <?php } ?>
-    		</div>
+               </ul>
+              </div>
+              <?php endif; // if bucketup ?>
+    			</div>
     	</div>
     </div>
+<?php endif; // Manage Options ?>
 </div>

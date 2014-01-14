@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: DreamObjects\n"
-"POT-Creation-Date: 2013-11-20 12:03-0800\n"
-"PO-Revision-Date: 2013-11-20 12:03-0800\n"
+"POT-Creation-Date: 2013-11-21 12:17-0800\n"
+"PO-Revision-Date: 2013-11-21 12:17-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 msgid "Backups"
 msgstr ""
 
-#: ../admin/backups.php:42 ../admin/cdn.php:103
+#: ../admin/backups.php:42 ../admin/cdn.php:53
 msgid "Update Options"
 msgstr ""
 
@@ -59,41 +59,6 @@ msgstr ""
 
 #: ../admin/cdn.php:41
 msgid "Configure your site to use DreamObjects for CDN."
-msgstr ""
-
-#: ../admin/cdn.php:45 ../lib/settings.php:133
-msgid "Settings"
-msgstr ""
-
-#: ../admin/cdn.php:65 ../lib/settings.php:136
-msgid "Bucket Name"
-msgstr ""
-
-#: ../admin/cdn.php:72 ../lib/settings.php:165
-msgid "Select from pre-existing buckets."
-msgstr ""
-
-#: ../admin/cdn.php:74 ../lib/settings.php:120
-#, php-format
-msgid ""
-"You are already using the bucket \"%s\" for backups. While you can reuse "
-"this bucket, it would be best not to."
-msgstr ""
-
-#: ../admin/cdn.php:82
-msgid "What to move to CDN"
-msgstr ""
-
-#: ../admin/cdn.php:86
-msgid "Theme Files"
-msgstr ""
-
-#: ../admin/cdn.php:90
-msgid "Images"
-msgstr ""
-
-#: ../admin/cdn.php:93 ../lib/settings.php:186
-msgid "You can select portions of your site to backup."
 msgstr ""
 
 #: ../admin/help.php:32 ../admin/help.php:43 ../admin/help.php:81
@@ -348,28 +313,28 @@ msgstr ""
 msgid "Upload files directly to DreamObjects."
 msgstr ""
 
-#: ../admin/uploader.php:57
+#: ../admin/uploader.php:54
 msgid "Upload File"
 msgstr ""
 
-#: ../admin/uploader.php:64
+#: ../admin/uploader.php:61
 msgid ""
 "Please select a file by clicking the 'Browse' button and press 'Upload' to "
 "start uploading your file."
 msgstr ""
 
-#: ../admin/uploader.php:79
+#: ../admin/uploader.php:76
 msgid "Available Files"
 msgstr ""
 
-#: ../admin/uploader.php:81
+#: ../admin/uploader.php:78
 msgid ""
 "The files listed below are all linked using the public URL. If an image has "
 "been uploaded with 'private' permissions, it will not display for anyone, "
 "not even you."
 msgstr ""
 
-#: ../admin/uploader.php:84
+#: ../admin/uploader.php:81
 msgid ""
 "To publically display the list of uploaded files, use the shortcode <code>"
 "[dreamobjects]</code> in a post or page. It will show the same list as you "
@@ -467,6 +432,13 @@ msgstr ""
 msgid "Select from your pre-existing buckets."
 msgstr ""
 
+#: ../lib/settings.php:120
+#, php-format
+msgid ""
+"You are already using the bucket \"%s\" for backups. While you can reuse "
+"this bucket, it would be best not to."
+msgstr ""
+
 #: ../lib/settings.php:127
 msgid "Private Uploads"
 msgstr ""
@@ -476,6 +448,14 @@ msgid ""
 "Designate if your uploads are public or private. If checked, all uploads are "
 "private. Be advised, the links to your uploads below will not work "
 "publically if you chose this."
+msgstr ""
+
+#: ../lib/settings.php:133
+msgid "Settings"
+msgstr ""
+
+#: ../lib/settings.php:136
+msgid "Bucket Name"
 msgstr ""
 
 #: ../lib/settings.php:140
@@ -488,6 +468,10 @@ msgstr ""
 
 #: ../lib/settings.php:144
 msgid "Backup Retention"
+msgstr ""
+
+#: ../lib/settings.php:165
+msgid "Select from pre-existing buckets."
 msgstr ""
 
 #: ../lib/settings.php:167
@@ -503,6 +487,10 @@ msgstr ""
 
 #: ../lib/settings.php:183
 msgid "Database"
+msgstr ""
+
+#: ../lib/settings.php:186
+msgid "You can select portions of your site to backup."
 msgstr ""
 
 #: ../lib/settings.php:194
