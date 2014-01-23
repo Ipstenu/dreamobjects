@@ -31,7 +31,7 @@ class DHDOSET {
     */
 
     // Add Settings Pages
-    function add_settings_page() {
+    public static function add_settings_page() {
         load_plugin_textdomain(dreamobjects, DHDO_PLUGIN_DIR . 'i18n', 'i18n');
         add_action('admin_init', array('DHDOSET', 'add_register_settings'));
         add_menu_page(__('DreamObjects Settings', 'dreamobjects'), __('DreamObjects', 'dreamobjects'), 'manage_options', 'dreamobjects-menu', array('DHDOSET', 'settings_page'), plugins_url('dreamobjects/images/dreamobj-color.png'));
@@ -44,25 +44,25 @@ class DHDOSET {
     }
 
     // Define Settings Pages    
-    function settings_page() {
+    public static function  settings_page() {
         include_once( DHDO_PLUGIN_DIR . '/admin/settings.php');// Main Settings
     }
     
-    function backup_page() {
+    public static function  backup_page() {
         include_once( DHDO_PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
     }
     
-    function cdn_page() {
+    public static function  cdn_page() {
         include_once( DHDO_PLUGIN_DIR . '/admin/cdn.php'); // CDN Settings (coming ... eventually)
     }
 
-    function uploader_page() {
+    public static function  uploader_page() {
         include_once( DHDO_PLUGIN_DIR . '/admin/uploader.php'); // Upload Settings
     }
 
 
     // Register Settings (for forms etc)
-    function add_register_settings() {
+    public static function add_register_settings() {
 
      // Keypair settings
         add_settings_section( 'keypair_id', __('DreamObject Access Settings', 'dreamobjects'), 'keypair_callback', 'dh-do-keypair_page' );

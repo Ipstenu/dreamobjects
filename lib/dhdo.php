@@ -26,7 +26,7 @@ include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
 
-    function init() {
+    public static function init() {
         // SCHEDULER
         if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
             wp_clear_scheduled_hook('dh-do-backup');
@@ -144,7 +144,7 @@ class DHDO {
      */
 
     // Acutal logging function
-    function logger($msg) {
+    public static function logger($msg) {
     
     if ( get_option('dh-do-logging') == 'on' ) {
            $file = DHDO_PLUGIN_DIR."/debug.txt"; 

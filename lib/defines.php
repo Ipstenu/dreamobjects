@@ -25,6 +25,11 @@ if (!defined('ABSPATH')) {
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
+// Auto-discovery disabled
+if( !defined('AWS_DISABLE_CONFIG_AUTO_DISCOVERY') ) {
+    define( 'AWS_DISABLE_CONFIG_AUTO_DISCOVERY', true );
+}
+
 // Error for PHP 5.2
 if (version_compare(phpversion(), '5.3', '<')) {
     add_action('admin_notices', array('DHDOMESS','oldPHPError'));
