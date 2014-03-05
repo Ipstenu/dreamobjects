@@ -50,7 +50,8 @@ if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', 
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '15' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
 if ( !get_option('dh-do-debugging')) {update_option( 'dh-do-debugging', 'off' );}
-    
+if ( !get_option('dh-do-boto')) {update_option( 'dh-do-boto', 'no' );}
+   
 // Shortcode
 if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucketup') != "XXXX") && !is_null(get_option('dh-do-bucketup')) ) {
     include_once( DHDO_PLUGIN_DIR . '/lib/shortcode.php');

@@ -49,7 +49,12 @@ class DHDOSET {
     }
     
     public static function  backup_page() {
-        include_once( DHDO_PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
+        if ( get_option('dh-do-boto') == 'yes' ) {
+            include_once( DHDO_PLUGIN_DIR . '/admin/backups-boto.php'); // Backup Settings
+        }
+        else {
+            include_once( DHDO_PLUGIN_DIR . '/admin/backups.php'); // Backup Settings
+        }
     }
     
     public static function  cdn_page() {
@@ -212,6 +217,9 @@ class DHDOSET {
             <p class="description"><?php echo $nextbackup; ?></p>
             <?php }
     	}
+    	
+    // Backup BOTO Settings
+        add_settings_section( 'backupboto_id', __('Settings', 'dreamobjects'), 'backupboto_callback', 'dh-do-backupboto_page' );
 
     // Reset Settings
         register_setting( 'dh-do-reset-settings', 'dh-do-reset');

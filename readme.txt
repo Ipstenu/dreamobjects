@@ -29,6 +29,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 
 = To Do =
 * CDN (when available)
+* Change backup to Boto Rsync
 * Better <code>[dreamobjects]</code> support for folders
 * Option to email results (if logging, email log? Have to split up by attempt for that)
 * Better advanced logging via s3's debug.
@@ -69,7 +70,7 @@ Yes, but this isn't an official DreamHost plugin at this time. It just works.
 
 <strong>Do I have to host my website on DreamHost?</strong>
 
-No, but using it anywhere else is unsupported. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts. 
+No, but using it anywhere else is unsupported. You have to use Dream<em>Objects</em>, which belongs to Dream<em>Host</em>. This plugin was built on and specifically for DreamHost servers, so I can give you no assurance it'll work on other hosts. BotoRsync, for example, and WP-CLI are installed on DreamHost servers. I can't vouch for any others.
 
 <strong>Can I use this on a Windows Server?</strong>
 

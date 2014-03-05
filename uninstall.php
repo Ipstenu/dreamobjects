@@ -35,6 +35,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
     delete_option( 'dh-do-uploadview' );
     delete_option( 'dh-do-logging' );
     delete_option( 'dh-do-debugging' );
+    delete_option( 'dh-do-boto' );
 
 // Unschedule
     wp_clear_scheduled_hook( 'dh-do-backupnow');
