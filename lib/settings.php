@@ -78,7 +78,7 @@ class DHDOSET {
 
         function keypair_callback() { 
             echo '<p>'. __("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
-            echo '<p><div class="dashicons dashicons-shield"></div>'.__( "Once saved, your keys will not display again for your own security.", dreamobjects ).'</p>'
+            echo '<p><div class="dashicons dashicons-shield"></div>'.__( "Once saved, your keys will not display again for your own security.", dreamobjects ).'</p>';
         }
     	function key_callback() {
         	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text" autocomplete="off"/>';
