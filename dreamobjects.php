@@ -63,7 +63,7 @@ require_once 'lib/dhdo.php';
 require_once 'lib/messages.php';
 require_once 'lib/settings.php';
 
-if ( !class_exists('UniversalClassLoader') ) {
+if ( !class_exists('UniversalClassLoader') && !is_plugin_active( 'dreamspeed/dreamspeed-cdn.php' ) ) {
 	require_once 'aws/aws-autoloader.php';
 }
 
