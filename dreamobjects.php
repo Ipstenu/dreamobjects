@@ -62,7 +62,7 @@ require_once 'lib/defines.php';
 require_once 'lib/dhdo.php';
 require_once 'lib/messages.php';
 require_once 'lib/settings.php';
-require_once 'aws/aws-autoloader.php';
+//require_once 'aws/aws-autoloader.php';
 
 // WP-CLI
 if ( defined('WP_CLI') && WP_CLI ) {
