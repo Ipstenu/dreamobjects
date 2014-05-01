@@ -21,14 +21,11 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+require_once 'vendor/aws/aws-autoloader.php';
+
 // Set up defaults
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
-
-// Auto-discovery disabled
-if( !defined('AWS_DISABLE_CONFIG_AUTO_DISCOVERY') ) {
-    define( 'AWS_DISABLE_CONFIG_AUTO_DISCOVERY', true );
-}
 
 // Standard content folder defines.
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );

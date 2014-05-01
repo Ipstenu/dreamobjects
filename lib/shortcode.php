@@ -63,7 +63,7 @@ function dreamobjects_func( $atts ) {
 	    	return $nobucket;
 	    }
 
-	    include_once( DHDO_PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');	
+	    //include_once( DHDO_PLUGIN_DIR.'/AWSSDKforPHP/sdk.class.php');	
 
         $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
     	$s3->set_hostname('objects.dreamhost.com');

@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
+//include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
 
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
