@@ -63,6 +63,10 @@ require_once 'lib/dhdo.php';
 require_once 'lib/messages.php';
 require_once 'lib/settings.php';
 
+if ( ! function_exists('is_plugin_inactive')) {
+    require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+}
+
 if ( !class_exists('UniversalClassLoader') && !is_plugin_active( 'dreamspeed/dreamspeed-cdn.php' ) ) {
 	require_once 'aws/aws-autoloader.php';
 }
