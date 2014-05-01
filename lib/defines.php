@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-require_once 'vendor/aws/aws-autoloader.php';
+require_once '../aws/aws-autoloader.php';
 
 // Set up defaults
 define( 'DHDO', true);
