@@ -14,13 +14,16 @@
  * permissions and limitations under the License.
  */
 
-require_once __DIR__ . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
 
 if (!defined('AWS_FILE_PREFIX')) {
     define('AWS_FILE_PREFIX', __DIR__);
 }
 
 if ( !class_exists('symfony\component\classloader\universalclassloader') ) {
+	require_once __DIR__ . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+}
+
 	$classLoader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 	$classLoader->registerNamespaces(array(
 	    'Aws'      => AWS_FILE_PREFIX,
@@ -34,4 +37,3 @@ if ( !class_exists('symfony\component\classloader\universalclassloader') ) {
 	$classLoader->register();
 	
 	return $classLoader;
-}
