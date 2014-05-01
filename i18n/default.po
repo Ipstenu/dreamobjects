@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: DreamObjects\n"
-"POT-Creation-Date: 2013-11-21 12:17-0800\n"
-"PO-Revision-Date: 2013-11-21 12:17-0800\n"
+"POT-Creation-Date: 2014-05-01 12:51-0800\n"
+"PO-Revision-Date: 2014-05-01 12:51-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,30 +13,54 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../admin/backups.php:33 ../lib/settings.php:40
+#: ../dreamobjects.php:45
+msgid ""
+"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
+"PHP 5.3 or higher. The plugin has now disabled itself."
+msgstr ""
+
+#: ../dreamobjects.php:51
+msgid ""
+"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
+"cURL 7.16.2+. The plugin has now disabled itself."
+msgstr ""
+
+#: ../dreamobjects.php:54
+msgid ""
+"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
+"that cURL is compiled with OpenSSL. The plugin has now disabled itself."
+msgstr ""
+
+#: ../dreamobjects.php:57
+msgid ""
+"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
+"that cURL is compiled with zlib. The plugin has now disabled itself."
+msgstr ""
+
+#: ../admin/backups-boto.php:33 ../admin/backups.php:33 ../lib/settings.php:40
 msgid "Backups"
 msgstr ""
 
-#: ../admin/backups.php:42 ../admin/cdn.php:53
+#: ../admin/backups-boto.php:42 ../admin/backups.php:42
 msgid "Update Options"
 msgstr ""
 
-#: ../admin/backups.php:51
+#: ../admin/backups-boto.php:51 ../admin/backups.php:51
 #, php-format
 msgid "Latest %s Backups"
 msgstr ""
 
-#: ../admin/backups.php:55
+#: ../admin/backups-boto.php:55 ../admin/backups.php:55
 msgid ""
 "All backups can be downloaded from this page without logging in to "
 "DreamObjects."
 msgstr ""
 
-#: ../admin/backups.php:83
+#: ../admin/backups-boto.php:83 ../admin/backups.php:83
 msgid "Backup ASAP!"
 msgstr ""
 
-#: ../admin/backups.php:84
+#: ../admin/backups-boto.php:84 ../admin/backups.php:84
 msgid ""
 "Oh you really want to do a backup right now? Schedule your backup to start "
 "in a minute. Be careful! This may take a while, and slow your site down, if "
@@ -44,21 +68,13 @@ msgid ""
 "and click \"Update Options\" before running this."
 msgstr ""
 
-#: ../admin/backups.php:88
+#: ../admin/backups-boto.php:88 ../admin/backups.php:88
 #, php-format
 msgid "Keep in mind, your next scheduled backup is at %s"
 msgstr ""
 
-#: ../admin/backups.php:94
+#: ../admin/backups-boto.php:94 ../admin/backups.php:94
 msgid "Backup ASAP"
-msgstr ""
-
-#: ../admin/cdn.php:39
-msgid "CDN"
-msgstr ""
-
-#: ../admin/cdn.php:41
-msgid "Configure your site to use DreamObjects for CDN."
 msgstr ""
 
 #: ../admin/help.php:32 ../admin/help.php:43 ../admin/help.php:81
@@ -258,47 +274,79 @@ msgstr ""
 msgid " - Used for Uploads"
 msgstr ""
 
-#: ../admin/settings.php:94
-msgid " Debug Logging"
+#: ../admin/settings.php:95
+msgid "Change Backup Type"
 msgstr ""
 
 #: ../admin/settings.php:96
+msgid "This feature is experimental."
+msgstr ""
+
+#: ../admin/settings.php:97
+msgid ""
+"Instead of using PHP to zip up a copy of your site and copy that up to "
+"DreamObjects, there is the option to use a sync tool. This will make a new "
+"folder and copy the individual files up to your server, however it requires "
+"two things:"
+msgstr ""
+
+#: ../admin/settings.php:99
+msgid "WP-CLI (installed on all DreamHost servers)"
+msgstr ""
+
+#: ../admin/settings.php:100
+msgid "Boto Rsync (installed on this server)"
+msgstr ""
+
+#: ../admin/settings.php:107
+msgid "Use rsync instead of zips (if checked)"
+msgstr ""
+
+#: ../admin/settings.php:110
+msgid "Configure Backup Type"
+msgstr ""
+
+#: ../admin/settings.php:114
+msgid "Debug Logging"
+msgstr ""
+
+#: ../admin/settings.php:116
 msgid ""
 "If you're trying to troubleshoot problems, like why backups only work for "
 "SQL, you can turn on logging to see what's being kicked off and when. "
 "Generally you should not leave this on all the time."
 msgstr ""
 
-#: ../admin/settings.php:97
+#: ../admin/settings.php:117
 msgid ""
 "When you turn off logging, the file will wipe itself out for your protection."
 msgstr ""
 
-#: ../admin/settings.php:101
+#: ../admin/settings.php:121
 msgid "Enable logging (if checked)"
 msgstr ""
 
-#: ../admin/settings.php:102
+#: ../admin/settings.php:122
 msgid "Your logfile is located at "
 msgstr ""
 
-#: ../admin/settings.php:108
+#: ../admin/settings.php:128
 msgid "Enable verbose debugging (if checked)"
 msgstr ""
 
-#: ../admin/settings.php:108
+#: ../admin/settings.php:128
 msgid "This will only provide output via the WP-CLI interface."
 msgstr ""
 
-#: ../admin/settings.php:115
+#: ../admin/settings.php:135
 msgid "Configure Logging"
 msgstr ""
 
-#: ../admin/settings.php:119
+#: ../admin/settings.php:139
 msgid "Reset Options"
 msgstr ""
 
-#: ../admin/settings.php:120
+#: ../admin/settings.php:140
 msgid ""
 "Click the button to wipe out all settings. This will reset your keypair, as "
 "well as all plugin options and wipe the debug log. It will <em>not</em> "
@@ -386,41 +434,41 @@ msgstr ""
 msgid "DreamObjects Settings"
 msgstr ""
 
-#: ../lib/settings.php:41
+#: ../lib/settings.php:44
 msgid "Uploader"
 msgstr ""
 
-#: ../lib/settings.php:68
+#: ../lib/settings.php:72
 msgid "DreamObject Access Settings"
 msgstr ""
 
-#: ../lib/settings.php:71
+#: ../lib/settings.php:75
 msgid "Access Key"
 msgstr ""
 
-#: ../lib/settings.php:74
+#: ../lib/settings.php:78
 msgid "Secret Key"
 msgstr ""
 
-#: ../lib/settings.php:77
+#: ../lib/settings.php:81
 msgid ""
 "Once you've configured your keypair here, you'll be able to use the features "
 "of this plugin."
 msgstr ""
 
-#: ../lib/settings.php:87
+#: ../lib/settings.php:91
 msgid "Uploader Settings"
 msgstr ""
 
-#: ../lib/settings.php:90
+#: ../lib/settings.php:94
 msgid "Select Your Bucket"
 msgstr ""
 
-#: ../lib/settings.php:93
+#: ../lib/settings.php:97
 msgid "Privacy"
 msgstr ""
 
-#: ../lib/settings.php:96
+#: ../lib/settings.php:100
 msgid ""
 "The options below will let you configure your uploads to go to a specific "
 "bucket on DreamObjects. While you can use any bucket you want, it's best to "
@@ -428,92 +476,92 @@ msgid ""
 "DreamObjects, there are no checks for filetype."
 msgstr ""
 
-#: ../lib/settings.php:117
+#: ../lib/settings.php:121
 msgid "Select from your pre-existing buckets."
 msgstr ""
 
-#: ../lib/settings.php:120
+#: ../lib/settings.php:124
 #, php-format
 msgid ""
 "You are already using the bucket \"%s\" for backups. While you can reuse "
 "this bucket, it would be best not to."
 msgstr ""
 
-#: ../lib/settings.php:127
+#: ../lib/settings.php:131
 msgid "Private Uploads"
 msgstr ""
 
-#: ../lib/settings.php:128
+#: ../lib/settings.php:132
 msgid ""
 "Designate if your uploads are public or private. If checked, all uploads are "
 "private. Be advised, the links to your uploads below will not work "
 "publically if you chose this."
 msgstr ""
 
-#: ../lib/settings.php:133
+#: ../lib/settings.php:137 ../lib/settings.php:221
 msgid "Settings"
 msgstr ""
 
-#: ../lib/settings.php:136
+#: ../lib/settings.php:140
 msgid "Bucket Name"
 msgstr ""
 
-#: ../lib/settings.php:140
+#: ../lib/settings.php:144
 msgid "What to Backup"
 msgstr ""
 
-#: ../lib/settings.php:142
+#: ../lib/settings.php:146
 msgid "Schedule"
 msgstr ""
 
-#: ../lib/settings.php:144
+#: ../lib/settings.php:148
 msgid "Backup Retention"
 msgstr ""
 
-#: ../lib/settings.php:165
+#: ../lib/settings.php:169
 msgid "Select from pre-existing buckets."
 msgstr ""
 
-#: ../lib/settings.php:167
+#: ../lib/settings.php:171
 #, php-format
 msgid ""
 "You are currently using the bucket \"%s\" for Uploads. While you can reuse "
 "this bucket, it would be best not to."
 msgstr ""
 
-#: ../lib/settings.php:179
+#: ../lib/settings.php:183
 msgid "All Files"
 msgstr ""
 
-#: ../lib/settings.php:183
+#: ../lib/settings.php:187
 msgid "Database"
 msgstr ""
 
-#: ../lib/settings.php:186
+#: ../lib/settings.php:190
 msgid "You can select portions of your site to backup."
 msgstr ""
 
-#: ../lib/settings.php:194
+#: ../lib/settings.php:198
 msgid "How many many backups do you want to keep? 30 is recommended."
 msgstr ""
 
-#: ../lib/settings.php:195
+#: ../lib/settings.php:199
 msgid "NOTICE!"
 msgstr ""
 
-#: ../lib/settings.php:195
+#: ../lib/settings.php:199
 msgid ""
 "DreamObjects charges you based on diskspace used. Setting to 'All' will "
 "retain your backups forwever, however this can cost you a large sum of money "
 "over time. Please use cautiously!"
 msgstr ""
 
-#: ../lib/settings.php:208
+#: ../lib/settings.php:212
 #, php-format
 msgid "Next scheduled backup is at %s"
 msgstr ""
 
-#: ../lib/settings.php:210
+#: ../lib/settings.php:214
 msgid "How often do you want to backup your files? Daily is recommended."
 msgstr ""
 

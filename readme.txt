@@ -3,17 +3,17 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 3.4.2
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Connect your WordPress site to DreamHost's DreamObjects.
+Backup your WordPress site to DreamHost's DreamObjects.
 
 == Description ==
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
-Well now that we've gotten the sales-pitch out of the way, DreamObjects Connections will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups, fileuploaders, and more!
+Well now that we've gotten the sales-pitch out of the way, DreamObjects Connections will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
 <em>Please do not open DreamHost Support Tickets for this plugin.</em> Honestly, the support techs are fantastic, but they can't debug this yet, so they'll just send you here anyway. Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
 
@@ -22,15 +22,8 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 * Retains 15, 30, 60, or 90 backups at any given time (so as not to charge you the moon when you have a large site).
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
-= Uploader =
-* Allows you to upload files to any bucket
-* Determine if files are public (default) or private
-* If configured, the shortcode <code>[dreamobjects]</code> will display a list of all your upload files
-
 = To Do =
-* CDN (when available)
 * Change backup to Boto Rsync
-* Better <code>[dreamobjects]</code> support for folders
 * Option to email results (if logging, email log? Have to split up by attempt for that)
 * Better advanced logging via s3's debug.
 
@@ -56,13 +49,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 
 <strong>What does it do?</strong>
 
-DreamObjects Connection connects your WordPress site to your DreamObjects cloud storage, allowing you to upload files directly to your cloud, or automatically store backups.
-
-<strong>What does it backup?</strong>
-
-Your database and your wp-content folder.
-
-In a perfect world it would also backup your wp-config.php and .htaccess, but those are harder to grab since there aren't constant locations.
+DreamObjects Connection connects your WordPress site to your DreamObjects cloud storage, allowing you to automatically store backups of your content.
 
 <strong>Do you work for DreamHost?</strong>
 
@@ -79,6 +66,12 @@ This is unsupported. You can try, and let me know how it goes. I built this for 
 <strong>Can I use this on Multisite?</strong>
 
 Not at this time. Backups for Multisite are a little messier, and I'm not sure how I want to handle that yet.
+
+<strong>What does it backup?</strong>
+
+Your database and your wp-content folder.
+
+In a perfect world it would also backup your wp-config.php and .htaccess, but those are harder to grab since there aren't constant locations.
 
 <strong>How big a site can this back up?</strong>
 
@@ -155,6 +148,14 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 That runs an immediate backup and is great if you're going to, say, upgrade WP. Then you backup, upgrade your site, and everything is happy!
 
+<strong>Why doesn't it have a CDN?</strong>
+
+Because we went with a slightly different feature with the CDN, and as such it's best as a separate plugin. Don't worry, they'll play nice!
+
+<strong>Where did the uploader go!?</strong>
+
+Away. It was never really used well and the CDN plugin will handle this much better. WP's just not the best tool for the job there.
+
 = Errors =
 
 <strong>It's reporting page not found when I access the pages</strong>
@@ -205,7 +206,7 @@ That will output a whole mess of code. Save that output and post in the forums t
 
 That's actually not an error. WordPress kicks off cron jobs when someone visits your site, so if no one visted the site from 3am to 8am, then the job to backup wouldn't run until then.
 
-<strong>Nothings happening when I press the backup ASAP button.</strong>
+<strong>Why is nothing happening when I press the backup ASAP button?</strong>
 
 First turn on logging, then run it again. If it gives output, then it's running, so read the log to see what the error is. If it just 'stops', then it's a bug. If it says it can't upload the file to DreamObjects, it's probably size.
 
@@ -220,6 +221,12 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 3.4.3 =
+May 1, 2014 by Ipstenu
+
+* Beginning deprecation of the uploader. If you're using it, it'll stay.
+* Changing images to CSS
 
 = 3.4.2 = 
 Jan 23, 2014 by Ipstenu
@@ -335,4 +342,4 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
-PHP 5.2 is no longer supported. Also now only wp-content/uploads is backed up (in the effort of making this smaller)
+The uploader is going away. IF you're using it, it'll stay. If you're not, it goes away. It's bad code.

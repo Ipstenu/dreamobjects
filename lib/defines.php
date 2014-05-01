@@ -30,12 +30,6 @@ if( !defined('AWS_DISABLE_CONFIG_AUTO_DISCOVERY') ) {
     define( 'AWS_DISABLE_CONFIG_AUTO_DISCOVERY', true );
 }
 
-// Error for PHP 5.2
-if (version_compare(phpversion(), '5.3', '<')) {
-    add_action('admin_notices', array('DHDOMESS','oldPHPError'));
-    return;
-}
-
 // Standard content folder defines.
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
@@ -43,7 +37,7 @@ if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-co
 if ( !defined('dreamobjects')) {define('dreamobjects','dreamobjects');} // Translation
 if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
 if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
-if ( !get_option('dh-do-bucketup')) {update_option( 'dh-do-bucketup', 'XXXX' );}
+//if ( !get_option('dh-do-bucketup')) {update_option( 'dh-do-bucketup', 'XXXX' );}
 if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}
 if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled' );}
 if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
