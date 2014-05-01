@@ -26,6 +26,13 @@ if (!defined('ABSPATH')) {
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
 
+	public function __construct() {
+		// Do we need the AWS stuff?
+		if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
+			require_once DHDO_PLUGIN_DIR.'aws/aws-autoloader.php';
+		}
+	}
+
     public static function init() {
 
         // SCHEDULER
