@@ -21,9 +21,6 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-
-
-//include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();

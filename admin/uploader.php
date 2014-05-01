@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-//include_once( DHDO_PLUGIN_DIR. '/AWSSDKforPHP/sdk.class.php');
+//
 ?>
 <script type="text/javascript">
     var ajaxTarget = "<?php echo DHDO::getURL() ?>backup.ajax.php";
