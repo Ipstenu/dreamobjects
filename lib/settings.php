@@ -159,10 +159,18 @@ class DHDOSET {
             echo 'Configure your site for backups by selecting your bucket, what you want to backup, and when.';
         }
         function backup_bucket_callback() {
+        /*
             $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
             $s3->set_hostname('objects.dreamhost.com');
             $s3->allow_hostname_override(false);
             $s3->enable_path_style();
+        */
+
+        	$s3 = AWS::factory(array(
+				'key'    => get_option('dh-do-key'),
+			    'secret' => get_option('dh-do-secretkey'),
+			    'base_url' => 'http://objects.dreamhost.com',
+			));
  
             $ListResponse = $s3->list_buckets();
             $buckets = $ListResponse->body->Buckets->Bucket;
