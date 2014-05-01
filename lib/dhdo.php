@@ -27,6 +27,7 @@ class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
 
     public static function init() {
+
         // SCHEDULER
         if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
             wp_clear_scheduled_hook('dh-do-backup');
