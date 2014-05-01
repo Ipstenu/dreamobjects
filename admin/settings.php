@@ -37,18 +37,6 @@ if (!defined('ABSPATH')) {
 
 				<p><?php echo __('DreamObjects&#153; is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
 
-<?php
-
-if ( !class_exists('UniversalClassLoader') ) {
-	echo "No UniversalClassLoader";
-}
-
-if ( !class_exists('Symfony\Component\ClassLoader\UniversalClassLoader') ) {
-	echo "No Symfony\Component\ClassLoader\UniversalClassLoader";
-}
-
-?>
-
 <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 
     <h3><?php echo __('Debug Logging', dreamobjects); ?></h3>
