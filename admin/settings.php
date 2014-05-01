@@ -91,26 +91,6 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
     		</div>
     	</div>
 
-<!-- IF BOTO IS INSTALLED -->
-    <h3><?php echo __('Change Backup Type', dreamobjects); ?></h3>
-    <p><em><?php echo __('This feature is experimental.', dreamobjects); ?></em></p>
-    <p><?php echo __('Instead of using PHP to zip up a copy of your site and copy that up to DreamObjects, there is the option to use a sync tool. This will make a new folder and copy the individual files up to your server, however it requires two things:', dreamobjects); ?></p>
-    <ol>
-        <li><?php echo __('WP-CLI (installed on all DreamHost servers)', dreamobjects); ?></li>
-        <li><?php echo __('Boto Rsync (installed on this server)', dreamobjects); ?></li>
-    </ol>
-    
-    <p><?php echo __('', dreamobjects); ?></p>
-
-    <form method="post" action="options.php">
-        <?php settings_fields( 'dh-do-boto-settings' ); ?>
-        <p><input type="checkbox" name="dh-do-boto" <?php checked( get_option('dh-do-boto') == 'yes',true); ?> /> <?php echo __('Use rsync instead of zips (if checked)', dreamobjects); ?> </p
-        <input type="hidden" name="dhdo-botochange" value="Y">
-        <input type="hidden" name="page_options" value="dh-do-boto" />
-        <p class="submit"><input class='button-secondary' type='Submit' name='boto' value='<?php echo __("Configure Backup Type", dreamobjects); ?>' id='submitbutton' /></p>
-    </form>
-<!-- end if -->
-
     <h3><?php echo __('Debug Logging', dreamobjects); ?></h3>
 
     <p><?php echo __('If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time.', dreamobjects); ?></p>
