@@ -21,6 +21,8 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+use Aws\S3\S3Client as AwsS3DHDOSET;
+
 class DHDOSET {
     /**
      * Generates the settings page
@@ -76,15 +78,13 @@ class DHDOSET {
 
         function keypair_callback() { 
             echo '<p>'. __("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
+            echo '<p><div class="dashicons dashicons-shield"></div>'.__( "Once saved, your keys will not display again for your own security.", dreamobjects ).'</p>'
         }
     	function key_callback() {
         	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text" autocomplete="off"/>';
     	}
     	function secretkey_callback() {
-        	?><input type="text" name="dh-do-secretkey" value="<?php echo get_option('dh-do-secretkey') ? '-- not shown --' : ''; ?>" class="regular-text" autocomplete="off" />
-        	
-        	<p class="description"><div class="dashicons dashicons-shield"></div>  <?php _e( 'Your secret key will not display for your own security.', 'dreamspeed' ); ?></p>
-        	<?php
+        	echo '<input type="text" name="dh-do-secretkey" value="'. get_option('dh-do-secretkey') .'" class="regular-text" autocomplete="off" />';
     	}
 
      // Uploader settings
@@ -101,10 +101,17 @@ class DHDOSET {
         }
 
         function bucketup_callback() { 
-            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-            $s3->set_hostname('objects.dreamhost.com');
-            $s3->allow_hostname_override(false);
-            $s3->enable_path_style();
+        
+        	$s3 = AWS::factory(array(
+				'key'    => get_option('dh-do-key'),
+			    'secret' => get_option('dh-do-secretkey'),
+			    'base_url' => 'http://objects.dreamhost.com',
+			));
+        
+            //$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
+            //$s3->set_hostname('objects.dreamhost.com');
+            //$s3->allow_hostname_override(false);
+            //$s3->enable_path_style();
             
             $ListResponse = $s3->list_buckets();
             $buckets = $ListResponse->body->Buckets->Bucket;
