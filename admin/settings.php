@@ -41,55 +41,6 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 				<p><?php echo __('DreamObjects&#153; is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
 
 <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
-    <h3><?php echo __('The Bucket Stuff', dreamobjects); ?></h3>
-
-    	<div id="dho-primary">
-    		<div id="dho-content">
-    			<div id="dho-leftcol">
-    			<h4><?php echo __('Create A New Bucket', dreamobjects); ?></h4>
-
-                <p><?php echo __('If you need to create a new bucket, just enter the name and click Create Bucket.', dreamobjects); ?>
-                    <br /><?php echo __('All buckets are created as "private" buckets.', dreamobjects); ?></p>
-                    <form method="post" action="options.php">
-                        <?php settings_fields( 'do-do-new-bucket-settings' ); ?>
-                        <input type="text" name="do-do-new-bucket" id="new-bucket" value="" />
-                        <p class="submit"><input class='button-secondary' type='Submit' name='newbucket' value='<?php echo __("Create Bucket", dreamobjects); ?>' id='submitbutton' /></p>
-                    </form>    			
-    			
-    			</div>
-    			<div id="dho-rightcol">
-                <h4><?php echo __('Bucket List', dreamobjects); ?></h4>
-                    
-                    <ul>
-                    <?php
-                    $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-                    $s3->set_hostname('objects.dreamhost.com');
-                    $s3->allow_hostname_override(false);
-                    $s3->enable_path_style();
-                
-                    $ListResponse = $s3->list_buckets();
-                    $buckets = $ListResponse->body->Buckets->Bucket;
-                
-                    if ( !empty($buckets) ) :
-                        foreach ( $buckets as $b ) {
-                            echo "<li>";
-                            if(isset($b->Name)) {$name = $b->Name;}
-                            printf($name);
-                            if ( $name == get_option('dh-do-bucket') ) 
-                                {$string = ' <strong>'. __(' - Used for Backups', dreamobjects).'</strong>';
-                                echo $string;}
-                            elseif ( $name == get_option('dh-do-bucketup') ) 
-                                {$string = ' <strong>'. __(' - Used for Uploads', dreamobjects).'</strong>';
-                                echo $string;
-                                }
-                            echo "</li>";
-                        }
-                    endif;
-                    ?>
-                    </ul>
-    			</div>
-    		</div>
-    	</div>
 
     <h3><?php echo __('Debug Logging', dreamobjects); ?></h3>
 
