@@ -44,7 +44,7 @@ if ( !class_exists('UniversalClassLoader') ) {
 }
 
 if ( !class_exists('Symfony\Component\ClassLoader\UniversalClassLoader') ) {
-	echo "No Symfony\Component\ClassLoader\UniversalClassLoader"
+	echo "No Symfony\Component\ClassLoader\UniversalClassLoader";
 }
 
 ?>
