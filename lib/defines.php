@@ -21,8 +21,6 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-require_once '../aws/aws-autoloader.php';
-
 // Set up defaults
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));

@@ -58,12 +58,13 @@ if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 	}
 }
  
-require_once dirname(__FILE__) . '/lib/defines.php';
-require_once dirname(__FILE__) . '/lib/dhdo.php';
-require_once dirname(__FILE__) . '/lib/messages.php';
-require_once dirname(__FILE__) . '/lib/settings.php';
+require_once './lib/defines.php';
+require_once './lib/dhdo.php';
+require_once './lib/messages.php';
+require_once './lib/settings.php';
+require_once './aws/aws-autoloader.php';
 
 // WP-CLI
 if ( defined('WP_CLI') && WP_CLI ) {
-	include( dirname(__FILE__) . '/lib/wp-cli.php' );
+	include( './lib/wp-cli.php' );
 }
