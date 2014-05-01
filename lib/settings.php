@@ -102,7 +102,7 @@ class DHDOSET {
 
         function bucketup_callback() { 
         
-        	$s3 = AWS::factory(array(
+        	$s3 = AwsS3DHDOSET::factory(array(
 				'key'    => get_option('dh-do-key'),
 			    'secret' => get_option('dh-do-secretkey'),
 			    'base_url' => 'http://objects.dreamhost.com',
@@ -166,7 +166,7 @@ class DHDOSET {
             $s3->enable_path_style();
         */
 
-        	$s3 = AWS::factory(array(
+        	$s3 = AwsS3DHDOSET::factory(array(
 				'key'    => get_option('dh-do-key'),
 			    'secret' => get_option('dh-do-secretkey'),
 			    'base_url' => 'http://objects.dreamhost.com',
