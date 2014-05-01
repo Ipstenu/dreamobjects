@@ -14,7 +14,7 @@
  * permissions and limitations under the License.
  */
 
-if ( !class_exists('Symfony\Component\ClassLoader\UniversalClassLoader') ) {
+if ( !class_exists('Symfony\Component\ClassLoader\UniversalClassLoader') || !class_exists('symfony\component\classloader\universalclassloader') ) {
 	require_once __DIR__ . '/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 }
 
