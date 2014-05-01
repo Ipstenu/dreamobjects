@@ -25,6 +25,11 @@ if (!defined('ABSPATH')) {
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
 
+// Do we need the AWS stuff?
+if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
+	require_once DHDO_PLUGIN_DIR.'aws/aws-autoloader.php';
+}
+
 // Standard content folder defines.
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 

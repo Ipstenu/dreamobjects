@@ -20,12 +20,6 @@
 if (!defined('ABSPATH')) {
     die();
 }
-
-
-if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
-	require_once DHDO_PLUGIN_DIR.'aws/aws-autoloader.php';
-}
-
 		$sections = get_option('dh-do-backupsection');
 		if ( !$sections ) {
 			$sections = array();
