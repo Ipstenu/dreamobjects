@@ -36,7 +36,7 @@ include_once (DHDO_PLUGIN_DIR . '/AWSSDKforPHP/sdk.class.php');
 			</script>
 			<div class="wrap">
 				<div id="icon-dreamobjects" class="icon32"></div>
-				<h2><?php echo __("DreamObjects", dreamobjects); ?></h2>
+				<h2><?php echo __("DreamObjects Backups", dreamobjects); ?></h2>
 
 				<p><?php echo __('DreamObjects&#153; is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
 
