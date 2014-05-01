@@ -35,15 +35,6 @@ if (!defined('ABSPATH')) {
 				<h2><?php echo __("DreamObjects Backups", dreamobjects); ?></h2>
 
 				<p><?php echo __('DreamObjects&#153; is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects); ?></p>
-				
-				<?php
-if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
-	echo "NO CLASS";
-} else {
-	echo "YES CLASS";
-}
-
-				?>
 
 <?php if ( get_option('dh-do-key') && get_option('dh-do-secretkey') ) : ?>
 

@@ -55,6 +55,8 @@ if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 	}
 	elseif ( !( $curl['features'] & CURL_VERSION_LIBZ ) ) {
 		dreamobjects_core_incompatibile( __( 'The official Amazon Web Services SDK, which DreamObjects relies on, requires that cURL is compiled with zlib. The plugin has now disabled itself.', 'dreamobjects' ) );
+	} elseif ( is_multisite() ) {
+		dreamobjects_core_incompatibile( __( 'Sorry, but DreamObjects is not currently compatible with WordPress Multisite, and should not be used. The plugin has now disabled itself.', 'dreamobjects' ) );
 	}
 }
  

@@ -21,9 +21,6 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-
-//
-
 class DHDOSET {
     /**
      * Generates the settings page
@@ -81,10 +78,13 @@ class DHDOSET {
             echo '<p>'. __("Once you've configured your keypair here, you'll be able to use the features of this plugin.", dreamobjects).'</p>';
         }
     	function key_callback() {
-        	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text"/>';
+        	echo '<input type="text" name="dh-do-key" value="'. get_option('dh-do-key') .'" class="regular-text" autocomplete="off"/>';
     	}
     	function secretkey_callback() {
-        	echo '<input type="text" name="dh-do-secretkey" value="'. get_option('dh-do-secretkey') .'" class="regular-text"/>';
+        	?><input type="text" name="dh-do-secretkey" value="<?php echo get_option('dh-do-secretkey') ? '-- not shown --' : ''; ?>" class="regular-text" autocomplete="off" />
+        	
+        	<p class="description"><div class="dashicons dashicons-shield"></div>  <?php _e( 'Your secret key will not display for your own security.', 'dreamspeed' ); ?></p>
+        	<?php
     	}
 
      // Uploader settings

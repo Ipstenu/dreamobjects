@@ -32,7 +32,6 @@ if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-co
 if ( !defined('dreamobjects')) {define('dreamobjects','dreamobjects');} // Translation
 if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
 if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
-//if ( !get_option('dh-do-bucketup')) {update_option( 'dh-do-bucketup', 'XXXX' );}
 if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}
 if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled' );}
 if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}

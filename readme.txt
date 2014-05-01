@@ -3,7 +3,7 @@ Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 3.4.3
+Stable tag: 3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -221,6 +221,14 @@ Then log in via SSH and run 'wp dreamobjects backup' to see if that works.
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 3.5 = 
+
+XXX by Ipstenu
+
+* Changed SDK to newest version
+* Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
+* Security tightening (hiding things)
 
 = 3.4.3 =
 May 1, 2014 by Ipstenu
