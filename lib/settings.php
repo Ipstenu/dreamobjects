@@ -113,7 +113,7 @@ class DHDOSET {
             //$s3->allow_hostname_override(false);
             //$s3->enable_path_style();
             
-            $ListResponse = $s3->list_buckets();
+            $ListResponse = $s3->listBuckets();
             $buckets = $ListResponse->body->Buckets->Bucket;
             ?>
             <select name="dh-do-bucketup">
