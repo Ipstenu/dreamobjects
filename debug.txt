@@ -1,0 +1,8 @@
+[2014/05/02 01:00:23] Scheduled ASAP backup.
+[2014/05/02 01:01:27] Begining Backup.
+[2014/05/02 01:01:27] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (676 kB).
+[2014/05/02 01:01:27] SQL filename added to zip.
+[2014/05/02 01:01:27] Creating zip file ...
+[2014/05/02 01:01:27] Calculating zip file size ...
+[2014/05/02 01:01:27] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (133 kB).
+[2014/05/02 01:01:27] New filename local.plugins.dev/2014-05-02-010127.zip.

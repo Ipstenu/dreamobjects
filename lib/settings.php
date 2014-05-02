@@ -112,10 +112,10 @@ class DHDOSET {
             ?>
             <select name="dh-do-bucketup">
                 <option value="XXXX">(select a bucket)</option>
-                <?php foreach ( $buckets as $b ) : 
-                      if(isset($b->Name)) {$name = $b->Name;}
+                <?php foreach ( $buckets['Buckets'] as $bucket ) : 
+                      if(isset($bucket['Name'])) {$name = $bucket['Name'];}
                 ?>
-                    <option <?php if ( $name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
+                    <option <?php if ( $name == get_option('dh-do-bucketup') ) echo 'selected="selected"' ?>><?php echo $b['Name'] ?></option>
                 <?php endforeach; ?>
             </select>
                     
@@ -144,7 +144,7 @@ class DHDOSET {
             register_setting( 'dh-do-backuper-settings','dh-do-backupsection');
             add_settings_field( 'dh-do-backupsection_id',  __('What to Backup', 'dreamobjects'), 'backup_what_callback', 'dh-do-backuper_page', 'backuper_id' );
             register_setting( 'dh-do-backuper-settings','dh-do-schedule');
-            add_settings_field( 'dh-do-schedule_id',  __('Schedule', 'dreamobjects'), 'backup_schedule_callback', 'dh-do-backuper_page', 'backuper_id' );
+            add_settings_field( 'dh-do-schedule_id',  __('Schedule', 'dreamobjects'), 'backup_sched_callback', 'dh-do-backuper_page', 'backuper_id' );
             register_setting( 'dh-do-backuper-settings','dh-do-retain');
             add_settings_field( 'dh-do-backupretain_id',  __('Backup Retention', 'dreamobjects'), 'backup_retain_callback', 'dh-do-backuper_page', 'backuper_id' );
         }
@@ -163,8 +163,8 @@ class DHDOSET {
             
             ?> <select name="dh-do-bucket">
                     <option value="XXXX">(select a bucket)</option>
-                    <?php foreach ( $buckets as $b ) : ?>
-                    <option <?php if ( $b->Name == get_option('dh-do-bucket') ) echo 'selected="selected"' ?>><?php echo $b->Name ?></option>
+                    <?php foreach ( $buckets['Buckets'] as $bucket ) : ?>
+                    <option <?php if ( $bucket['Name'] == get_option('dh-do-bucket') ) echo 'selected="selected"' ?> ><?php echo $bucket['Name'] ?></option>
                     <?php endforeach; ?>
                 </select>
 				<p class="description"><?php echo __('Select from pre-existing buckets.', dreamobjects); ?></p>
@@ -190,18 +190,9 @@ class DHDOSET {
 				</p>
 				<p class="description"><?php echo __('You can select portions of your site to backup.', dreamobjects); ?></p><?php
         }
-    	function backup_retain_callback() {
-            ?><select name="dh-do-retain">
-				    <?php foreach ( array('15','30','60','90','all') as $s ) : ?>
-				        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-				    <?php endforeach; ?>
-				</select>	
-				<p class="description"><?php echo __('How many many backups do you want to keep? 30 is recommended.', dreamobjects); ?></p>
-				<p class="description"><strong><?php echo __('NOTICE!', dreamobjects); ?></strong> <?php echo __('DreamObjects charges you based on diskspace used. Setting to \'All\' will retain your backups forwever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p><?
-    	
-    	}
-    	
-    	function backup_schedule_callback() {
+
+
+    	function backup_sched_callback() {
     	
             ?><select name="dh-do-schedule">
 				<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
@@ -218,6 +209,18 @@ class DHDOSET {
             <?php }
     	}
     	
+
+    	function backup_retain_callback() {
+            ?><select name="dh-do-retain">
+				    <?php foreach ( array('5','10','15','30','60','90','all') as $s ) : ?>
+				        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
+				    <?php endforeach; ?>
+				</select>
+				<p class="description"><?php echo __('How many many backups do you want to keep? 15 is recommended.', dreamobjects); ?></p>
+				<p class="description"><div class="dashicons dashicons-info"></div> <?php echo __('DreamObjects charges you based on diskspace used. Setting to \'All\' will retain your backups forwever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p>
+		<?php
+    	}
+   	
     // Backup BOTO Settings
         add_settings_section( 'backupboto_id', __('Settings', 'dreamobjects'), 'backupboto_callback', 'dh-do-backupboto_page' );
 

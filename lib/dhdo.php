@@ -21,7 +21,12 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-//
+use Aws\S3\S3Client as AwsS3DHDO;
+
+// Multipart uploads
+use Aws\Common\Enum\Size;
+use Aws\Common\Exception\MultipartUploadException;
+use Aws\S3\Model\MultipartUpload\UploadBuilder;
 
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
@@ -48,15 +53,22 @@ class DHDO {
 
         // CREATE NEW BUCKET
         if ( current_user_can('manage_options') && isset($_POST['do-do-new-bucket']) && !empty($_POST['do-do-new-bucket']) ) {
-            $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
-            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-            $s3->set_hostname('objects.dreamhost.com');
-            $s3->allow_hostname_override(false);
-            $s3->enable_path_style();
-            if ($s3->create_bucket($_POST['do-do-new-bucket'], AmazonS3::REGION_US_E1))
-               {add_action('admin_notices', array('DHDOMESS','newBucketMessage'));}
-            else
-               {add_action('admin_notices', array('DHDOMESS','newBucketError'));}
+	            $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
+	
+	        	$s3 = AwsS3DHDO::factory(array(
+					'key'      => get_option('dh-do-key'),
+				    'secret'   => get_option('dh-do-secretkey'),
+				    'base_url' => 'http://objects.dreamhost.com',
+				));
+	            
+	            if ($s3->createBucket( array(
+	            	'Bucket'             => $_POST['do-do-new-bucket'],
+	            	//'LocationConstraint' => \Aws\Common\Enum\REGION::US_E1
+	            )) ) {
+	               add_action('admin_notices', array('DHDOMESS','newBucketMessage'));
+	            } else {
+	            	add_action('admin_notices', array('DHDOMESS','newBucketError'));
+	            }
            }
 
         // RESET
@@ -86,14 +98,15 @@ class DHDO {
         if( current_user_can('manage_options') && isset($_POST['Submit']) && isset($_FILES['theFile']) && $_GET['page'] ==
 'dreamobjects-menu-uploader' ) {
           $fileName = sanitize_file_name( $_FILES['theFile']['name']);
-          $fileTempName = realpath($_FILES['theFile']['tmp_name']);
+          $fileTempPath = realpath($_FILES['theFile']['tmp_name']);
           $fileType = $_FILES['theFile']['type'];
-          DHDO::logger('Preparing to upload '. $fileName .' to DreamObjects. Temp data stored as '. $fileTempName .'.');
-            
-            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-            $s3->set_hostname('objects.dreamhost.com');
-            $s3->allow_hostname_override(false);
-            $s3->enable_path_style();
+          DHDO::logger('Preparing to upload '. $fileName .' to DreamObjects. Temp data stored as '. $fileTempPath .'.');
+
+		  	$s3 = AwsS3DHDO::factory(array(
+				'key'      => get_option('dh-do-key'),
+			    'secret'   => get_option('dh-do-secretkey'),
+			    'base_url' => 'http://objects.dreamhost.com',
+			));
           
             if ( get_option('dh-do-uploadpub') != 1 )
               {   $acl = AmazonS3::ACL_PUBLIC;
@@ -104,21 +117,20 @@ class DHDO {
                   DHDO::logger('Upload will be private.');
               }
             $bucket = get_option('dh-do-bucketup');
- 
-             $mpupload = $s3->create_mpu_object($bucket, $fileName, array(
-                        'fileUpload'  => $fileTempName,
-                        'contentType' => $fileType,
-                        'acl'         =>$acl,
-                        'storage'     => AmazonS3::STORAGE_STANDARD
-                        ));
-            $result=(array)$mpupload;
+
+			$result = $s3->putObject(array(
+				'Bucket'        => $bucket,
+				'Key'           => $fileName, // The name of the file
+				'SourceFile'    => $fileTempPath, // The temp path to the file on the server
+				'ACL'			=> $acl,
+			));
 
             if ( $result["status"]>=200 and $result["status"]<300 ) {
                 add_action('admin_notices', array('DHDOMESS','uploaderMessage'));
                 DHDO::logger('Copied '. $fileName .' to DreamObjects.');
             } else {
                 add_action('admin_notices', array('DHDOMESS','uploaderError'));
-                DHDO::logger('File failed to copy '. $fileTempName .' to DreamObjects as '. $fileName .'. Error: '. $result["Code"] .' '. $result["MESSAGE"] .' '. $result["status"] .'.');
+                DHDO::logger('File failed to copy '. $fileTempPath .' to DreamObjects as '. $fileName .'. Error: '. $result["Code"] .' '. $result["MESSAGE"] .' '. $result["status"] .'.');
             }
         }
         
@@ -236,10 +248,13 @@ class DHDO {
             DHDO::logger('Zip file generated: '. $file .' ('. $zipsize .').');
             
             // Upload
-            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-            $s3->set_hostname('objects.dreamhost.com');
-            $s3->allow_hostname_override(false);
-            $s3->enable_path_style();
+
+		  	$s3 = AwsS3DHDO::factory(array(
+				'key'      => get_option('dh-do-key'),
+			    'secret'   => get_option('dh-do-secretkey'),
+			    'base_url' => 'http://objects.dreamhost.com',
+			));
+
             $bucket = get_option('dh-do-bucket');
             
             $parseUrl = parse_url(trim(home_url()));
@@ -252,13 +267,18 @@ class DHDO {
             DHDO::logger('New filename '. $newname .'.');
             set_time_limit(180);
             if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
-            $mpupload = $s3->create_mpu_object($bucket, $newname, array(
-                        'fileUpload'  => $file,
-                        'contentType' => 'application/zip',
-                        'acl'         => AmazonS3::ACL_PRIVATE,
-                        'storage'     => AmazonS3::STORAGE_STANDARD
-                        ));
-            $result=(array)$mpupload;
+
+			$result = $client->createMultipartUpload(array(
+			    'ACL'         => 'private',
+			    'Bucket'      => $bucket,
+			    'Key'         => $file,
+			    'ContentType' => 'application/zip',
+			    'Metadata' => array(
+			        'UploadedBy'   => 'DreamObjectsBackupPlugin',
+			        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
+			    ),
+			));
+
 
             if ( $result["status"]>=200 and $result["status"]<300 ) {
                 DHDO::logger('Creating backup file '. $newname .' in DreamObjects. Status: '. $result["status"] .'.');
@@ -281,21 +301,28 @@ class DHDO {
         if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
             $num_backups = get_option('dh-do-retain');
 
-            $s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-            $s3->set_hostname('objects.dreamhost.com');
-            $s3->allow_hostname_override(false);
-            $s3->enable_path_style();
+		  	$s3 = AwsS3DHDO::factory(array(
+				'key'      => get_option('dh-do-key'),
+			    'secret'   => get_option('dh-do-secretkey'),
+			    'base_url' => 'http://objects.dreamhost.com',
+			));
+
             $bucket = get_option('dh-do-bucket');
 
             $prefix = next(explode('//', home_url()));
-            $backups = $s3->get_object_list( $bucket, array( 'prefix' => $prefix ) );
+            
+            $backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket ));
+            
             if ($backups !== false) {
                 krsort($backups);
                 $count = 0;
                 foreach ($backups as $object) {
                     if ( ++$count > $num_backups ) {
-                        $s3->delete_object($bucket, $object);
-                        DHDO::logger('Removed backup '. $object .' from DreamObjects, per user retention choice.');
+                        $s3->deleteObject( array(
+                        	'Bucket' => $bucket,
+                        	'Key'    => $object['Key'],
+                        ));
+                        DHDO::logger('Removed backup '. $object['Key'] .' from DreamObjects, per user retention choice.');
                     }    
                 }
             }
