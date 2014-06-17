@@ -23,11 +23,6 @@ if (!defined('ABSPATH')) {
 
 use Aws\S3\S3Client as AwsS3DHDO;
 
-// Multipart uploads
-use Aws\Common\Enum\Size;
-use Aws\Common\Exception\MultipartUploadException;
-use Aws\S3\Model\MultipartUpload\UploadBuilder;
-
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
 
@@ -268,7 +263,8 @@ class DHDO {
             set_time_limit(180);
             if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
 
-			$result = $client->createMultipartUpload(array(
+/*
+			$multipart = $s3->createMultipartUpload(array(
 			    'ACL'         => 'private',
 			    'Bucket'      => $bucket,
 			    'Key'         => $file,
@@ -278,13 +274,27 @@ class DHDO {
 			        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
 			    ),
 			));
+*/
 
+			$uploader = UploadBuilder::newInstance()
+			    ->setClient($s3)
+			    ->setSource($file)
+			    ->setBucket($bucket)
+			    ->setKey($newname)
+			    ->setOption('Metadata', array('Foo' => 'Bar'))
+			    ->setOption('CacheControl', 'max-age=3600')
+			    ->build();
 
-            if ( $result["status"]>=200 and $result["status"]<300 ) {
-                DHDO::logger('Creating backup file '. $newname .' in DreamObjects. Status: '. $result["status"] .'.');
-            } else {
-                DHDO::logger('File failed to create '. $file .' in DreamObjects as '. $newname .'. Status: '. $result["status"] .'.');
-            }
+			// Perform the upload. Abort the upload if something goes wrong
+			try {
+			    $uploader->upload();
+			    DHDO::logger('Success! Created backup file '. $newname .' in DreamObjects.');
+			    $backup_result = 'Yes';
+			} catch (MultipartUploadException $e) {
+			    $uploader->abort();
+			    DHDO::logger('Failure. File failed to create '. $file .'  as '. $newname .' in DreamObjects.');
+			    DHDO::logger( $e );
+			}
 
             // Cleanup
             if(file_exists($file)) { 
@@ -298,7 +308,7 @@ class DHDO {
         }
         
         // Cleanup Old Backups
-        if ( get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
+        if ( $backup_result = 'Yes' && get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
             $num_backups = get_option('dh-do-retain');
 
 		  	$s3 = AwsS3DHDO::factory(array(
@@ -321,11 +331,14 @@ class DHDO {
                         $s3->deleteObject( array(
                         	'Bucket' => $bucket,
                         	'Key'    => $object['Key'],
+                        	'Prefix' => $prefix, // This makes sure we don't delete all our media!
                         ));
                         DHDO::logger('Removed backup '. $object['Key'] .' from DreamObjects, per user retention choice.');
                     }    
                 }
             }
+        } else {
+	        DHDO::logger('Per user retention choice, not deleteing a single old backup.');
         }
         DHDO::logger('Backup Complete.');
         DHDO::logger('');
