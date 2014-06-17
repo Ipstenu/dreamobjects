@@ -127,7 +127,7 @@ class DHDO {
 
     // Returns the URL of the plugin's folder.
     function getURL() {
-        return WP_CONTENT_URL.'/plugins/'.basename(dirname(__FILE__)) . '/';
+        return plugins_url() . '/';
     }
    
 
@@ -204,7 +204,7 @@ class DHDO {
         
         // And me DB!
         if ( in_array('database', $sections) ) {
-            set_time_limit(180);
+            set_time_limit(300);
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
             $result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
             $sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
