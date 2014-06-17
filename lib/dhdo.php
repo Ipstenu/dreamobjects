@@ -46,26 +46,6 @@ class DHDO {
             }
         }
 
-        // CREATE NEW BUCKET
-        if ( current_user_can('manage_options') && isset($_POST['do-do-new-bucket']) && !empty($_POST['do-do-new-bucket']) ) {
-	            $_POST['do-do-new-bucket'] = strtolower($_POST['do-do-new-bucket']);
-	
-	        	$s3 = AwsS3DHDO::factory(array(
-					'key'      => get_option('dh-do-key'),
-				    'secret'   => get_option('dh-do-secretkey'),
-				    'base_url' => 'http://objects.dreamhost.com',
-				));
-	            
-	            if ($s3->createBucket( array(
-	            	'Bucket'             => $_POST['do-do-new-bucket'],
-	            	//'LocationConstraint' => \Aws\Common\Enum\REGION::US_E1
-	            )) ) {
-	               add_action('admin_notices', array('DHDOMESS','newBucketMessage'));
-	            } else {
-	            	add_action('admin_notices', array('DHDOMESS','newBucketError'));
-	            }
-           }
-
         // RESET
         if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
             delete_option( 'dh-do-backupsection' );
