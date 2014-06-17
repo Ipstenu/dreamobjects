@@ -31,7 +31,7 @@ class DHDOMESS {
     public static function backupMessage() {
         $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backupnow' ) ), get_option('time_format') );
         $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), $timestamp );
-        echo "<div id='message' class='updated fade'><div class='dashicons dashicons-clock'></div> <p><strong>".$string."</strong></p></div>";
+        echo "<div id='message' class='updated fade'><p><div class='dashicons dashicons-clock'></div> <strong>".$string."</strong></p></div>";
     }
     
     public static function uploaderMessage() {

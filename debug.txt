@@ -1,0 +1,213 @@
+[2014/06/17 07:16:31] Scheduled ASAP backup.
+[2014/06/17 07:17:58] Begining Backup.
+[2014/06/17 07:17:59] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (781 kB).
+[2014/06/17 07:17:59] SQL filename added to zip.
+[2014/06/17 07:17:59] Creating zip file ...
+[2014/06/17 07:17:59] Calculating zip file size ...
+[2014/06/17 07:17:59] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (126 kB).
+[2014/06/17 07:17:59] New filename local.plugins.dev/2014-06-17-191759.zip.
+[2014/06/17 07:21:43] Scheduled ASAP backup.
+[2014/06/17 07:23:09] Begining Backup.
+[2014/06/17 07:23:09] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (781 kB).
+[2014/06/17 07:23:09] SQL filename added to zip.
+[2014/06/17 07:23:09] Creating zip file ...
+[2014/06/17 07:23:09] Calculating zip file size ...
+[2014/06/17 07:23:09] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (126 kB).
+[2014/06/17 07:23:09] New filename local.plugins.dev/2014-06-17-192309.zip.
+[2014/06/17 07:23:09] Begining upload to DreamObjects servers.
+[2014/06/17 07:23:09] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
+[2014/06/17 07:23:09] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/08/unicorn-wallpaper-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/08/unicorn-wallpaper.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:10] Removed backup wp-content/uploads/2010/09/100_5478.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/100_5540.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/canola2-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/canola2-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/canola2-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:11] Removed backup wp-content/uploads/2010/09/canola2.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032-1024x819.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032-300x240.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/cep00032.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/dcp_2082-1024x682.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/dcp_2082-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/dcp_2082-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:12] Removed backup wp-content/uploads/2010/09/dcp_2082-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dcp_2082-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dcp_2082.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc02085.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:13] Removed backup wp-content/uploads/2010/09/dsc03149-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc03149-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc03149-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc03149-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc03149-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc03149.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:14] Removed backup wp-content/uploads/2010/09/dsc04563.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc09114.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20040724_152504_532-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20040724_152504_532-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20040724_152504_532-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20040724_152504_532.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:15] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050102_192118_51.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050604_133440_34211-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050604_133440_34211-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050604_133440_34211-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050604_133440_34211.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050727_091048_222-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050727_091048_222-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:16] Removed backup wp-content/uploads/2010/09/dsc20050727_091048_222-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20050727_091048_222.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20050813_115856_52-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20050813_115856_52-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20050813_115856_52-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20050813_115856_52.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102-1024x682.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:17] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_160808_102.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119-1024x682.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dsc20051220_173257_119.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dscn3316-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:18] Removed backup wp-content/uploads/2010/09/dscn3316-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/dscn3316-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/dscn3316-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/dscn3316-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/dscn3316.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0513-1-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0513-1-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0513-1-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0513-1.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0747-1024x682.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0747-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0747-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:19] Removed backup wp-content/uploads/2010/09/img_0747-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0747-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0747.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0767-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0767-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0767-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_0767.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399-1024x682.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399-300x199.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/img_8399.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:20] Removed backup wp-content/uploads/2010/09/michelle_049-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/michelle_049-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/michelle_049-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/michelle_049-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/michelle_049-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/michelle_049.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:21] Removed backup wp-content/uploads/2010/09/windmill-1024x768.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2010/09/windmill-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2010/09/windmill-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2010/09/windmill-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2010/09/windmill-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2010/09/windmill.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-horizontal-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-horizontal-300x155.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-horizontal.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-vertical-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-vertical-155x300.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:22] Removed backup wp-content/uploads/2012/03/featured-image-vertical-300x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2012/03/featured-image-vertical-300x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2012/03/featured-image-vertical.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002-1024x341.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002-1038x400.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002-300x100.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-1200x4002.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-150x150-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:23] Removed backup wp-content/uploads/2013/01/image-alignment-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/image-alignment-300x200-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/image-alignment-300x200.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/image-alignment-580x300-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/image-alignment-580x300-300x155.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/image-alignment-580x300.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper-1024x640.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper-1038x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper-300x187.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:24] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper-672x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2013/01/soworthloving-wallpaper.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/BoBWWgFCQAABHa1-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/BoBWWgFCQAABHa1-225x300.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/BoBWWgFCQAABHa1-600x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/BoBWWgFCQAABHa1-600x576.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/BoBWWgFCQAABHa1.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20040724_152504_532-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20040724_152504_532-300x225.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20040724_152504_532-640x372.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20040724_152504_532.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20050604_133440_34211-e1400541132379-150x150.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20050604_133440_34211-e1400541132379-300x166.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Removed backup wp-content/uploads/2014/05/dsc20050604_133440_34211-e1400541132379.jpg from DreamObjects, per user retention choice.
+[2014/06/17 07:23:25] Backup Complete.
+[2014/06/17 07:23:25] 
+[2014/06/17 07:32:50] 60
+[2014/06/17 07:33:52] Begining Backup.
+[2014/06/17 07:33:52] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (781 kB).
+[2014/06/17 07:33:52] SQL filename added to zip.
+[2014/06/17 07:33:52] Creating zip file ...
+[2014/06/17 07:33:52] Calculating zip file size ...
+[2014/06/17 07:33:52] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (127 kB).
+[2014/06/17 07:33:52] New filename local.plugins.dev/2014-06-17-193352.zip.
+[2014/06/17 07:33:52] Begining upload to DreamObjects servers.
+[2014/06/17 07:33:52] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
+[2014/06/17 07:33:52] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
+[2014/06/17 07:33:53] Backup Complete.
+[2014/06/17 07:33:53] 
+[2014/06/17 07:34:49] 60
+[2014/06/17 07:35:51] Begining Backup.
+[2014/06/17 07:35:51] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (781 kB).
+[2014/06/17 07:35:51] SQL filename added to zip.
+[2014/06/17 07:35:51] Creating zip file ...
+[2014/06/17 07:35:51] Calculating zip file size ...
+[2014/06/17 07:35:51] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (127 kB).
+[2014/06/17 07:35:51] New filename local.plugins.dev/2014-06-17-193551.zip.
+[2014/06/17 07:35:51] Begining upload to DreamObjects servers.
+[2014/06/17 07:35:51] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
+[2014/06/17 07:35:51] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
+[2014/06/17 07:35:51] Checking for backups to be deleted.
+[2014/06/17 07:35:51] Backup Complete.
+[2014/06/17 07:35:51] 

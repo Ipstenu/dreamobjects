@@ -116,7 +116,7 @@ class DHDO {
         if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
             wp_schedule_single_event( current_time('timestamp', true)+60, 'dh-do-backupnow');
             add_action('admin_notices', array('DHDOMESS','backupMessage'));
-            DHDO::logger('Scheduled ASAP backup.');
+            DHDO::logger('Scheduled ASAP backup in 60 seconds.' );
         }
         
         // BACKUP
@@ -215,7 +215,7 @@ class DHDO {
         }
         
         if ( !empty($backups) ) {
-            set_time_limit(180); 
+            set_time_limit(300); 
             DHDO::logger('Creating zip file ...');
             $zip->create($backups);
             DHDO::logger('Calculating zip file size ...');
@@ -240,9 +240,10 @@ class DHDO {
             $newname = $url . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             
             DHDO::logger('New filename '. $newname .'.');
-            set_time_limit(180);
+            set_time_limit(300);
             if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
 
+			DHDO::logger('Begining upload to DreamObjects servers.');
 /*
 			$multipart = $s3->createMultipartUpload(array(
 			    'ACL'         => 'private',
@@ -254,7 +255,7 @@ class DHDO {
 			        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
 			    ),
 			));
-*/
+
 
 			$uploader = UploadBuilder::newInstance()
 			    ->setClient($s3)
@@ -275,6 +276,7 @@ class DHDO {
 			    DHDO::logger('Failure. File failed to create '. $file .'  as '. $newname .' in DreamObjects.');
 			    DHDO::logger( $e );
 			}
+*/
 
             // Cleanup
             if(file_exists($file)) { 
@@ -288,6 +290,7 @@ class DHDO {
         }
         
         // Cleanup Old Backups
+        DHDO::logger('Checking for backups to be deleted.');
         if ( $backup_result = 'Yes' && get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
             $num_backups = get_option('dh-do-retain');
 
@@ -301,7 +304,12 @@ class DHDO {
 
             $prefix = next(explode('//', home_url()));
             
-            $backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket ));
+            $parseUrl = parse_url(trim(home_url()));
+            $prefixurl = $parseUrl['host'];
+            if( isset($parseUrl['path']) ) 
+                { $prefixurl .= $parseUrl['path']; }
+            
+            $backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, "Prefix" => $prefixurl ) );
             
             if ($backups !== false) {
                 krsort($backups);
