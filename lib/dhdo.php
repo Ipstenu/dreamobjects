@@ -23,6 +23,11 @@ if (!defined('ABSPATH')) {
 
 use Aws\S3\S3Client as AwsS3DHDO;
 
+use Aws\Common\Enum\Size;
+use Aws\Common\Exception\MultipartUploadException;
+use Aws\S3\Model\MultipartUpload\UploadBuilder;
+
+
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
 
@@ -193,6 +198,7 @@ class DHDO {
         }
         
         $file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
+        $fileurl = content_url() . '/upgrade/dreamobject-backups.zip';
         $zip = new PclZip($file);
         $backups = array();
 
@@ -231,52 +237,114 @@ class DHDO {
 			));
 
             $bucket = get_option('dh-do-bucket');
-            
             $parseUrl = parse_url(trim(home_url()));
             $url = $parseUrl['host'];
             if( isset($parseUrl['path']) ) 
                 { $url .= $parseUrl['path']; }
             
-            $newname = $url . '/' . date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
-            
+            // Rename file
+            $newname = $url.'/'.date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
             DHDO::logger('New filename '. $newname .'.');
-            set_time_limit(300);
+
+			// Uploading
+            set_time_limit(180);
             if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
 
 			DHDO::logger('Begining upload to DreamObjects servers.');
-/*
-			$multipart = $s3->createMultipartUpload(array(
-			    'ACL'         => 'private',
-			    'Bucket'      => $bucket,
-			    'Key'         => $file,
-			    'ContentType' => 'application/zip',
-			    'Metadata' => array(
-			        'UploadedBy'   => 'DreamObjectsBackupPlugin',
-			        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
-			    ),
-			));
 
+			if ( @filesize($file) >= (5 * 1024 * 1024) ) {
 
-			$uploader = UploadBuilder::newInstance()
-			    ->setClient($s3)
-			    ->setSource($file)
-			    ->setBucket($bucket)
-			    ->setKey($newname)
-			    ->setOption('Metadata', array('Foo' => 'Bar'))
-			    ->setOption('CacheControl', 'max-age=3600')
-			    ->build();
-
-			// Perform the upload. Abort the upload if something goes wrong
-			try {
-			    $uploader->upload();
-			    DHDO::logger('Success! Created backup file '. $newname .' in DreamObjects.');
-			    $backup_result = 'Yes';
-			} catch (MultipartUploadException $e) {
-			    $uploader->abort();
-			    DHDO::logger('Failure. File failed to create '. $file .'  as '. $newname .' in DreamObjects.');
-			    DHDO::logger( $e );
+				// Files larger than 5megs go through Multipart
+				
+				// 1. Instantiate the client.
+			  	$client = AwsS3DHDO::factory(array(
+					'key'      => get_option('dh-do-key'),
+				    'secret'   => get_option('dh-do-secretkey'),
+				    'base_url' => 'http://objects.dreamhost.com',
+				));
+				
+				// 2. Create a new multipart upload and get the upload ID.
+				$result = $s3->createMultipartUpload(array(
+				    'Bucket'       => $bucket,
+				    'Key'          => $newname,
+				    'ACL'          => 'private',
+				    'Metadata'     => array(
+				        'UploadedBy' => 'DreamObjectsBackupPlugin',
+				        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp'))
+				    )
+				));
+				$uploadId = $result['UploadId'];
+	
+				// 3. Upload the file in parts.
+				try {    
+				    $uploadfile = fopen($fileurl, 'r');
+				    $parts = array();
+				    $partNumber = 1;
+				    while (!feof($uploadfile)) {
+				        $result = $s3->uploadPart(array(
+				            'Bucket'     => $bucket,
+				            'Key'        => $newname,
+				            'UploadId'   => $uploadId,
+				            'PartNumber' => $partNumber,
+				            'Body'       => fread($uploadfile, 5 * 1024 * 1024),
+				        ));
+	
+				        DHDO::logger('Uploading part '.$partNumber.' of '.$newname);
+	
+				        $parts[] = array(
+				            'PartNumber' => $partNumber++,
+				            'ETag'       => $result['ETag'],
+				        );
+				        
+				    }
+				    fclose($fileurl);
+				    fclose($uploadfile);
+				    
+				    DHDO::logger('All parts uploaded.');
+				    
+				} catch (S3Exception $e) {
+				    $result = $s3->abortMultipartUpload(array(
+				        'Bucket'   => $bucket,
+				        'Key'      => $newname,
+				        'UploadId' => $uploadId
+				    ));
+				
+				    DHDO::logger('Upload failed.');
+				}
+				
+				// 4. Complete multipart upload.
+				try {
+					$result = $s3->completeMultipartUpload(array(
+					    'Bucket'   => $bucket,
+					    'Key'      => $newname,
+					    'UploadId' => $uploadId,
+					    'Parts'    => $parts,
+					));
+					$url = $result['Location'];
+	
+					DHDO::logger('Upload complete'. $url);
+				} catch (Exception $e) {
+				    DHDO::logger('Upload failed: '. $e->getMessage() );
+				}
+			} else {
+				// If it's under 5megs, do it the old way
+				try {
+					$result = $s3->putObject(array(
+					    'Bucket'       => $bucket,
+					    'Key'          => $newname,
+					    'SourceFile'   => $file,
+					    'ContentType'  => 'application/zip',
+					    'ACL'          => 'private',
+					    'Metadata'     => array(
+					        'UploadedBy'   => 'DreamObjectsBackupPlugin',
+					        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
+					    )
+					));
+					DHDO::logger('Upload complete');
+				} catch (S3Exception $e) {
+				    DHDO::logger('Upload failed: '. $e->getMessage() );
+				}
 			}
-*/
 
             // Cleanup
             if(file_exists($file)) { 
@@ -301,8 +369,6 @@ class DHDO {
 			));
 
             $bucket = get_option('dh-do-bucket');
-
-            $prefix = next(explode('//', home_url()));
             
             $parseUrl = parse_url(trim(home_url()));
             $prefixurl = $parseUrl['host'];
@@ -319,7 +385,6 @@ class DHDO {
                         $s3->deleteObject( array(
                         	'Bucket' => $bucket,
                         	'Key'    => $object['Key'],
-                        	'Prefix' => $prefix, // This makes sure we don't delete all our media!
                         ));
                         DHDO::logger('Removed backup '. $object['Key'] .' from DreamObjects, per user retention choice.');
                     }    
