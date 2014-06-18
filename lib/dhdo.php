@@ -23,7 +23,6 @@ if (!defined('ABSPATH')) {
 
 use Aws\S3\S3Client as AwsS3DHDO;
 
-use Aws\Common\Enum\Size;
 use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Aws\S3\Exception\S3Exception;
@@ -217,8 +216,8 @@ class DHDO {
 				DHDO::logger('Filesize is over 100megs, using Multipart uploader.');
 				
 				// High Level
-				
 				DHDO::logger('Prepare the upload parameters.');
+				
 				$uploader = UploadBuilder::newInstance()
 				    ->setClient($s3)
 				    ->setSource($file)
@@ -229,7 +228,8 @@ class DHDO {
 				        'UploadedBy' => 'DreamObjectsBackupPlugin'
 				    ))
 				    ->setOption('ACL', 'private')
-				    //->setConcurrency(3)
+				    //->setOption('ContentType', 'application/zip')
+				    ->setConcurrency(3)
 				    ->build();
 				
 				DHDO::logger('Perform the upload. Abort the upload if something goes wrong.');

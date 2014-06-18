@@ -1,18 +1,18 @@
-[2014/06/18 03:24:50] Begining Backup.
-[2014/06/18 03:25:02] Files in wp-content added to backup list.
-[2014/06/18 03:25:02] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (781 kB).
-[2014/06/18 03:25:02] SQL added to backup list.
-[2014/06/18 03:25:02] Creating zip file...
-[2014/06/18 03:25:02] NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server's PHP memory, RAM or CPU.
-[2014/06/18 03:26:27] Calculating zip file size ...
-[2014/06/18 03:26:27] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (106 MB).
-[2014/06/18 03:26:28] New filename local.plugins.dev/2014-06-18-152628.zip.
-[2014/06/18 03:26:28] Begining upload to DreamObjects servers.
-[2014/06/18 03:26:28] Filesize is over 100megs, using Multipart uploader.
-[2014/06/18 03:26:28] Prepare the upload parameters.
-[2014/06/18 03:26:29] Perform the upload. Abort the upload if something goes wrong.
-[2014/06/18 03:28:09] Upload failed: An error was encountered while performing a multipart upload: 
-[2014/06/18 03:28:09] exception 'Aws\S3\Exception\InvalidArgumentException' in /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/plugins/dreamspeed/vendor/aws/Aws/Common/Exception/NamespaceExceptionFactory.php:91
+[2014/06/18 04:32:14] Begining Backup.
+[2014/06/18 04:32:22] Files in wp-content added to backup list.
+[2014/06/18 04:32:22] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (782 kB).
+[2014/06/18 04:32:22] SQL added to backup list.
+[2014/06/18 04:32:23] Creating zip file...
+[2014/06/18 04:32:23] NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server's PHP memory, RAM or CPU.
+[2014/06/18 04:35:11] Calculating zip file size ...
+[2014/06/18 04:35:12] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (116 MB).
+[2014/06/18 04:35:13] New filename local.plugins.dev/2014-06-18-163513.zip.
+[2014/06/18 04:35:13] Begining upload to DreamObjects servers.
+[2014/06/18 04:35:13] Filesize is over 100megs, using Multipart uploader.
+[2014/06/18 04:35:13] Prepare the upload parameters.
+[2014/06/18 04:35:13] Perform the upload. Abort the upload if something goes wrong.
+[2014/06/18 04:36:06] Upload failed: An error was encountered while performing a multipart upload: 
+[2014/06/18 04:36:06] exception 'Aws\S3\Exception\InvalidArgumentException' in /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/plugins/dreamspeed/vendor/aws/Aws/Common/Exception/NamespaceExceptionFactory.php:91
 Stack trace:
 #0 /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/plugins/dreamspeed/vendor/aws/Aws/Common/Exception/NamespaceExceptionFactory.php(76): Aws\Common\Exception\NamespaceExceptionFactory->createException('Aws\S3\Exceptio...', Object(Guzzle\Http\Message\EntityEnclosingRequest), Object(Guzzle\Http\Message\Response), Array)
 #1 /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/plugins/dreamspeed/vendor/aws/Aws/Common/Exception/ExceptionListener.php(55): Aws\Common\Exception\NamespaceExceptionFactory->fromResponse(Object(Guzzle\Http\Message\EntityEnclosingRequest), Object(Guzzle\Http\Message\Response))
@@ -66,8 +66,8 @@ Stack trace:
 #11 /srv/www/wp-cli/php/wp-cli.php(34): WP_CLI\Runner->after_wp_load()
 #12 /srv/www/wp-cli/php/boot-fs.php(17): include('/srv/www/wp-cli...')
 #13 {main}
-[2014/06/18 03:28:09] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
-[2014/06/18 03:28:09] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
-[2014/06/18 03:28:09] Checking for backups to be deleted.
-[2014/06/18 03:28:10] Backup Complete.
-[2014/06/18 03:28:10] 
+[2014/06/18 04:36:06] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
+[2014/06/18 04:36:06] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
+[2014/06/18 04:36:06] Checking for backups to be deleted.
+[2014/06/18 04:36:07] Backup Complete.
+[2014/06/18 04:36:07] 
