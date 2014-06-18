@@ -286,7 +286,7 @@ class DHDO {
 				            'Key'        => $newname,
 				            'UploadId'   => $uploadId,
 				            'PartNumber' => $partNumber,
-				            'Body'       => fread($uploadfile, 5 * 1024 * 1024),
+				            'Body'       => fread($uploadfile, 50 * 1024 * 1024),
 				        ));
 	
 				        DHDO::logger('Uploading part '.$partNumber.' of '.$newname);
