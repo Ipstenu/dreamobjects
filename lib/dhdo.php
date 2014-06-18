@@ -26,6 +26,7 @@ use Aws\S3\S3Client as AwsS3DHDO;
 use Aws\Common\Enum\Size;
 use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
+use Aws\S3\Exception\S3Exception;
 
 
 class DHDO {
@@ -54,16 +55,13 @@ class DHDO {
         // RESET
         if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
             delete_option( 'dh-do-backupsection' );
+            delete_option( 'dh-do-boto' );
             delete_option( 'dh-do-bucket' );
-            delete_option( 'dh-do-bucketup' );
             delete_option( 'dh-do-key' );
             delete_option( 'dh-do-schedule' );
             delete_option( 'dh-do-secretkey' );
             delete_option( 'dh-do-section' );
-            delete_option( 'dh-do-uploader' );
-            delete_option( 'dh-do-uploadview' );
             delete_option( 'dh-do-logging' );
-            delete_option( 'dh-do-debugging' );
             DHDO::logger('reset');
            }
 
@@ -73,49 +71,9 @@ class DHDO {
                 DHDO::logger('reset');
             }
         }       
-
-        // UPLOADER
-        if( current_user_can('manage_options') && isset($_POST['Submit']) && isset($_FILES['theFile']) && $_GET['page'] ==
-'dreamobjects-menu-uploader' ) {
-          $fileName = sanitize_file_name( $_FILES['theFile']['name']);
-          $fileTempPath = realpath($_FILES['theFile']['tmp_name']);
-          $fileType = $_FILES['theFile']['type'];
-          DHDO::logger('Preparing to upload '. $fileName .' to DreamObjects. Temp data stored as '. $fileTempPath .'.');
-
-		  	$s3 = AwsS3DHDO::factory(array(
-				'key'      => get_option('dh-do-key'),
-			    'secret'   => get_option('dh-do-secretkey'),
-			    'base_url' => 'http://objects.dreamhost.com',
-			));
-          
-            if ( get_option('dh-do-uploadpub') != 1 )
-              {   $acl = AmazonS3::ACL_PUBLIC;
-                  DHDO::logger('Upload will be public.');
-              }
-            else
-              {   $acl = AmazonS3::ACL_PRIVATE;
-                  DHDO::logger('Upload will be private.');
-              }
-            $bucket = get_option('dh-do-bucketup');
-
-			$result = $s3->putObject(array(
-				'Bucket'        => $bucket,
-				'Key'           => $fileName, // The name of the file
-				'SourceFile'    => $fileTempPath, // The temp path to the file on the server
-				'ACL'			=> $acl,
-			));
-
-            if ( $result["status"]>=200 and $result["status"]<300 ) {
-                add_action('admin_notices', array('DHDOMESS','uploaderMessage'));
-                DHDO::logger('Copied '. $fileName .' to DreamObjects.');
-            } else {
-                add_action('admin_notices', array('DHDOMESS','uploaderError'));
-                DHDO::logger('File failed to copy '. $fileTempPath .' to DreamObjects as '. $fileName .'. Error: '. $result["Code"] .' '. $result["MESSAGE"] .' '. $result["status"] .'.');
-            }
-        }
         
         // UPDATE OPTIONS
-        if ( isset($_GET['settings-updated']) && isset($_GET['page']) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' || $_GET['page'] == 'dreamobjects-menu-uploader' ) ) add_action('admin_notices', array('DHDOMESS','updateMessage'));
+        if ( isset($_GET['settings-updated']) && isset($_GET['page']) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' ) ) add_action('admin_notices', array('DHDOMESS','updateMessage'));
 
         // BACKUP ASAP
         if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
@@ -166,7 +124,7 @@ class DHDO {
         
     // Scan folders to collect all the filenames
     function rscandir($base='') {
-        $data = array_diff(scandir($base), array('.', '..'));
+        $data = array_diff(scandir($base), array('.', '..', '/cache/') );
     
         $subs = array();
         foreach($data as $key => $value) :
@@ -205,7 +163,7 @@ class DHDO {
         // All me files!
         if ( in_array('files', $sections) ) {
             $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
-            DHDO::logger('List of files added to the zip.');
+            DHDO::logger('Files in wp-content added to backup list.');
         } 
         
         // And me DB!
@@ -217,12 +175,13 @@ class DHDO {
             $sqlsize = size_format( @filesize($sqlfile) );
             DHDO::logger('SQL file created: '. $sqlfile .' ('. $sqlsize .').');
             $backups[] = $sqlfile;
-            DHDO::logger('SQL filename added to zip.');
+            DHDO::logger('SQL added to backup list.');
         }
         
         if ( !empty($backups) ) {
-            set_time_limit(300); 
-            DHDO::logger('Creating zip file ...');
+            set_time_limit(300);  // Increased timeout to 5 minutes. If the zip takes longer than that, I have a problem.
+            DHDO::logger('Creating zip file...');
+            DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
             $zip->create($backups);
             DHDO::logger('Calculating zip file size ...');
             $zipsize = size_format( @filesize($file) );
@@ -248,26 +207,50 @@ class DHDO {
 
 			// Uploading
             set_time_limit(180);
-            if ( get_option('dh-do-logging') == 'on' && get_option('dh-do-debugging') == 'on') {$s3->debug_mode = true;}
 
 			DHDO::logger('Begining upload to DreamObjects servers.');
 
-			if ( @filesize($file) >= (5 * 1024 * 1024) ) {
+			// Check the size of the file before we upload, in order to compensate for large files
+			if ( @filesize($file) >= (100 * 1024 * 1024) ) {
 
-				// Files larger than 5megs go through Multipart
+				// Files larger than 100megs go through Multipart
+				DHDO::logger('Filesize is over 100megs, using Multipart uploader.');
 				
-				// 1. Instantiate the client.
-			  	$client = AwsS3DHDO::factory(array(
-					'key'      => get_option('dh-do-key'),
-				    'secret'   => get_option('dh-do-secretkey'),
-				    'base_url' => 'http://objects.dreamhost.com',
-				));
+				// High Level
 				
+				DHDO::logger('Prepare the upload parameters.');
+				$uploader = UploadBuilder::newInstance()
+				    ->setClient($s3)
+				    ->setSource($file)
+				    ->setBucket($bucket)
+				    ->setKey($newname)
+				    ->setMinPartSize(25 * 1024 * 1024)
+				    ->setOption('Metadata', array(
+				        'UploadedBy' => 'DreamObjectsBackupPlugin'
+				    ))
+				    ->setOption('ACL', 'private')
+				    //->setConcurrency(3)
+				    ->build();
+				
+				DHDO::logger('Perform the upload. Abort the upload if something goes wrong.');
+				try {
+				    $uploader->upload();
+				    DHDO::logger('Upload complete');
+				} catch (MultipartUploadException $e) {
+				    $uploader->abort();
+				    DHDO::logger('Upload failed: '.$e->getMessage() );
+				    DHDO::logger( $e );
+				}
+				
+/*
+				// Lowlevel
+
 				// 2. Create a new multipart upload and get the upload ID.
 				$result = $s3->createMultipartUpload(array(
 				    'Bucket'       => $bucket,
 				    'Key'          => $newname,
 				    'ACL'          => 'private',
+				    'ContentType'  => 'application/zip',
 				    'Metadata'     => array(
 				        'UploadedBy' => 'DreamObjectsBackupPlugin',
 				        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp'))
@@ -277,30 +260,38 @@ class DHDO {
 	
 				// 3. Upload the file in parts.
 				try {    
-				    $uploadfile = fopen($fileurl, 'r');
-				    $parts = array();
-				    $partNumber = 1;
-				    while (!feof($uploadfile)) {
-				        $result = $s3->uploadPart(array(
-				            'Bucket'     => $bucket,
-				            'Key'        => $newname,
-				            'UploadId'   => $uploadId,
-				            'PartNumber' => $partNumber,
-				            'Body'       => fread($uploadfile, 50 * 1024 * 1024),
-				        ));
-	
-				        DHDO::logger('Uploading part '.$partNumber.' of '.$newname);
-	
-				        $parts[] = array(
-				            'PartNumber' => $partNumber++,
-				            'ETag'       => $result['ETag'],
-				        );
-				        
-				    }
-				    fclose($fileurl);
-				    fclose($uploadfile);
-				    
-				    DHDO::logger('All parts uploaded.');
+				    $uploadfile = fopen($file, 'r');
+				    if ( $uploadfile === false ) {
+				    	DHDO::logger('Error: Zip not found.');
+				    } else {
+				    	
+				    	$chunkSize = (5 * 1024 * 1024);
+					    $parts = array();
+					    $partNumber = 1;
+					    
+					    $part_counts = getMultipartCounts(filesize($file), $chunkSize );
+					    
+					    while (!feof($uploadfile)) {
+					        $result = $s3->uploadPart(array(
+					            'Body'        => fread($uploadfile, $chunkSize ),
+					            'Bucket'      => $bucket,
+					            'Key'         => $newname,
+					            'PartNumber'  => $partNumber,
+					            'UploadId'    => $uploadId,
+					        ));
+		
+					        DHDO::logger('Adding part #'.$partNumber.' of '.$part_counts.' to multipart upload.');
+		
+					        $parts[] = array(
+					            'PartNumber' => $partNumber++,
+					            'ETag'       => $result['ETag'],
+					        );
+					        
+					    }
+					    fclose($uploadfile);
+					    
+					    DHDO::logger('All parts added to multipart. Preparing to upload ...');
+					}
 				    
 				} catch (S3Exception $e) {
 				    $result = $s3->abortMultipartUpload(array(
@@ -309,7 +300,7 @@ class DHDO {
 				        'UploadId' => $uploadId
 				    ));
 				
-				    DHDO::logger('Upload failed.');
+				    DHDO::logger('Multipart upload aborted. '. $e );
 				}
 				
 				// 4. Complete multipart upload.
@@ -317,17 +308,21 @@ class DHDO {
 					$result = $s3->completeMultipartUpload(array(
 					    'Bucket'   => $bucket,
 					    'Key'      => $newname,
-					    'UploadId' => $uploadId,
 					    'Parts'    => $parts,
+					    'UploadId' => $uploadId,
 					));
 					$url = $result['Location'];
 	
-					DHDO::logger('Upload complete'. $url);
+					DHDO::logger('Multipart upload complete'. $url);
 				} catch (Exception $e) {
-				    DHDO::logger('Upload failed: '. $e->getMessage() );
+				    DHDO::logger('Multipart upload unable to complete: '. $e );
 				}
+*/
 			} else {
-				// If it's under 5megs, do it the old way
+				// If it's under 100megs, do it the old way
+				DHDO::logger('Filesize is under 100megs. This will be less spammy.');
+				
+				set_time_limit(180); // 3 min 
 				try {
 					$result = $s3->putObject(array(
 					    'Bucket'       => $bucket,

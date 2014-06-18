@@ -33,21 +33,4 @@ class DHDOMESS {
         $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. Do not hit refresh on the backups page. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), $timestamp );
         echo "<div id='message' class='updated fade'><p><div class='dashicons dashicons-clock'></div> <strong>".$string."</strong></p></div>";
     }
-    
-    public static function uploaderMessage() {
-        echo "<div id='message' class='updated fade'><p><div class='dashicons dashicons-yes'></div> <strong>".__('Your file was successfully uploaded.', dreamobjects)."</strong></p></div>";
-    }
-            
-    public static function uploaderError() {
-        echo "<div id='message' class='error fade'><p><div class='dashicons dashicons-no'></div>  <strong>".__('Error: Something went wrong while uploading your file.', dreamobjects)."</strong></p></div>";
-    }
-    
-    public static function newBucketMessage() {
-        echo "<div id='message' class='updated fade'><p><div class='dashicons dashicons-yes'></div> <strong>".__('Your new bucket has been created.', dreamobjects)."</strong></p></div>";
-    }
-            
-    public static function newBucketError() {
-        echo "<div id='message' class='error fade'><p><div class='dashicons dashicons-no'></div> <strong>".__('Error: Unable to create bucket (it may already exist and/or be owned by someone else)', dreamobjects)."</strong></p></div>";
-    }
-
 }

@@ -21,6 +21,8 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+use Aws\S3\S3Client as AwsS3DHDOBACK;
+
 ?>
 <script type="text/javascript">
     var ajaxTarget = "<?php echo DHDO::getURL() ?>backup.ajax.php";
@@ -51,26 +53,37 @@ if (!defined('ABSPATH')) {
                     ?>
                     
                     <h3><?php echo $show_backup_header; ?></h3>
-                    <p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
                 
                     <div id="backups">
                         <ul><?php 
-                            if ( get_option('dh-do-bucketup') && (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) {
+                            if ( (get_option('dh-do-bucket') != "XXXX") && !is_null(get_option('dh-do-bucket')) ) {
+
+								?><p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p><?php
+									$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', (time()+600) ), get_option('time_format') );
+									$string = sprintf( __('Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', dreamobjects), $timestamp );									
+								?><p><?php echo $string; ?></p><?php
+
+								$s3 = AwsS3DHDOBACK::factory(array(
+									'key'    => get_option('dh-do-key'),
+									'secret' => get_option('dh-do-secretkey'),
+									'base_url' => 'http://objects.dreamhost.com',
+								));
                     
-                            	$s3 = new AmazonS3( array('key' => get_option('dh-do-key'), 'secret' => get_option('dh-do-secretkey')) );
-                            	$s3->set_hostname('objects.dreamhost.com');
-                            	$s3->allow_hostname_override(false);
-                            	$s3->enable_path_style();
                                 $bucket = get_option('dh-do-bucket');
                                 $prefix = next(explode('//', home_url()));
-                                $uploads = $s3->get_object_list( $bucket, array( 'prefix' => $prefix ) );
-                            		if ($uploads !== false) {
-                                		krsort($uploads);
-                                        foreach ($uploads as $object) {
-                                            $objecturl = $s3->get_object_url( $bucket , $object, '30 minutes' );
-                                            echo '<li>&bull; <a href="'. $objecturl .'">'. $object .'</a></li>';
-                                        }
-                                    }
+                                
+                                try {
+                                	$objects = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));
+                                
+	                                echo '<ul>';
+									foreach ($objects as $object) {
+									    echo '<li><a href="'.$s3->getObjectUrl($bucket, $object['Key'], '+10 minutes').'">'.$object['Key'] .'</a> - '.size_format($object['Size']).'</li>';								    
+									}
+									echo '</ul>';
+								} catch (S3Exception $e) {
+									echo __('There are no backups currently stored. Why not run a backup now?');
+								}
+                                
                     		} // if you picked a bucket
                     					?>
                          </ul>

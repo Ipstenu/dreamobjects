@@ -45,6 +45,11 @@ class DreamObjects_Command extends WP_CLI_Command {
 		do_action('dh-do-backup', array('DHDO', 'backup'));
 		WP_CLI::success( 'Backup Complete' );
 	}
+	
+	function resetlog( $args = array(), $vars = array() ) {
+		DHDO::logger('reset');
+		WP_CLI::success( 'Debug log wiped' );
+	}
 
 	/**
 	 * Help function for this command
@@ -54,6 +59,8 @@ class DreamObjects_Command extends WP_CLI_Command {
 usage: wp dreamobjects [backup]
 
 	backup    run a backup now
+	resetlog  wipe the debug log
+
 EOB
 	);
 	}
