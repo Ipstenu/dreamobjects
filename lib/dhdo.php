@@ -25,18 +25,11 @@ use Aws\S3\S3Client as AwsS3DHDO;
 
 use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
-use Aws\S3\Exception\S3Exception;
+use Guzzle\Plugin\Log\LogPlugin; // DEBUGGING ONLY
 
 
 class DHDO {
     // INIT - hooking into this lets us run things when a page is hit.
-
-	public function __construct() {
-		// Do we need the AWS stuff?
-		if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
-			require_once DHDO_PLUGIN_DIR.'aws/aws-autoloader.php';
-		}
-	}
 
     public static function init() {
 
@@ -194,6 +187,13 @@ class DHDO {
 			    'base_url' => 'http://objects.dreamhost.com',
 			));
 
+			// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
+			$logPlugin = LogPlugin::getDebugPlugin(TRUE,
+			//Don't provide this parameter to show the log in PHP output
+				fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a')
+			);
+			//$s3->addSubscriber($logPlugin);
+
             $bucket = get_option('dh-do-bucket');
             $parseUrl = parse_url(trim(home_url()));
             $url = $parseUrl['host'];
@@ -216,7 +216,7 @@ class DHDO {
 				DHDO::logger('Filesize is over 100megs, using Multipart uploader.');
 				
 				// High Level
-				DHDO::logger('Prepare the upload parameters.');
+				DHDO::logger('Prepare the upload parameters and upload parts in 25M chunks (this may take a while).');
 				
 				$uploader = UploadBuilder::newInstance()
 				    ->setClient($s3)
@@ -228,96 +228,26 @@ class DHDO {
 				        'UploadedBy' => 'DreamObjectsBackupPlugin'
 				    ))
 				    ->setOption('ACL', 'private')
-				    //->setOption('ContentType', 'application/zip')
 				    ->setConcurrency(3)
 				    ->build();
 				
-				DHDO::logger('Perform the upload. Abort the upload if something goes wrong.');
+				// This will be called in the following try
+				$uploader->getEventDispatcher()->addListener(
+				    'multipart_upload.after_part_upload', 
+				    function($event) {
+				        DHDO::logger( 'Part '. $event["state"]->count() . ' uploaded ...');
+				    }
+				);
+				
 				try {
+					DHDO::logger('Begin the upload. Abort the upload if something goes wrong.');				
 				    $uploader->upload();
 				    DHDO::logger('Upload complete');
 				} catch (MultipartUploadException $e) {
 				    $uploader->abort();
 				    DHDO::logger('Upload failed: '.$e->getMessage() );
-				    DHDO::logger( $e );
 				}
-				
-/*
-				// Lowlevel
 
-				// 2. Create a new multipart upload and get the upload ID.
-				$result = $s3->createMultipartUpload(array(
-				    'Bucket'       => $bucket,
-				    'Key'          => $newname,
-				    'ACL'          => 'private',
-				    'ContentType'  => 'application/zip',
-				    'Metadata'     => array(
-				        'UploadedBy' => 'DreamObjectsBackupPlugin',
-				        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp'))
-				    )
-				));
-				$uploadId = $result['UploadId'];
-	
-				// 3. Upload the file in parts.
-				try {    
-				    $uploadfile = fopen($file, 'r');
-				    if ( $uploadfile === false ) {
-				    	DHDO::logger('Error: Zip not found.');
-				    } else {
-				    	
-				    	$chunkSize = (5 * 1024 * 1024);
-					    $parts = array();
-					    $partNumber = 1;
-					    
-					    $part_counts = getMultipartCounts(filesize($file), $chunkSize );
-					    
-					    while (!feof($uploadfile)) {
-					        $result = $s3->uploadPart(array(
-					            'Body'        => fread($uploadfile, $chunkSize ),
-					            'Bucket'      => $bucket,
-					            'Key'         => $newname,
-					            'PartNumber'  => $partNumber,
-					            'UploadId'    => $uploadId,
-					        ));
-		
-					        DHDO::logger('Adding part #'.$partNumber.' of '.$part_counts.' to multipart upload.');
-		
-					        $parts[] = array(
-					            'PartNumber' => $partNumber++,
-					            'ETag'       => $result['ETag'],
-					        );
-					        
-					    }
-					    fclose($uploadfile);
-					    
-					    DHDO::logger('All parts added to multipart. Preparing to upload ...');
-					}
-				    
-				} catch (S3Exception $e) {
-				    $result = $s3->abortMultipartUpload(array(
-				        'Bucket'   => $bucket,
-				        'Key'      => $newname,
-				        'UploadId' => $uploadId
-				    ));
-				
-				    DHDO::logger('Multipart upload aborted. '. $e );
-				}
-				
-				// 4. Complete multipart upload.
-				try {
-					$result = $s3->completeMultipartUpload(array(
-					    'Bucket'   => $bucket,
-					    'Key'      => $newname,
-					    'Parts'    => $parts,
-					    'UploadId' => $uploadId,
-					));
-					$url = $result['Location'];
-	
-					DHDO::logger('Multipart upload complete'. $url);
-				} catch (Exception $e) {
-				    DHDO::logger('Multipart upload unable to complete: '. $e );
-				}
-*/
 			} else {
 				// If it's under 100megs, do it the old way
 				DHDO::logger('Filesize is under 100megs. This will be less spammy.');
@@ -340,6 +270,9 @@ class DHDO {
 				    DHDO::logger('Upload failed: '. $e->getMessage() );
 				}
 			}
+			
+			// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
+			//$s3->getEventDispatcher()->removeSubscriber($logPlugin);
 
             // Cleanup
             if(file_exists($file)) { 
@@ -373,6 +306,7 @@ class DHDO {
             $backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, "Prefix" => $prefixurl ) );
             
             if ($backups !== false) {
+            	$backups = $backups->toArray();
                 krsort($backups);
                 $count = 0;
                 foreach ($backups as $object) {

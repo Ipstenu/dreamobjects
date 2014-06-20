@@ -74,12 +74,14 @@ use Aws\S3\S3Client as AwsS3DHDOBACK;
                                 
                                 try {
                                 	$objects = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));
+									$objects = $objects->toArray();
+									krsort($objects);
                                 
-	                                echo '<ul>';
+	                                echo '<ol>';
 									foreach ($objects as $object) {
 									    echo '<li><a href="'.$s3->getObjectUrl($bucket, $object['Key'], '+10 minutes').'">'.$object['Key'] .'</a> - '.size_format($object['Size']).'</li>';								    
 									}
-									echo '</ul>';
+									echo '</ol>';
 								} catch (S3Exception $e) {
 									echo __('There are no backups currently stored. Why not run a backup now?');
 								}
