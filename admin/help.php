@@ -86,19 +86,5 @@ if ($screen->id == 'dreamobjects_page_dreamobjects-menu-backup') {
 		'<p>' . __( 'The default backup retention is 15 backups, however you can change this t0 30, 60, 90, or all backups (where \'all\' is all backups, forever and ever). Keep in mind you will be charged for the space you use, so chose wisely.', 'dreamobjects' ) . '</p>'
       ));
 	}
-
-// Uploader Page
-if ($screen->id == 'dreamobjects_page_dreamobjects-menu-uploader') {
-    
-    // Base Help
-    $screen->add_help_tab( array(
-		'id'      => 'dreamobjects-menu-backup-base',
-		'title'   => __('Overview', 'dreamobjects'),
-		'content' => 
-		'<h3>' . __('DreamObjects Uploader', 'dreamobjects') .'</h3>' .
-		'<p>' . __( 'The basic uploader allows you to upload files via WordPress to your DreamObjects buckets. It is not as fast as using a client like CyberDuck, but is very useful in a pinch.', 'dreamobjects' ) . '</p>' .
-		'<p>' . __( 'By default all uploads are public. If the admin has checked the box for private uploads, they will become private and the provided URL will not work.', 'dreamobjects' ) . '</p>'
-      ));
-	}
 else
     return;
