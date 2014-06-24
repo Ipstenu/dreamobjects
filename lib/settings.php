@@ -151,7 +151,7 @@ class DHDOSET {
 
     	function backup_retain_callback() {
             ?><select name="dh-do-retain">
-				    <?php foreach ( array('5','10','15','30','60','90','all') as $s ) : ?>
+				    <?php foreach ( array('1','2','5','10','15','30','60','90','all') as $s ) : ?>
 				        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 				    <?php endforeach; ?>
 				</select>

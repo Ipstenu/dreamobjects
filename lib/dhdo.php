@@ -113,7 +113,7 @@ class DHDO {
      * Generate Backups and the functions needed for that to run
      *
      */
-        
+
     // Scan folders to collect all the filenames
     function rscandir($base='') {
         $data = array_diff(scandir($base), array('.', '..', '/cache/') );
@@ -154,8 +154,17 @@ class DHDO {
 
         // All me files!
         if ( in_array('files', $sections) ) {
-            $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
-            DHDO::logger('Files in wp-content added to backup list.');
+
+			$ds = disk_total_space(WP_CONTENT_DIR);
+			
+			DHDO::logger( 'Space: '.$ds);
+			
+			//if ( ) {
+			//	DHDO::logger('ERROR: The size of your wp-content folder is too big for PHP to comprehend. Backup will proceed without the wp-content folder included.');
+			//} else {
+	            $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
+				DHDO::logger('Files in wp-content added to backup list.');
+			//}
         } 
         
         // And me DB!
