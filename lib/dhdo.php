@@ -139,8 +139,7 @@ class DHDO {
     function backup() {
         DHDO::logger('Begining Backup.');
         global $wpdb;
-        require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
-
+        
         // Pull in data for what to backup
         $sections = get_option('dh-do-backupsection');
         if ( !$sections ) {
@@ -149,22 +148,27 @@ class DHDO {
         
         $file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
         $fileurl = content_url() . '/upgrade/dreamobject-backups.zip';
-        $zip = new PclZip($file);
+
+
+		try {
+				$zip = new ZipArchive( $file );
+				$zaresult = true;
+				DHDO::logger('ZipArchive found and will be used for backups.');
+		} catch ( Exception $e ) {
+				$error_string = $e->getMessage();
+				$zip = new PclZip($file);
+				DHDO::logger('ZipArchive not found. Error: '. $error_string );
+				DHDO::logger('PclZip will be used for backups.');
+				require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
+				$zaresult = false;
+		}
+
         $backups = array();
 
         // All me files!
         if ( in_array('files', $sections) ) {
-
-			$ds = disk_total_space(WP_CONTENT_DIR);
-			
-			DHDO::logger( 'Space: '.$ds);
-			
-			//if ( ) {
-			//	DHDO::logger('ERROR: The size of your wp-content folder is too big for PHP to comprehend. Backup will proceed without the wp-content folder included.');
-			//} else {
-	            $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
-				DHDO::logger('Files in wp-content added to backup list.');
-			//}
+	        $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
+			DHDO::logger( 'Files in wp-content added to backup list.');
         } 
         
         // And me DB!
@@ -181,107 +185,136 @@ class DHDO {
         
         if ( !empty($backups) ) {
             set_time_limit(300);  // Increased timeout to 5 minutes. If the zip takes longer than that, I have a problem.
-            DHDO::logger('Creating zip file...');
-            DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
-            $zip->create($backups);
-            DHDO::logger('Calculating zip file size ...');
-            $zipsize = size_format( @filesize($file) );
-            DHDO::logger('Zip file generated: '. $file .' ('. $zipsize .').');
+            if ( $zaresult != 'true' ) {
+            	DHDO::logger('Creating zip file using PclZip.');
+            	DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
+            	$zip->create($backups);
+
+            } else {
+            	DHDO::logger('Creating zip file using ZipArchive.');
+            	DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
+            	try {
+	            	$zip->open( $file, ZipArchive::CREATE );
+	            	foreach($backups as $backupfiles) {
+	            		$zip->addFile($backupfiles);
+					}
+					$zip->close();
+            	} catch ( Exception $e ) {
+            		$error_string = $e->getMessage();
+            		DHDO::logger('ZipArchive failed to complete: '. $error_string );
+            	}
+
+            }
+
+			if ( @file_exists( $file ) ) { 
+            	DHDO::logger('Calculating zip file size ...');
+				$zipsize = size_format( @filesize($file) );
+				DHDO::logger('Zip file generated: '. $file .' ('. $zipsize .').');
+			} else {
+				@unlink($file);
+				DHDO::logger('Zip file failed to generate. Nothing will be backed up.');
+			}
             
             // Upload
 
-		  	$s3 = AwsS3DHDO::factory(array(
-				'key'      => get_option('dh-do-key'),
-			    'secret'   => get_option('dh-do-secretkey'),
-			    'base_url' => 'http://objects.dreamhost.com',
-			));
-
-			// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
-			$logPlugin = LogPlugin::getDebugPlugin(TRUE,
-			//Don't provide this parameter to show the log in PHP output
-				fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a')
-			);
-			//$s3->addSubscriber($logPlugin);
-
-            $bucket = get_option('dh-do-bucket');
-            $parseUrl = parse_url(trim(home_url()));
-            $url = $parseUrl['host'];
-            if( isset($parseUrl['path']) ) 
-                { $url .= $parseUrl['path']; }
-            
-            // Rename file
-            $newname = $url.'/'.date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
-            DHDO::logger('New filename '. $newname .'.');
-
-			// Uploading
-            set_time_limit(180);
-
-			DHDO::logger('Begining upload to DreamObjects servers.');
-
-			// Check the size of the file before we upload, in order to compensate for large files
-			if ( @filesize($file) >= (100 * 1024 * 1024) ) {
-
-				// Files larger than 100megs go through Multipart
-				DHDO::logger('Filesize is over 100megs, using Multipart uploader.');
-				
-				// High Level
-				DHDO::logger('Prepare the upload parameters and upload parts in 25M chunks (this may take a while).');
-				
-				$uploader = UploadBuilder::newInstance()
-				    ->setClient($s3)
-				    ->setSource($file)
-				    ->setBucket($bucket)
-				    ->setKey($newname)
-				    ->setMinPartSize(25 * 1024 * 1024)
-				    ->setOption('Metadata', array(
-				        'UploadedBy' => 'DreamObjectsBackupPlugin'
-				    ))
-				    ->setOption('ACL', 'private')
-				    ->setConcurrency(3)
-				    ->build();
-				
-				// This will be called in the following try
-				$uploader->getEventDispatcher()->addListener(
-				    'multipart_upload.after_part_upload', 
-				    function($event) {
-				        DHDO::logger( 'Part '. $event["state"]->count() . ' uploaded ...');
-				    }
+			if ( @file_exists( $file ) ) {
+	
+			  	$s3 = AwsS3DHDO::factory(array(
+					'key'      => get_option('dh-do-key'),
+				    'secret'   => get_option('dh-do-secretkey'),
+				    'base_url' => 'http://objects.dreamhost.com',
+				));
+	
+				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
+				$logPlugin = LogPlugin::getDebugPlugin(TRUE,
+				//Don't provide this parameter to show the log in PHP output
+					fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a')
 				);
-				
-				try {
-					DHDO::logger('Begin the upload. Abort the upload if something goes wrong.');				
-				    $uploader->upload();
-				    DHDO::logger('Upload complete');
-				} catch (MultipartUploadException $e) {
-				    $uploader->abort();
-				    DHDO::logger('Upload failed: '.$e->getMessage() );
+				//$s3->addSubscriber($logPlugin);
+	
+	            $bucket = get_option('dh-do-bucket');
+	            $parseUrl = parse_url(trim(home_url()));
+	            $url = $parseUrl['host'];
+	            if( isset($parseUrl['path']) ) 
+	                { $url .= $parseUrl['path']; }
+	            
+	            // Rename file
+	            $newname = $url.'/'.date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
+	            DHDO::logger('New filename '. $newname .'.');
+	
+				// Uploading
+	            set_time_limit(180);
+	
+				DHDO::logger('Begining upload to DreamObjects servers.');
+	
+				// Check the size of the file before we upload, in order to compensate for large files
+				if ( @filesize($file) >= (100 * 1024 * 1024) ) {
+	
+					// Files larger than 100megs go through Multipart
+					DHDO::logger('Filesize is over 100megs, using Multipart uploader.');
+					
+					// High Level
+					DHDO::logger('Prepare the upload parameters and upload parts in 25M chunks.');
+					
+					$uploader = UploadBuilder::newInstance()
+					    ->setClient($s3)
+					    ->setSource($file)
+					    ->setBucket($bucket)
+					    ->setKey($newname)
+					    ->setMinPartSize(25 * 1024 * 1024)
+					    ->setOption('Metadata', array(
+					        'UploadedBy' => 'DreamObjectsBackupPlugin'
+					    ))
+					    ->setOption('ACL', 'private')
+					    ->setConcurrency(3)
+					    ->build();
+					
+					// This will be called in the following try
+					$uploader->getEventDispatcher()->addListener(
+					    'multipart_upload.after_part_upload', 
+					    function($event) {
+					        DHDO::logger( 'Part '. $event["state"]->count() . ' uploaded ...');
+					    }
+					);
+					
+					try {
+						DHDO::logger('Begin upload. This may take a while (5min for every 75 megs or so).');
+						set_time_limit(180);
+					    $uploader->upload();
+					    DHDO::logger('Upload complete');
+					} catch (MultipartUploadException $e) {
+					    $uploader->abort();
+					    DHDO::logger('Upload failed: '.$e->getMessage() );
+					}
+	
+				} else {
+					// If it's under 100megs, do it the old way
+					DHDO::logger('Filesize is under 100megs. This will be less spammy.');
+					
+					set_time_limit(180); // 3 min 
+					try {
+						$result = $s3->putObject(array(
+						    'Bucket'       => $bucket,
+						    'Key'          => $newname,
+						    'SourceFile'   => $file,
+						    'ContentType'  => 'application/zip',
+						    'ACL'          => 'private',
+						    'Metadata'     => array(
+						        'UploadedBy'   => 'DreamObjectsBackupPlugin',
+						        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
+						    )
+						));
+						DHDO::logger('Upload complete');
+					} catch (S3Exception $e) {
+					    DHDO::logger('Upload failed: '. $e->getMessage() );
+					}
 				}
-
+				
+				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
+				//$s3->getEventDispatcher()->removeSubscriber($logPlugin);
 			} else {
-				// If it's under 100megs, do it the old way
-				DHDO::logger('Filesize is under 100megs. This will be less spammy.');
-				
-				set_time_limit(180); // 3 min 
-				try {
-					$result = $s3->putObject(array(
-					    'Bucket'       => $bucket,
-					    'Key'          => $newname,
-					    'SourceFile'   => $file,
-					    'ContentType'  => 'application/zip',
-					    'ACL'          => 'private',
-					    'Metadata'     => array(
-					        'UploadedBy'   => 'DreamObjectsBackupPlugin',
-					        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
-					    )
-					));
-					DHDO::logger('Upload complete');
-				} catch (S3Exception $e) {
-				    DHDO::logger('Upload failed: '. $e->getMessage() );
-				}
+				DHDO::logger('Nothing to upload.');
 			}
-			
-			// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
-			//$s3->getEventDispatcher()->removeSubscriber($logPlugin);
 
             // Cleanup
             if(file_exists($file)) { 

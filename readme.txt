@@ -179,7 +179,8 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 XXX by Ipstenu
 
-* Changed SDK to newest version: 2.6.6 (<a href="http://blogs.aws.amazon.com/php/post/Tx1X88LCP8FDY3T/Release-AWS-SDK-for-PHP-Version-2-6-6">official release notes</a>)
+* Changed SDK to newest version: 2.6.9 (<a href="http://blogs.aws.amazon.com/php/post/Tx2Q8T2MTERKJS4/Release-AWS-SDK-for-PHP-Version-2-6-9">official release notes</a>)
+* Added support for ZipArchive, with graceful fallback to PclZip if needed
 * Improved multipart uploads, which should allow for larger files in a better way
 * Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
 * Security tightening (hiding things)
