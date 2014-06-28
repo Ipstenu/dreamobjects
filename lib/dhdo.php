@@ -29,6 +29,9 @@ use Guzzle\Plugin\Log\LogPlugin; // DEBUGGING ONLY
 
 
 class DHDO {
+
+	const DIRECTORY_SEPARATORS = '/\\';
+
     // INIT - hooking into this lets us run things when a page is hit.
 
     public static function init() {
@@ -113,10 +116,11 @@ class DHDO {
      * Generate Backups and the functions needed for that to run
      *
      */
-
+        
     // Scan folders to collect all the filenames
     function rscandir($base='') {
-        $data = array_diff(scandir($base), array('.', '..', '/cache/') );
+        $data = array_diff(scandir($base), array('.', '..'));
+        $omit = array('\/cache');
     
         $subs = array();
         foreach($data as $key => $value) :
@@ -131,6 +135,15 @@ class DHDO {
         foreach ( $subs as $sub ) {
             $data = array_merge($data, $sub);
         }
+        return $data;
+        DHDO::logger('Scanned folders and files to generate list for backup.');
+    
+        foreach( $omit as $omitter ) {
+        	$data = preg_grep( $omitter , $data, PREG_GREP_INVERT);
+        }
+        
+        DHDO::logger( print_r($data) );
+
         return $data;
         DHDO::logger('Scanned folders and files to generate list for backup.');
     }
@@ -167,27 +180,55 @@ class DHDO {
 
         // All me files!
         if ( in_array('files', $sections) ) {
-	        $backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
-			DHDO::logger( 'Files in wp-content added to backup list.');
+
+			DHDO::logger( 'Calculating backup size...');
+
+			$trimdisk = WP_CONTENT_DIR ;
+			$diskcmd = sprintf("du -s %s", WP_CONTENT_DIR );
+			$diskusage = exec( $diskcmd );
+			$diskusage = trim(str_replace($trimdisk, '', $diskusage));
+			
+			DHDO::logger($diskusage);
+			
+			if ($diskusage < ( 2000 * 1024 * 1024 ) ) {
+				$backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
+				DHDO::logger( count($backups) .' files added to backup list.');
+			} else {
+				DHDO::logger( 'ERROR! PHP is unable to backup your wp-content folder. Please consider cleaning out unused files (like plugins and themes).');
+			}
+
+			if ( file_exists(ABSPATH .'wp-config.php') ) {
+		        $backups[] = ABSPATH .'wp-config.php' ;
+				DHDO::logger( 'wp-config.php added to backup list.');
+		    }
+
         } 
         
         // And me DB!
         if ( in_array('database', $sections) ) {
             set_time_limit(300);
+
+			$sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
-            $result = shell_exec('mysqldump --single-transaction -h ' . DB_HOST . ' -u ' . DB_USER . ' --password="' . DB_PASSWORD . '" ' . DB_NAME . ' ' . implode(' ', $tables) . ' > ' .  WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql');
-            $sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
+            $tables_string = implode( ' ', $tables );
+            
+            $dbcmd = sprintf( "mysqldump -h'%s' -u'%s' -p'%s' %s %s --single-transaction 2>&1 >> %s",
+            DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, $tables_string, $sqlfile );
+            
+            exec( $dbcmd );
+            
             $sqlsize = size_format( @filesize($sqlfile) );
             DHDO::logger('SQL file created: '. $sqlfile .' ('. $sqlsize .').');
             $backups[] = $sqlfile;
             DHDO::logger('SQL added to backup list.');
+
         }
         
         if ( !empty($backups) ) {
             set_time_limit(300);  // Increased timeout to 5 minutes. If the zip takes longer than that, I have a problem.
             if ( $zaresult != 'true' ) {
             	DHDO::logger('Creating zip file using PclZip.');
-            	DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
+            	DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider increasing the server\'s PHP memory, RAM or CPU.');
             	$zip->create($backups);
 
             } else {
@@ -195,9 +236,14 @@ class DHDO {
             	DHDO::logger('NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server\'s PHP memory, RAM or CPU.');
             	try {
 	            	$zip->open( $file, ZipArchive::CREATE );
-	            	foreach($backups as $backupfiles) {
-	            		$zip->addFile($backupfiles);
+	            	$trimpath =  ABSPATH ;
+
+		            foreach($backups as $backupfiles) {
+		            	if (strpos( $backupfiles , DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR ) === false) {
+			            	$zip->addFile($backupfiles, 'dreamobjects-backup'.str_replace($trimpath, '/', $backupfiles) );
+			            }
 					}
+					
 					$zip->close();
             	} catch ( Exception $e ) {
             		$error_string = $e->getMessage();
@@ -217,7 +263,7 @@ class DHDO {
             
             // Upload
 
-			if ( @file_exists( $file ) ) {
+			if ( !@file_exists( $file ) ) {
 	
 			  	$s3 = AwsS3DHDO::factory(array(
 					'key'      => get_option('dh-do-key'),
@@ -225,12 +271,14 @@ class DHDO {
 				    'base_url' => 'http://objects.dreamhost.com',
 				));
 	
+/*
 				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
 				$logPlugin = LogPlugin::getDebugPlugin(TRUE,
 				//Don't provide this parameter to show the log in PHP output
 					fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a')
 				);
-				//$s3->addSubscriber($logPlugin);
+				$s3->addSubscriber($logPlugin);
+*/
 	
 	            $bucket = get_option('dh-do-bucket');
 	            $parseUrl = parse_url(trim(home_url()));
@@ -310,15 +358,17 @@ class DHDO {
 					}
 				}
 				
+/*
 				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
-				//$s3->getEventDispatcher()->removeSubscriber($logPlugin);
+				$s3->getEventDispatcher()->removeSubscriber($logPlugin);
+*/
 			} else {
 				DHDO::logger('Nothing to upload.');
 			}
 
             // Cleanup
             if(file_exists($file)) { 
-                @unlink($file);
+                //@unlink($file);
                 DHDO::logger('Deleting zip file: '.$file.' ...');
             }
             if(file_exists($sqlfile)) { 

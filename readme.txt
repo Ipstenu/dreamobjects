@@ -23,6 +23,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
 = To Do =
+* Better failure on large sites
 * Offer syncing backup as an alternative (see <a href="http://blogs.aws.amazon.com/php/post/Tx2W9JAA7RXVOXA/Syncing-Data-with-Amazon-S3">Syncing Data with Amazon S3</a>
 * Option to email results (if logging, email log? Have to split up by attempt for that)
 
@@ -181,11 +182,15 @@ XXX by Ipstenu
 
 * Changed SDK to newest version: 2.6.9 (<a href="http://blogs.aws.amazon.com/php/post/Tx2Q8T2MTERKJS4/Release-AWS-SDK-for-PHP-Version-2-6-9">official release notes</a>)
 * Added support for ZipArchive, with graceful fallback to PclZip if needed
-* Improved multipart uploads, which should allow for larger files in a better way
+* `/cache/` folder is not backed up anymore
+* Zip has shorter paths (unzipped, it's /dreamobjects-backup/wp-content/etc)
+* Improved multipart uploads, which should allow for large files in a better way
 * Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
-* Security tightening (hiding things)
+* Security tightening: hiding things, making things harder for people to run, safer command usage
+* Backs up wp-config sometimes... (if you put it in a weird place, I'm not responsible)
 * Improved debug logging
-* New wp-cli command: wp dreamobjects resetlog
+* Removed uploader for both security and support reasons. It was bad and I feel bad.
+* New wp-cli command: `wp dreamobjects resetlog` (resets the debug log)
 
 = 3.4.3 =
 May 1, 2014 by Ipstenu
@@ -307,4 +312,6 @@ Sept 2012, by Ipstenu
 * Saving temp files to upgrade (vs it's own folder)
 
 == Upgrade notice ==
+This is a MAJOR UPGRADE to the plugin. Please read the changelog.
+
 The separate uploader has been removed in version 3.5 and up and will not be returning.
