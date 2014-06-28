@@ -183,11 +183,12 @@ XXX by Ipstenu
 * Changed SDK to newest version: 2.6.9 (<a href="http://blogs.aws.amazon.com/php/post/Tx2Q8T2MTERKJS4/Release-AWS-SDK-for-PHP-Version-2-6-9">official release notes</a>)
 * Added support for ZipArchive, with graceful fallback to PclZip if needed
 * `/cache/` folder is not backed up anymore
+* Backs up `wp-config.php` sometimes... (if you put it in a weird place, I'm not responsible)
+* Backup ignores `wp-content` if it's nearly 2G (blame PHP, not me!)
 * Zip has shorter paths (unzipped, it's /dreamobjects-backup/wp-content/etc)
 * Improved multipart uploads, which should allow for large files in a better way
 * Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
 * Security tightening: hiding things, making things harder for people to run, safer command usage
-* Backs up wp-config sometimes... (if you put it in a weird place, I'm not responsible)
 * Improved debug logging
 * Removed uploader for both security and support reasons. It was bad and I feel bad.
 * New wp-cli command: `wp dreamobjects resetlog` (resets the debug log)
