@@ -263,7 +263,7 @@ class DHDO {
             
             // Upload
 
-			if ( !@file_exists( $file ) ) {
+			if ( @file_exists( $file ) ) {
 	
 			  	$s3 = AwsS3DHDO::factory(array(
 					'key'      => get_option('dh-do-key'),
@@ -368,7 +368,7 @@ class DHDO {
 
             // Cleanup
             if(file_exists($file)) { 
-                //@unlink($file);
+                @unlink($file);
                 DHDO::logger('Deleting zip file: '.$file.' ...');
             }
             if(file_exists($sqlfile)) { 
