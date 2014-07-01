@@ -244,7 +244,7 @@ class DHDO {
 			            }
 					}
 					
-					$zip->close();
+					$zip->close($file, ZipArchive::CLOSE);
             	} catch ( Exception $e ) {
             		$error_string = $e->getMessage();
             		DHDO::logger('ZipArchive failed to complete: '. $error_string );

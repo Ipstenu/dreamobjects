@@ -1,9 +1,9 @@
-=== DreamObjects Connection ===
+=== DreamObjects Backups ===
 Contributors: Ipstenu, DanCoulter
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.9
-Stable tag: 3.5
+Stable tag: 3.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

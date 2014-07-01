@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: DreamObjects Connection
+Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
 Version: 3.5-beta 
@@ -41,6 +41,9 @@ function dreamobjects_core_incompatibile( $msg ) {
 }
 
 if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
+
+	require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		
 	if ( version_compare( PHP_VERSION, '5.3.3', '<' ) ) {
 		dreamobjects_core_incompatibile( __( 'The official Amazon Web Services SDK, which DreamObjects relies on, requires PHP 5.3 or higher. The plugin has now disabled itself.', 'dreamobjects' ) );
 	}
