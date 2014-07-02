@@ -323,7 +323,8 @@ class DHDO {
 					    ->setKey($newname)
 					    ->setMinPartSize(25 * 1024 * 1024)
 					    ->setOption('Metadata', array(
-					        'UploadedBy' => 'DreamObjectsBackupPlugin'
+					        'UploadedBy' => 'DreamObjectsBackupPlugin',
+					        'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp'))
 					    ))
 					    ->setOption('ACL', 'private')
 					    ->setConcurrency(3)
