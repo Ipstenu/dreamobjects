@@ -162,6 +162,11 @@ class DHDO {
         $file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
         $fileurl = content_url() . '/upgrade/dreamobject-backups.zip';
 
+        // Pre-Cleanup
+        if(file_exists($file)) { 
+            @unlink($file);
+            DHDO::logger('Leftover zip file found, deleting '.$file.' ...');
+        }
 
 		try {
 				$zip = new ZipArchive( $file );
@@ -188,9 +193,9 @@ class DHDO {
 			$diskusage = exec( $diskcmd );
 			$diskusage = trim(str_replace($trimdisk, '', $diskusage));
 			
-			DHDO::logger($diskusage);
+			DHDO::logger(size_format( $diskusage * 1024 ).' of diskspace will be processed.');
 			
-			if ($diskusage < ( 2000 * 1024 * 1024 ) ) {
+			if ($diskusage < ( 2000 * 1024 ) ) {
 				$backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
 				DHDO::logger( count($backups) .' files added to backup list.');
 			} else {
@@ -211,6 +216,12 @@ class DHDO {
 			$sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
             $tables_string = implode( ' ', $tables );
+
+			// Pre cleanup
+	        if(file_exists($sqlfile)) { 
+	            @unlink($sqlfile);
+	            DHDO::logger('Leftover sql file found, deleting '.$sqlfile.' ...');
+	        }
             
             $dbcmd = sprintf( "mysqldump -h'%s' -u'%s' -p'%s' %s %s --single-transaction 2>&1 >> %s",
             DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, $tables_string, $sqlfile );
@@ -241,10 +252,11 @@ class DHDO {
 		            foreach($backups as $backupfiles) {
 		            	if (strpos( $backupfiles , DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR ) === false) {
 			            	$zip->addFile($backupfiles, 'dreamobjects-backup'.str_replace($trimpath, '/', $backupfiles) );
+			            	//DHDO::logger( $backupfiles );
 			            }
 					}
 					
-					$zip->close($file, ZipArchive::CLOSE);
+					$zip->close();
             	} catch ( Exception $e ) {
             		$error_string = $e->getMessage();
             		DHDO::logger('ZipArchive failed to complete: '. $error_string );

@@ -1,18 +1,10 @@
-[2014/06/27 08:10:05] Begining Backup.
-[2014/06/27 08:10:05] ZipArchive found and will be used for backups.
-[2014/06/27 08:10:05] Calculating backup size...
-[2014/06/27 08:10:08] 117496
-[2014/06/27 08:10:08] PHP is unable to backup that many files. Please consider cleaning out unused files (like plugins and themes).
-[2014/06/27 08:10:08] wp-config.php added to backup list.
-[2014/06/27 08:10:08] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (790 kB).
-[2014/06/27 08:10:08] SQL added to backup list.
-[2014/06/27 08:10:08] Creating zip file using ZipArchive.
-[2014/06/27 08:10:08] NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server's PHP memory, RAM or CPU.
-[2014/06/27 08:10:12] Calculating zip file size ...
-[2014/06/27 08:10:13] Zip file generated: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip (60 MB).
-[2014/06/27 08:10:13] Nothing to upload.
-[2014/06/27 08:10:13] Deleting zip file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-backups.zip ...
-[2014/06/27 08:10:13] Deleting SQL file: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql ...
-[2014/06/27 08:10:13] Checking for backups to be deleted.
-[2014/06/27 08:10:14] Backup Complete.
-[2014/06/27 08:10:14] 
+[2014/07/01 12:38:10] Begining Backup.
+[2014/07/01 12:38:10] ZipArchive found and will be used for backups.
+[2014/07/01 12:38:10] Calculating backup size...
+[2014/07/01 12:38:15] 117620
+[2014/07/01 12:38:24] 4367 files added to backup list.
+[2014/07/01 12:38:24] wp-config.php added to backup list.
+[2014/07/01 12:38:24] SQL file created: /srv/www/vvv-ass/wordpress-plugins/htdocs/wp-content/upgrade/dreamobject-db-backup.sql (792 kB).
+[2014/07/01 12:38:24] SQL added to backup list.
+[2014/07/01 12:38:24] Creating zip file using ZipArchive.
+[2014/07/01 12:38:24] NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider cleaning out unused files (like plugins and themes), or increasing the server's PHP memory, RAM or CPU.
