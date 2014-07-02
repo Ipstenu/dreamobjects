@@ -180,13 +180,13 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 XXX by Ipstenu
 
-* Changed SDK to newest version: 2.6.9 (<a href="http://blogs.aws.amazon.com/php/post/Tx2Q8T2MTERKJS4/Release-AWS-SDK-for-PHP-Version-2-6-9">official release notes</a>)
+* Changed SDK to newest version: 2.6.10 (<a href="http://blogs.aws.amazon.com/php/post/TxDRVCHQYZSNN7/Release-AWS-SDK-for-PHP-Version-2-6-10">official release notes</a>)
 * Added support for ZipArchive, with graceful fallback to PclZip if needed
 * `/cache/` folder is not backed up anymore
 * Backs up `wp-config.php` sometimes... (if you put it in a weird place, I'm not responsible)
 * Backup ignores `wp-content` if it's nearly 2G (blame PHP, not me!)
 * Zip has shorter paths (unzipped, it's /dreamobjects-backup/wp-content/etc)
-* Improved multipart uploads, which should allow for large files in a better way
+* Improved multipart uploads, which should allow for large files in a better way (worked up to 428M!)
 * Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
 * Security tightening: hiding things, making things harder for people to run, safer command usage
 * Improved debug logging
