@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: DreamObjects\n"
-"POT-Creation-Date: 2014-06-27 20:44-0800\n"
-"PO-Revision-Date: 2014-06-27 20:44-0800\n"
+"POT-Creation-Date: 2014-07-09 11:47-0800\n"
+"PO-Revision-Date: 2014-07-09 11:47-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,34 +13,50 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../dreamobjects.php:45
+#: ../dreamobjects.php:48
 msgid ""
-"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
-"PHP 5.3 or higher. The plugin has now disabled itself."
-msgstr ""
-
-#: ../dreamobjects.php:51
-msgid ""
-"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
-"cURL 7.16.2+. The plugin has now disabled itself."
+"The official Amazon Web Services SDK, which DreamObjects Backups relies on, "
+"requires PHP 5.3 or higher. The plugin has now disabled itself."
 msgstr ""
 
 #: ../dreamobjects.php:54
 msgid ""
-"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
-"that cURL is compiled with OpenSSL. The plugin has now disabled itself."
+"The official Amazon Web Services SDK, which DreamObjects Backups relies on, "
+"requires cURL 7.16.2+. The plugin has now disabled itself."
 msgstr ""
 
 #: ../dreamobjects.php:57
 msgid ""
-"The official Amazon Web Services SDK, which DreamObjects relies on, requires "
-"that cURL is compiled with zlib. The plugin has now disabled itself."
+"The official Amazon Web Services SDK, which DreamObjects Backups relies on, "
+"requires that cURL is compiled with OpenSSL. The plugin has now disabled "
+"itself."
 msgstr ""
 
-#: ../dreamobjects.php:59
+#: ../dreamobjects.php:60
 msgid ""
-"Sorry, but DreamObjects is not currently compatible with WordPress "
+"The official Amazon Web Services SDK, which DreamObjects Backups relies on, "
+"requires that cURL is compiled with zlib. The plugin has now disabled itself."
+msgstr ""
+
+#: ../dreamobjects.php:62
+msgid ""
+"Sorry, but DreamObjects Backups is not currently compatible with WordPress "
 "Multisite, and should not be used. The plugin has now disabled itself."
+msgstr ""
+
+#: ../dreamobjects.php:64
+msgid ""
+"Running both DreamObjects Backups AND BackupBuddy at once will cause a rift "
+"in the space/time continuum, because we use different versions of the AWS "
+"SDK. Please deactivate BackupBuddy if you wish to use DreamObjects."
+msgstr ""
+
+#: ../dreamobjects.php:66
+msgid ""
+"Running both DreamObjects Backups AND Amazon Web Services at once will cause "
+"a rift in the space/time continuum, because we use different versions of the "
+"AWS SDK. Please deactivate Amazon Web Services if you wish to use "
+"DreamObjects."
 msgstr ""
 
 #: ../admin/backups.php:34 ../lib/settings.php:39
@@ -99,7 +115,7 @@ msgid "Overview"
 msgstr ""
 
 #: ../admin/help.php:34
-msgid "Welcome to DreamObjects"
+msgid "Welcome to DreamObjects Backups"
 msgstr ""
 
 #: ../admin/help.php:35 ../admin/settings.php:37
@@ -300,7 +316,7 @@ msgid "DreamObjects"
 msgstr ""
 
 #: ../lib/settings.php:57
-msgid "DreamObject Access Settings"
+msgid "DreamObjects Backups Access Settings"
 msgstr ""
 
 #: ../lib/settings.php:60

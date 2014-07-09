@@ -54,7 +54,7 @@ class DHDOSET {
     public static function add_register_settings() {
 
      // Keypair settings
-        add_settings_section( 'keypair_id', __('DreamObject Access Settings', 'dreamobjects'), 'keypair_callback', 'dh-do-keypair_page' );
+        add_settings_section( 'keypair_id', __('DreamObjects Backups Access Settings', 'dreamobjects'), 'keypair_callback', 'dh-do-keypair_page' );
         
         register_setting( 'dh-do-keypair-settings','dh-do-key');
         add_settings_field( 'key_id', __('Access Key', 'dreamobjects'), 'key_callback', 'dh-do-keypair_page', 'keypair_id' );

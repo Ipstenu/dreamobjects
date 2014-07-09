@@ -31,7 +31,7 @@ if ($screen->id == 'toplevel_page_dreamobjects-menu') {
 		'id'      => 'dreamobjects-menu-base',
 		'title'   => __('Overview', 'dreamobjects'),
 		'content' => 
-		'<h3>' . __('Welcome to DreamObjects', 'dreamobjects') .'</h3>' .
+		'<h3>' . __('Welcome to DreamObjects Backups', 'dreamobjects') .'</h3>' .
 		'<p>' . __( 'DreamObjects&#153; is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', 'dreamobjects' ) . '</p>' .
 		'<p>' . __( 'This plugin was built on and for DreamHost Servers. While it may work on other webhosts, provided of course you have DreamObjects, it does so at your own risk.', 'dreamobjects' ) . '</p>' .
 		'<p>' . __( 'If you haven\'t already signed up for DreamObjects, you won\'t find this plugin of any use at all.', 'dreamobjects' ) . '</p>'
