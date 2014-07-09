@@ -15,17 +15,20 @@ DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/"
 
 Well now that we've gotten the sales-pitch out of the way, DreamObjects Connections will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
-<em>Please do not open DreamHost Support Tickets for this plugin.</em> Honestly, the support techs are fantastic, but they can't debug this yet, so they'll just send you here anyway. Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
+<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Honestly, the support techs are fantastic, but they can't debug this yet, so they'll just send you here anyway. Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
 
 = Backup Features =
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
-* Retains 15, 30, 60, or 90 backups at any given time (so as not to charge you the moon when you have a large site).
+* Retains a limitable number of backups at any given time (so as not to charge you the moon when you have a large site).
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
 = To Do =
-* Better failure on large sites
 * Offer syncing backup as an alternative (see <a href="http://blogs.aws.amazon.com/php/post/Tx2W9JAA7RXVOXA/Syncing-Data-with-Amazon-S3">Syncing Data with Amazon S3</a>
 * Option to email results (if logging, email log? Have to split up by attempt for that)
+
+= Credit =
+
+Version 3.5 and up would not have been possible without the work Brad Touesnard did with <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>. His incororation of the AWS SDK v 2.x was the cornerstone to this plugin working better.
 
 == Installation ==
 
@@ -181,7 +184,8 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 XXX by Ipstenu
 
 * Changed SDK to newest version: 2.6.10 (<a href="http://blogs.aws.amazon.com/php/post/TxDRVCHQYZSNN7/Release-AWS-SDK-for-PHP-Version-2-6-10">official release notes</a>)
-* Added support for ZipArchive, with graceful fallback to PclZip if needed
+* Many code concepts learned from <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>.
+* Added support for ZipArchive, with graceful fallback to PclZip if needed, to fix Windows unzip issues
 * `/cache/` folder is not backed up anymore
 * Backs up `wp-config.php` sometimes... (if you put it in a weird place, I'm not responsible)
 * Backup ignores `wp-content` if it's nearly 2G (blame PHP, not me!)

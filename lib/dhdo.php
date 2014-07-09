@@ -155,7 +155,7 @@ class DHDO {
 
 		if (!is_dir( content_url() . '/upgrade/' )) {
 			DHDO::logger('Upgrade folder missing. This will cause serious issues with WP in general, so we will create it for you.');
-		    mkdir( content_url() . '/upgrade/' );         
+		    mkdir( content_url() . '/upgrade/' );       
 		}
         
         // Pull in data for what to backup
