@@ -183,7 +183,7 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 XXX by Ipstenu
 
-* Changed SDK to newest version: 2.6.10 (<a href="http://blogs.aws.amazon.com/php/post/TxDRVCHQYZSNN7/Release-AWS-SDK-for-PHP-Version-2-6-10">official release notes</a>)
+* Changed SDK to newest version: 2.6.12 (<a href="http://blogs.aws.amazon.com/php/post/Tx2PDR0J3NL0YKN/Release-AWS-SDK-for-PHP-Version-2-6-12">official release notes</a>)
 * Many code concepts learned from <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>.
 * Added support for ZipArchive, with graceful fallback to PclZip if needed, to fix Windows unzip issues
 * `/cache/` folder is not backed up anymore
