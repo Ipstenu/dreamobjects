@@ -1,5 +1,5 @@
 === DreamObjects Backups ===
-Contributors: Ipstenu, DanCoulter
+Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
 Tested up to: 3.9
@@ -23,12 +23,12 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 * Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
 
 = To Do =
-* Offer syncing backup as an alternative (see <a href="http://blogs.aws.amazon.com/php/post/Tx2W9JAA7RXVOXA/Syncing-Data-with-Amazon-S3">Syncing Data with Amazon S3</a>
+* Offer syncing backup as an alternative (see <a href="http://blogs.aws.amazon.com/php/post/Tx2W9JAA7RXVOXA/Syncing-Data-with-Amazon-S3">Syncing Data with Amazon S3</a>)
 * Option to email results (if logging, email log? Have to split up by attempt for that)
 
 = Credit =
 
-Version 3.5 and up would not have been possible without the work Brad Touesnard did with <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>. His incororation of the AWS SDK v 2.x was the cornerstone to this plugin working better.
+Version 3.5 and up would not have been possible without the work Brad Touesnard did with <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>. His incorporation of the AWS SDK v 2.x was the cornerstone to this plugin working better.
 
 == Installation ==
 
