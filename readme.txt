@@ -181,9 +181,9 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 = 3.5.1 = 
 
-November 12, 2014 by Ipstenu
+December 2, 2014 by Ipstenu
 
-* Changed SDK to newest version: 2.7.4 (<a href="https://github.com/aws/aws-sdk-php/releases/tag/2.7.4">official release notes</a>)
+* Changed SDK to newest version: 2.7.7
 
 = 3.5 = 
 
