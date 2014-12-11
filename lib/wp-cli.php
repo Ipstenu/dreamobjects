@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 
 
 if( class_exists( 'DHDO' ) ) {
-	WP_CLI::addCommand( 'dreamobjects', 'DreamObjects_Command' );
+	WP_CLI::add_command( 'dreamobjects', 'DreamObjects_Command' );
 }
 
 /**

@@ -181,9 +181,10 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 = 3.5.1 = 
 
-December 2, 2014 by Ipstenu
+December 11, 2014 by Ipstenu
 
-* Changed SDK to newest version: 2.7.7
+* Changed SDK to newest version: 2.7.9
+* Corrected deprecated warning with WP-CLI
 
 = 3.5 = 
 
