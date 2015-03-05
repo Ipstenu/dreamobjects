@@ -217,8 +217,9 @@ class DHDO {
         // And me DB!
         if ( in_array('database', $sections) ) {
             set_time_limit(300);
-
-			$sqlfile = WP_CONTENT_DIR . '/upgrade/dreamobject-db-backup.sql';
+            
+            $sqlhash = wp_hash( wp_rand() );
+			$sqlfile = WP_CONTENT_DIR . '/upgrade/'.$sqlhash.'.sql';
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
             $tables_string = implode( ' ', $tables );
 
