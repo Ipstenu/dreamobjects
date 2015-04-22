@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 3.5.2-beta
+Version: 3.5.2
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
