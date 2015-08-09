@@ -2,7 +2,7 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 3.4
-Tested up to: 4.2
+Tested up to: 4.3
 Stable tag: 3.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -179,20 +179,20 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 
 == Changelog ==
 
-= 3.5.2 = 
+= 3.5.2 =
 
 April 2015 by Ipstenu
 
 * Hashes and 4.2 compat.
 
-= 3.5.1 = 
+= 3.5.1 =
 
 December 11, 2014 by Ipstenu
 
 * Changed SDK to newest version: 2.7.9
 * Corrected deprecated warning with WP-CLI
 
-= 3.5 = 
+= 3.5 =
 
 August 11, 2014 by Ipstenu
 
@@ -216,13 +216,13 @@ May 1, 2014 by Ipstenu
 * Beginning deprecation of the uploader. If you're using it, it'll stay.
 * Changing images to CSS
 
-= 3.4.2 = 
+= 3.4.2 =
 Jan 23, 2014 by Ipstenu
 
 * AWS was being picky and doing things that users don't care about. (<a href="http://wordpress.org/support/topic/log-is-complaining?replies=2#post-5146902">Props @renoirb</a>)
 * Cleaned up some PHP 5.4 functions
 
-= 3.4.1 = 
+= 3.4.1 =
 Nov 21, 2013 by Ipstenu
 
 * Change blindness. What happens when you copy the wrong file over and don't even notice. (Props <a href="http://wordpress.org/support/topic/uploader-page-not-showing">araucaria</a>)
@@ -313,7 +313,7 @@ Oct 11, 2012 by Ipstenu
 * Moved New Bucket code to the main settings page, where you can see your buckets now
 
 = 1.1 =
-Sept 27, 2012 by Ipstenu 
+Sept 27, 2012 by Ipstenu
 
 * <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
 * Security (nonce, abspath, etc)
