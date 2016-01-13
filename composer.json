@@ -1,0 +1,37 @@
+{
+    "name": "dreamhost/dreamobjects",
+    "description": "DreamObjects Connection Plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Mika Epstein",
+            "email": "ipstenu@halfelf.org"
+        }
+    ],
+    "require": {
+	    "aws/aws-sdk-php": "2.*",
+	    "doctrine/orm": "*",
+	    "monolog/monolog": "*"
+	},
+	"scripts": {
+        "post-update-cmd": [
+	        "rm -rf aws/Aws",
+	        "cp -r vendor/aws/aws-sdk-php/src/Aws aws/",
+	        "rm -rf aws/Doctrine",
+	        "cp -r vendor/doctrine/common/lib/Doctrine aws/",
+	        "rm -rf aws/Guzzle",
+	        "cp -r vendor/guzzle/guzzle/src/Guzzle aws/",
+	        "rm -rf aws/Monolog",
+	        "cp -r vendor/monolog/monolog/src/Monolog aws/",
+	        "rm -rf aws/Psr",
+	        "cp -r vendor/psr/log/Psr aws/",
+	        "rm -rf aws/Symfony",
+	        "mkdir -p aws/Symfony/Component/EventDispatcher",
+	        "cp -r vendor/symfony/event-dispatcher/* aws/Symfony/Component/EventDispatcher/"
+        ]
+    }
+}
+
+
+aws/Symfony/Component/EventDispatcher/Tests/EventDispatcherTest.php
+aws/Symphony/Component/EventDispatcher/Tests/AbstractEventDispatcherTest.php
