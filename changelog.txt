@@ -1,0 +1,118 @@
+= 3.4.3 =
+May 1, 2014 by Ipstenu
+
+* Beginning deprecation of the uploader. If you're using it, it'll stay.
+* Changing images to CSS
+
+= 3.4.2 =
+Jan 23, 2014 by Ipstenu
+
+* AWS was being picky and doing things that users don't care about. (<a href="http://wordpress.org/support/topic/log-is-complaining?replies=2#post-5146902">Props @renoirb</a>)
+* Cleaned up some PHP 5.4 functions
+
+= 3.4.1 =
+Nov 21, 2013 by Ipstenu
+
+* Change blindness. What happens when you copy the wrong file over and don't even notice. (Props <a href="http://wordpress.org/support/topic/uploader-page-not-showing">araucaria</a>)
+
+= 3.4 =
+Nov 20, 2013 by Ipstenu
+
+* Wrong use of echo -- _e() should be __() (props Marko and Shredder)
+* TARDIS error. Any time you pick a timezone that was +GMT, it mathed out totally wrong (props DreamHost customer Jeremy C!)
+* Clean up scheduled hooks on uninstall
+* Error message for PHP less than 5.3
+* Outright failure to activate on Multisite (this is intentional, it's NOT supported)
+* Added cache-buster for compatibility with DreamPress/Varnish
+* MP6 ready (aka will look nice on WP 3.8)
+
+= 3.3 =
+June 24, 2013 by Ipstenu
+
+* Changing how the backup is done to make it smaller but also to support more configurations. Now it only backs up wp-content.
+* Increased timeouts for SQL
+
+= 3.2.1 =
+Mar 28, 2013 by Ipstenu
+
+* Dropping support for PHP 5.2, since AWSSDK did it first. It's not me, Mom!
+
+= 3.2 =
+Mar 19, 2013 by Ipstenu
+
+* PHP 5.4 support required updating the AWSSDK (props Shredder)
+* Added in an actual checkbox for super debug mode
+* Edited AWSSDKforPHP/services/s3.class.php to work with CEPH
+
+= 3.1.1 =
+Feb 11, 2013 by Ipstenu
+
+* The shortcode was broken. No one noticed. Not sure what that means ;)
+
+= 3.1 =
+Jan 23, 2013 by Ipstenu
+
+* Fixing timeout with large zips
+* Fixed Multipart for files over 100megs (props Stephon)
+
+= 3.0 =
+Jan 16, 2013 by Ipstenu
+
+* Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class (Thank you Stephon, Shredder/@GetSource, and Justin at DreamHost)
+* Security level up: Using register settings and the nonces the way WP intended (thank you @no_fear_inc, @rarst, @trepmal)
+* Logging now covers uploads, plus has more information for debugging.
+* Moving DHDO::, messages, registering settings, and many other things to their own files.
+* Fixed lingering debug warning with translations.
+* Using the MultiPart uploader, which should handle larger files.
+
+= 2.3 =
+Jan 3, 2013 by Ipstenu
+
+* Optional logging (good for debugging)
+* No longer takes a backup right away when saving settings (good for testing lots of stuff)
+* Hiding keys if set for security
+* Reset option (wipes all settings)
+
+= 2.2 =
+Dec 30, 2012 by Ipstenu
+
+* Fixed date/time issue with backups displaying wrong (did not impact functionality, just bad date conversion)
+* Changed refs of siteurl to home_url, in order to fix wp-cli backups going astray under certain conditions
+* Security fixes (from duck_ aka Jon Cave)
+
+= 2.1 =
+Dec 21, 2012 by Ipstenu
+
+* Made a change to how times are generated using current_time correctly, vs time (props Regan, a DreamHost customer, for letting me log into your site!)
+* Changed date() to date_i18n() (thank you @Rarst for your 'tsk' - it lights a fire)
+* Cleaning up debug errors
+* Fixed uninstall
+
+= 2.0 =
+Nov 1, 2012 by Ipstenu
+
+* Backup retention - chose your own adventure.
+
+= 1.2 =
+Oct 11, 2012 by Ipstenu
+
+* Uploader added
+* Shortcode to list uploaded files added
+* Moved New Bucket code to the main settings page, where you can see your buckets now
+
+= 1.1 =
+Sept 27, 2012 by Ipstenu
+
+* <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
+* Security (nonce, abspath, etc)
+* Better defines
+* wp-cli (still not 100%)
+
+= 1 =
+
+Sept 2012, by Ipstenu
+
+* Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
+* Upgraded <a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a> to latest version
+* Pretified, consolidated, organized, and formatted.
+* Saving temp files to upgrade (vs it's own folder)
