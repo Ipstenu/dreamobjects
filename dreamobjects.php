@@ -69,7 +69,6 @@ if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
  
 require_once 'lib/defines.php';
 require_once 'lib/dhdo.php';
-require_once 'lib/messages.php';
 require_once 'lib/settings.php';
 
 if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {

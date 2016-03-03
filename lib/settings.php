@@ -55,12 +55,34 @@ class DHDOSET {
 		return $result;
 	}
 	
-	function get_what_sections() {
+	function get_sections() {
 		$sections = array(
 			'files'    => __('All Files', dreamobjects),
 			'database' => __('Database', dreamobjects)
 		);
 		return $sections;
+	}
+	function get_schedule() {
+		$schedule = array(
+			'disabled' => __('Disabled', dreamobjects),
+			'daily'    => __('Daily', dreamobjects),
+			'weekly'   => __('Weekly', dreamobjects),
+			'monthly'  => __('Monthly', dreamobjects)
+		);
+		return $schedule;
+	}
+	function get_retain() {
+		$retain = array('1','2','5','10','15','30','60','90','all');
+		return $retain;
+	}
+	function get_notify() {
+		$notify = array(
+			'disabled' => __('Disabled', dreamobjects),
+			'success'  => __('Success', dreamobjects),
+			'failure'  => __('Failure', dreamobjects),
+			'all'      => __('All', dreamobjects)
+		);
+		return $notify;
 	}
 
     /**
@@ -221,26 +243,24 @@ class DHDOSET {
 		// Backup Settings
         add_settings_section( 'backuper_id', __('Settings', 'dreamobjects'), 'backuper_callback', 'dh-do-backuper_page' );
         
-        register_setting( 'dh-do-backuper-settings','dh-do-bucket', 'backup_bucket_validation' );
+        register_setting( 'dh-do-backuper-settings', 'dh-do-bucket', 'backup_bucket_validation' );
         add_settings_field( 'dh-do-bucket_id',  __('Bucket Name', 'dreamobjects'), 'backup_bucket_callback', 'dh-do-backuper_page', 'backuper_id' );
 
         if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) {
-            register_setting( 'dh-do-backuper-settings','dh-do-backupsection');
+            register_setting( 'dh-do-backuper-settings', 'dh-do-backupsection', 'backup_what_validation' );
             add_settings_field( 'dh-do-backupsection_id',  __('What to Backup', 'dreamobjects'), 'backup_what_callback', 'dh-do-backuper_page', 'backuper_id' );
-            register_setting( 'dh-do-backuper-settings','dh-do-schedule');
+            register_setting( 'dh-do-backuper-settings', 'dh-do-schedule', 'backup_sched_validation' );
             add_settings_field( 'dh-do-schedule_id',  __('Schedule', 'dreamobjects'), 'backup_sched_callback', 'dh-do-backuper_page', 'backuper_id' );
-            register_setting( 'dh-do-backuper-settings','dh-do-retain');
+            register_setting( 'dh-do-backuper-settings', 'dh-do-retain', 'backup_retain_validation' );
             add_settings_field( 'dh-do-backupretain_id',  __('Backup Retention', 'dreamobjects'), 'backup_retain_callback', 'dh-do-backuper_page', 'backuper_id' );
-            register_setting( 'dh-do-backuper-settings','dh-do-notify');
+            register_setting( 'dh-do-backuper-settings', 'dh-do-notify', 'backup_notify_validation' );
             add_settings_field( 'dh-do-backupnotify_id',  __('Notifications', 'dreamobjects'), 'backup_notify_callback', 'dh-do-backuper_page', 'backuper_id' );
         }
         
         function backuper_callback() { 
             echo __( 'Configure your site for backups by selecting your bucket, what you want to backup, and when.', dreamobjects);
         }
-
         function backup_bucket_callback() {
-	        
             $buckets = DHDOSET::get_buckets();
                                     
             ?> <select name="dh-do-bucket">
@@ -251,16 +271,11 @@ class DHDOSET {
                 </select>
 				<p class="description"><?php echo __('Select from pre-existing buckets.', dreamobjects); ?></p><?php
 		}
-    	
 	    function backup_bucket_validation( $input ) {
-		    // validate that the bucket passed to input is actually a valid bucket name.
-		    
-		    	$buckets = DHDOSET::get_buckets();
-		    	
+		    	$buckets = DHDOSET::get_buckets();		    	
 		    	$goodbuckets = array_map(function($bname) {
 				return $bname['Name'];
 			}, $buckets['Buckets']);
-		    	
 		    	$thisbucket  = sanitize_file_name($input);
 		    	
 		    	if ( $input !== $thisbucket || !in_array( $thisbucket, $goodbuckets )  ) {
@@ -278,7 +293,6 @@ class DHDOSET {
 			} else {
 	        		return $thisbucket;
 	        	}
-	
 	    }
 	
 	    	function backup_what_callback() {
@@ -286,8 +300,7 @@ class DHDOSET {
 	    		if ( !$mysections ) {
 	    			$mysections = array();
 	    		}
-	    		
-	    		$availablesections =  DHDOSET::get_what_sections();
+	    		$availablesections = DHDOSET::get_sections();
 	    		
 	        	?><p><label for="dh-do-backupsections">
 
@@ -302,13 +315,40 @@ class DHDOSET {
 			?>
 			<p class="description"><?php echo __('You can select portions of your site to backup.', dreamobjects); ?></p><?php
 	    }
+		function backup_what_validation( $input ) {
+			$availablesections = DHDOSET::get_sections();
+			$thesesections = array();
+
+			foreach ( $input as $key => $value ) {
+				$thissection = sanitize_text_field($value);
+				
+				if ( $input[$key] !== $thissection || !array_key_exists( $thissection, $availablesections )  ) {
+					$error = true;
+				} else {
+					$thesesections[$key] = $thissection;
+				}
+			}
+	
+			if ( $error === true ) {
+				$string = __('Invalid section choice.', dreamobjects);
+			    add_settings_error(
+			      'dh-do-backupsection',
+			      'backupsection-field-error',
+			      $string,
+			      'error'
+			    );
+			} else {
+	        		return $thesesections;
+	        	}
+		}
 
     		function backup_sched_callback() {
-    	
             ?><select name="dh-do-schedule">
-				<?php foreach ( array('Disabled','Daily','Weekly','Monthly') as $s ) : ?>
+				<?php 
+				$schedules = DHDOSET::get_schedule();	
+				foreach ( $schedules as $s ) { ?>
 				<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-schedule') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-				<?php endforeach; ?>
+				<?php } ?>
 				</select>
 				<?php
                   $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );
@@ -316,13 +356,35 @@ class DHDOSET {
             ?>
             <p class="description"><?php echo __('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
             <?php if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) { ?>
-            <p class="description"><?php echo $nextbackup; ?></p>
+            		<p class="description"><?php echo $nextbackup; ?></p>
             <?php }
+		}
+		function backup_sched_validation( $input ) {
+			$availabletimes = DHDOSET::get_schedule();
+			$thistime = sanitize_text_field($input);
+				
+			if ( $input !== $thistime || !array_key_exists( $thistime, $availabletimes )  ) {
+				$error = true;
+				$string = __('Invalid scheduling choice.', dreamobjects);
+			}
+			
+			if ( $error === true ) {
+			    add_settings_error(
+			      'dh-do-schedule',
+			      'schedule-field-error',
+			      $string,
+			      'error'
+			    );
+			} else {
+	        		return $thistime;
+	        	}
 		}
     	
     		function backup_retain_callback() {
+	    		$retainarray = DHDOSET::get_retain();
+	    		
 	    		?><select name="dh-do-retain">
-				<?php foreach ( array('1','2','5','10','15','30','60','90','all') as $s ) : ?>
+				<?php foreach ( $retainarray as $s ) : ?>
 			        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 			    <?php endforeach; ?>
 			</select>
@@ -330,17 +392,58 @@ class DHDOSET {
 			<p class="description"><?php echo __('DreamObjects charges you based on disk space used. Setting to \'All\' will retain your backups forever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p>
 			<?php
 	    	}
+		function backup_retain_validation( $input ) {
+			$retainarray = DHDOSET::get_retain();
+			$retain = sanitize_text_field($input);
+				
+			if ( $input !== $retain || !array_key_exists( $retain, $retainarray )  ) {
+				$error = true;
+				$string = __('Invalid retention option.', dreamobjects);
+			}
+			
+			if ( $error === true ) {
+			    add_settings_error(
+			      'dh-do-retain',
+			      'retain-field-error',
+			      $string,
+			      'error'
+			    );
+			} else {
+	        		return $retain;
+	        	}
+		}
     	
 	    	function backup_notify_callback() {
+		    	$notifyarray = DHDOSET::get_notify();
 		    ?><select name="dh-do-notify">
-		    	<?php foreach ( array('Disabled','Success','Failure','All') as $s ) : ?>
+		    	<?php foreach ( $notifyarray as $s ) : ?>
 				<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-notify') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 			<?php endforeach; ?>
 			</select>
 			
 	        <p class="description"><?php echo __('Select how often you want email alerts for backups.', dreamobjects); ?></p>
-	    		<?php    	
+	    		<?php
 	    	}
+		function backup_notify_validation( $input ) {
+			$notifyarray = DHDOSET::get_notify();
+			$notify = sanitize_text_field($input);
+				
+			if ( $input !== $notify || !array_key_exists( $notify, $notifyarray )  ) {
+				$error = true;
+				$string = __('Invalid notification option.', dreamobjects);
+			}
+			
+			if ( $error === true ) {
+			    add_settings_error(
+			      'dh-do-notify',
+			      'notify-field-error',
+			      $string,
+			      'error'
+			    );
+			} else {
+	        		return $notify;
+	        	}
+		}
 
 		// Backup NOW Settings
         add_settings_section( 'backupnow_id', __('Immediate Backup', 'dreamobjects'), 'backupnow_callback', 'dh-do-backupnow_page' );

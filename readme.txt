@@ -180,6 +180,7 @@ March 2016 by Ipstenu
 * Improved security and sanitization
 * Migrated to settings API
 * Removed 'reset' and changed to allowing users to edit keys ad hoc
+* Improve translations
 
 = 3.5.2 =
 
