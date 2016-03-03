@@ -37,13 +37,9 @@ if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled'
 if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '5' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
-//if ( !get_option('dh-do-boto')) {update_option( 'dh-do-boto', 'no' );}
-
-// For removed features
-if ( get_option('dh-do-debugging')) { delete_option( 'dh-do-debugging'); }
-if ( get_option('dh-do-bucketup')) { delete_option( 'dh-do-bucketup' ); }
-if ( get_option('dh-do-uploader')) { delete_option( 'dh-do-uploader' ); }
-if ( get_option('dh-do-uploadview')) { delete_option( 'dh-do-uploadview' ); }
+if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'disabled' );}
+if ( !get_option('dh-do-status')) {update_option( 'dh-do-status', '' );}
+if ( !get_option('dh-do-reset')) {update_option( 'dh-do-reset', 'N' );}
 
 // The Help Screen
 function dreamhost_dreamobjects_plugin_help() {

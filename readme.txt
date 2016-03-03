@@ -1,9 +1,9 @@
 === DreamObjects Backups ===
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
-Requires at least: 3.4
-Tested up to: 4.4
-Stable tag: 3.5.2
+Requires at least: 4.0
+Tested up to: 4.5
+Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,16 +15,12 @@ DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/"
 
 Well now that we've gotten the sales-pitch out of the way, DreamObjects Connections will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
-<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Honestly, the support techs are fantastic, but they can't debug this yet, so they'll just send you here anyway. Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
+<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
 
 = Backup Features =
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Retains a limitable number of backups at any given time (so as not to charge you the moon when you have a large site).
-* Provides <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a> hooks to do the same
-
-= To Do =
-* Offer syncing backup as an alternative (see <a href="http://blogs.aws.amazon.com/php/post/Tx2W9JAA7RXVOXA/Syncing-Data-with-Amazon-S3">Syncing Data with Amazon S3</a>)
-* Option to email results (if logging, email log? Have to split up by attempt for that)
+* Provides <a href="https://wp-cli.org/">wp-cli</a> hooks to do the same
 
 = Credit =
 
@@ -63,9 +59,9 @@ Not at this time. Backups for Multisite are a little messier, and I'm not sure h
 
 <strong>What does it backup?</strong>
 
-Your database and your wp-content folder.
+Your database and your `wp-content` folder.
 
-In a perfect world it would also backup your wp-config.php and .htaccess, but those are harder to grab since there aren't constant locations.
+In a perfect world it would also backup your `wp-config.php` and `.htaccess`, but those are harder to grab since there aren't consistent locations.
 
 <strong>How big a site can this back up?</strong>
 
@@ -86,13 +82,13 @@ There are a few things at play here:
 3. The amount of server memory
 4. The amount of available CPU
 
-In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increasing_the_PHP_Memory_Limit">PHP memorylimit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. Just because PHP has a hard limit of 2G doesn't mean it'll even get that far.
+In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increasing_the_PHP_Memory_Limit">PHP memory limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. Just because PHP has a hard limit of 2G doesn't mean it'll even get that far.
 
-I have, personally, verified a 250MB zip file, with no timeouts, no server thrashing, and no PHP errors, so if this is still happening, turn on debugging and check the log. If the log stalls on creating the zip, then you've hit the memory wall. It's possible to increase your memory limit via PHP, <em>however</em> doing this on a shared server means you're probably getting too big for this sort of backup solution in the first place. If your site is over 500megs and you're still on shared, you need to seriously think about your future. This will be much less of an issue on VPS and dedi boxes, where you don't have the same limits.
+I have, personally, verified a 250MB zip file, with no timeouts, no server thrashing, and no PHP errors, so if this is still happening, turn on debugging and check the log. If the log stalls on creating the zip, then you've hit the memory wall. It's possible to increase your memory limit via PHP, <em>however</em> doing this on a shared server means you're probably getting too big for this sort of backup solution in the first place. If your site is over 500megs and you're still on shared, you need to seriously think about your future. This will be much less of an issue on VPS and dedicated boxes, where you don't have the same limits.
 
 <strong>Where's the Database in the zip?</strong>
 
-I admit, it's in a weird spot: /wp-content/upgrade/dreamobject-db-backup.sql
+I admit, it's in a weird spot: `/wp-content/upgrade/RANDOM-dreamobjects-backup.sql`
 
 Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for me to delete.
 
@@ -110,13 +106,13 @@ You can schedule them daily, weekly, or monthly.
 
 Yep! It actually sets it to run in 60 seconds, but works out the same.
 
-<strong>I disabled wp-cron. Will this work?</strong>
+<strong>I disabled `wp-cron`. Will this work?</strong>
 
 Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. 'curl http://domain.com/wp-cron.php'). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
 
 <strong>I kicked off an ASAP backup, but it says don't refresh the page. How do I know it's done?</strong>
 
-By revisiting the page, <em>but not</em> pressing refresh. Refresh is a funny thing. It re-runs what you last did, so you might accidently kick off another backup. You probably don't want that. The list isn't dynamically generated either, so just sitting on the page waiting won't do anything except entertain you as much as watching paint dry.
+By revisiting the page, <em>but not</em> pressing refresh. Refresh is a funny thing. It re-runs what you last did, so you might accidentally kick off another backup. You probably don't want that. The list isn't dynamically generated either, so just sitting on the page waiting won't do anything except entertain you as much as watching paint dry.
 
 My suggestions: Visit another part of your site and go get a cup of coffee, or something else that will kill time for about two minutes. Then come back to the backups page. Just click on it from the admin sidebar. You'll see your backup is done.
 
@@ -128,11 +124,7 @@ Since you get charged on space used for DreamObjects, the default is to retain t
 
 <strong>Can I keep them forever?</strong>
 
-If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you will be charged more money.
-
-<strong>Why is upload files gone?</strong>
-
-Becuase it was klunkly and hacky and a security hole.
+If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you may be charged more money.
 
 <strong>How do I use the CLI?</strong>
 
@@ -143,7 +135,7 @@ wp dreamobjects backup
 wp dreamobjects resetlog
 </pre>
 
-The 'backup' command runs an immediate backup, while the 'resetlog' command wipes your debug log.
+The 'backup' command runs an immediate backup, while the `resetlog` command wipes your debug log.
 
 <strong>Why doesn't it have a CDN?</strong>
 
@@ -161,13 +153,13 @@ You can enable logging on the main DreamObjects screen. This is intended to be t
 
 <strong>The automated backup is set to run at 3am but it didn't run till 8am!</strong>
 
-That's not an error. WordPress kicks off cron jobs when someone visits your site, so if no one visted the site from 3am to 8am, then the job to backup wouldn't run until then.
+That's not an error. WordPress kicks off cron jobs when someone visits your site, so if no one visited the site from 3am to 8am, then the job to backup wouldn't run until then.
 
 <strong>Why is nothing happening when I press the backup ASAP button?</strong>
 
 First turn on logging, then run it again. If it gives output, then it's running, so read the log to see what the error is. If it just 'stops', it should have suggestions as to why.
 
-You can also log in via SSH and run 'wp dreamobjects backup' to see if that works.
+You can also log in via SSH and run `wp dreamobjects backup` to see if that works.
 
 == Screenshots ==
 1. DreamObjects Private Key
@@ -178,6 +170,16 @@ You can also log in via SSH and run 'wp dreamobjects backup' to see if that work
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 4.0 =
+
+March 2016 by Ipstenu
+
+* Moved to Composer for SDK
+* Upgraded SDK to 2.7.27 (nb: 2.8.x fails to run for some reason)
+* Improved security and sanitization
+* Migrated to settings API
+* Removed 'reset' and changed to allowing users to edit keys ad hoc
 
 = 3.5.2 =
 
@@ -210,126 +212,8 @@ August 11, 2014 by Ipstenu
 * Removed uploader for both security and support reasons. It was bad and I feel bad.
 * New wp-cli command: `wp dreamobjects resetlog` (resets the debug log)
 
-= 3.4.3 =
-May 1, 2014 by Ipstenu
+= Previous Versions =
 
-* Beginning deprecation of the uploader. If you're using it, it'll stay.
-* Changing images to CSS
-
-= 3.4.2 =
-Jan 23, 2014 by Ipstenu
-
-* AWS was being picky and doing things that users don't care about. (<a href="http://wordpress.org/support/topic/log-is-complaining?replies=2#post-5146902">Props @renoirb</a>)
-* Cleaned up some PHP 5.4 functions
-
-= 3.4.1 =
-Nov 21, 2013 by Ipstenu
-
-* Change blindness. What happens when you copy the wrong file over and don't even notice. (Props <a href="http://wordpress.org/support/topic/uploader-page-not-showing">araucaria</a>)
-
-= 3.4 =
-Nov 20, 2013 by Ipstenu
-
-* Wrong use of echo -- _e() should be __() (props Marko and Shredder)
-* TARDIS error. Any time you pick a timezone that was +GMT, it mathed out totally wrong (props DreamHost customer Jeremy C!)
-* Clean up scheduled hooks on uninstall
-* Error message for PHP less than 5.3
-* Outright failure to activate on Multisite (this is intentional, it's NOT supported)
-* Added cache-buster for compatibility with DreamPress/Varnish
-* MP6 ready (aka will look nice on WP 3.8)
-
-= 3.3 =
-June 24, 2013 by Ipstenu
-
-* Changing how the backup is done to make it smaller but also to support more configurations. Now it only backs up wp-content.
-* Increased timeouts for SQL
-
-= 3.2.1 =
-Mar 28, 2013 by Ipstenu
-
-* Dropping support for PHP 5.2, since AWSSDK did it first. It's not me, Mom!
-
-= 3.2 =
-Mar 19, 2013 by Ipstenu
-
-* PHP 5.4 support required updating the AWSSDK (props Shredder)
-* Added in an actual checkbox for super debug mode
-* Edited AWSSDKforPHP/services/s3.class.php to work with CEPH
-
-= 3.1.1 =
-Feb 11, 2013 by Ipstenu
-
-* The shortcode was broken. No one noticed. Not sure what that means ;)
-
-= 3.1 =
-Jan 23, 2013 by Ipstenu
-
-* Fixing timeout with large zips
-* Fixed Multipart for files over 100megs (props Stephon)
-
-= 3.0 =
-Jan 16, 2013 by Ipstenu
-
-* Massive re-write. Now using The full SDK instead of Amazon S3 PHP Class (Thank you Stephon, Shredder/@GetSource, and Justin at DreamHost)
-* Security level up: Using register settings and the nonces the way WP intended (thank you @no_fear_inc, @rarst, @trepmal)
-* Logging now covers uploads, plus has more information for debugging.
-* Moving DHDO::, messages, registering settings, and many other things to their own files.
-* Fixed lingering debug warning with translations.
-* Using the MultiPart uploader, which should handle larger files.
-
-= 2.3 =
-Jan 3, 2013 by Ipstenu
-
-* Optional logging (good for debugging)
-* No longer takes a backup right away when saving settings (good for testing lots of stuff)
-* Hiding keys if set for security
-* Reset option (wipes all settings)
-
-= 2.2 =
-Dec 30, 2012 by Ipstenu
-
-* Fixed date/time issue with backups displaying wrong (did not impact functionality, just bad date conversion)
-* Changed refs of siteurl to home_url, in order to fix wp-cli backups going astray under certain conditions
-* Security fixes (from duck_ aka Jon Cave)
-
-= 2.1 =
-Dec 21, 2012 by Ipstenu
-
-* Made a change to how times are generated using current_time correctly, vs time (props Regan, a DreamHost customer, for letting me log into your site!)
-* Changed date() to date_i18n() (thank you @Rarst for your 'tsk' - it lights a fire)
-* Cleaning up debug errors
-* Fixed uninstall
-
-= 2.0 =
-Nov 1, 2012 by Ipstenu
-
-* Backup retention - chose your own adventure.
-
-= 1.2 =
-Oct 11, 2012 by Ipstenu
-
-* Uploader added
-* Shortcode to list uploaded files added
-* Moved New Bucket code to the main settings page, where you can see your buckets now
-
-= 1.1 =
-Sept 27, 2012 by Ipstenu
-
-* <em>All minor changes, but since people had been using 1.0, I thought a kick was in order.</em>
-* Security (nonce, abspath, etc)
-* Better defines
-* wp-cli (still not 100%)
-
-= 1 =
-
-Sept 2012, by Ipstenu
-
-* Forked <a href="http://wordpress.org/extend/plugins/wp-s3-backups/">WP S3 Backups</a> to work with DreamObjects.
-* Upgraded <a href="http://undesigned.org.za/2007/10/22/amazon-s3-php-class">Amazon S3 PHP Class</a> to latest version
-* Pretified, consolidated, organized, and formatted.
-* Saving temp files to upgrade (vs it's own folder)
+See changelog.txt
 
 == Upgrade notice ==
-This is a MAJOR UPGRADE to the plugin. Please read the changelog.
-
-The separate uploader has been removed in version 3.5 and up and will not be returning.

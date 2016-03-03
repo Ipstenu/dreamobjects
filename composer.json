@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-	    "aws/aws-sdk-php": "2.*",
+	    "aws/aws-sdk-php": "2.7.*",
 	    "doctrine/orm": "*",
 	    "monolog/monolog": "*"
 	},
@@ -31,7 +31,3 @@
         ]
     }
 }
-
-
-aws/Symfony/Component/EventDispatcher/Tests/EventDispatcherTest.php
-aws/Symphony/Component/EventDispatcher/Tests/AbstractEventDispatcherTest.php

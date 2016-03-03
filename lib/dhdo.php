@@ -27,7 +27,6 @@ use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Guzzle\Plugin\Log\LogPlugin; // DEBUGGING ONLY
 
-
 class DHDO {
 
 	const DIRECTORY_SEPARATORS = '/\\';
@@ -36,50 +35,38 @@ class DHDO {
 
     public static function init() {
 
-        // SCHEDULER
+        // The Scheduler
         if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
+	        
+	        check_admin_referer('dh-do-backuper-settings-options');
             wp_clear_scheduled_hook('dh-do-backup');
-            if ( $_POST['dh-do-schedule'] != 'disabled' ) {
-                wp_schedule_event(current_time('timestamp',true)+86400, $_POST['dh-do-schedule'], 'dh-do-backup');
+            
+            $do_schedule = sanitize_text_field($_POST['dh-do-schedule']);
+            
+            if ( $do_schedule != 'disabled' ) {
+                wp_schedule_event(current_time('timestamp',true)+86400, $do_schedule, 'dh-do-backup');
                 $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option('time_format') );
                 $nextbackup = sprintf(__('Next backup: %s', dreamobjects), $timestamp );
-                DHDO::logger('Scheduled '.$_POST['dh-do-schedule'].' backup. ' .$nextbackup);
+                DHDO::logger('Scheduled '.$do_schedule.' backup. ' .$nextbackup);
             }
         }
 
-        // RESET
-        if ( current_user_can('manage_options') && isset($_POST['dhdo-reset']) && $_POST['dhdo-reset'] == 'Y'  ) {
-            delete_option( 'dh-do-backupsection' );
-            delete_option( 'dh-do-boto' );
-            delete_option( 'dh-do-bucket' );
-            delete_option( 'dh-do-key' );
-            delete_option( 'dh-do-schedule' );
-            delete_option( 'dh-do-secretkey' );
-            delete_option( 'dh-do-section' );
-            delete_option( 'dh-do-logging' );
-            DHDO::logger('reset');
-           }
-
         // LOGGER: Wipe logger if blank
-        if ( current_user_can('manage_options') && isset($_POST['dhdo-logchange']) && $_POST['dhdo-logchange'] == 'Y' ) {
-            if ( !isset($_POST['dh-do-logging'])) {
-                DHDO::logger('reset');
-            }
+        if ( current_user_can('manage_options') && get_option('dh-do-logging') == 'off' ) {
+            DHDO::logger('reset');
         }       
-        
-        // UPDATE OPTIONS
-        if ( isset($_GET['settings-updated']) && isset($_GET['page']) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' ) ) add_action('admin_notices', array('DHDOMESS','updateMessage'));
 
         // BACKUP ASAP
-        if ( current_user_can('manage_options') &&  isset($_GET['backup-now']) && $_GET['page'] == 'dreamobjects-menu-backup' ) {
+        if ( current_user_can('manage_options') && isset($_POST['dh-do-backupnow']) ) {
+	        check_admin_referer('dh-do-backupnow-settings-options');
             wp_schedule_single_event( current_time('timestamp', true)+60, 'dh-do-backupnow');
-            add_action('admin_notices', array('DHDOMESS','backupMessage'));
             DHDO::logger('Scheduled ASAP backup in 60 seconds.' );
         }
         
-        // BACKUP
+        // BACKUP STATUS
         if ( wp_next_scheduled( 'dh-do-backupnow' ) && ( $_GET['page'] == 'dreamobjects-menu' || $_GET['page'] == 'dreamobjects-menu-backup' ) ) {
-            add_action('admin_notices', array('DHDOMESS','backupMessage'));
+            // add_action('admin_notices', array('DHDOMESS','backupMessage'));
+            // This is where I should show some status if I do this
         }
     }
 
@@ -150,7 +137,7 @@ class DHDO {
     
     // The actual backup
     function backup() {
-        DHDO::logger('Begining Backup.');
+        DHDO::logger('Beginning Backup.');
         global $wpdb;
 
 		if (!is_dir( content_url() . '/upgrade/' )) {
@@ -164,26 +151,28 @@ class DHDO {
             $sections = array();
         }
         
-        $file = WP_CONTENT_DIR . '/upgrade/dreamobject-backups.zip';
-        $fileurl = content_url() . '/upgrade/dreamobject-backups.zip';
+        $backupfolder = WP_CONTENT_DIR . '/upgrade/';
+        $backuphash = wp_hash( wp_rand() );
+        $file = $backupfolder.$backuphash.'-dreamobject-backup.zip';
+        $fileurl = content_url() . '/upgrade/dreamobject-backup.zip';
 
         // Pre-Cleanup
-        if(file_exists($file)) { 
-            @unlink($file);
-            DHDO::logger('Leftover zip file found, deleting '.$file.' ...');
-        }
+		foreach ( glob ( $backupfolder.'*.zip' ) as $oldzip ) {
+			DHDO::logger('Leftover zip file found, deleting '.$oldzip.' ...');
+			@unlink($oldzip);
+		}
 
 		try {
-				$zip = new ZipArchive( $file );
-				$zaresult = true;
-				DHDO::logger('ZipArchive found and will be used for backups.');
+			$zip = new ZipArchive( $file );
+			$zaresult = true;
+			DHDO::logger('ZipArchive found and will be used for backups.');
 		} catch ( Exception $e ) {
-				$error_string = $e->getMessage();
-				$zip = new PclZip($file);
-				DHDO::logger('ZipArchive not found. Error: '. $error_string );
-				DHDO::logger('PclZip will be used for backups.');
-				require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
-				$zaresult = false;
+			$error_string = $e->getMessage();
+			$zip = new PclZip($file);
+			DHDO::logger('ZipArchive not found. Error: '. $error_string );
+			DHDO::logger('PclZip will be used for backups.');
+			require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
+			$zaresult = false;
 		}
 
         $backups = array();
@@ -217,17 +206,18 @@ class DHDO {
         // And me DB!
         if ( in_array('database', $sections) ) {
             set_time_limit(300);
-            
-            $sqlhash = wp_hash( wp_rand() );
-			$sqlfile = WP_CONTENT_DIR . '/upgrade/'.$sqlhash.'.sql';
+           
+			$sqlfile = $backupfolder.$backuphash.'-dreamobjects-backup.sql';
             $tables = $wpdb->get_col("SHOW TABLES LIKE '" . $wpdb->prefix . "%'");
             $tables_string = implode( ' ', $tables );
 
 			// Pre cleanup
-	        if(file_exists($sqlfile)) { 
-	            @unlink($sqlfile);
-	            DHDO::logger('Leftover sql file found, deleting '.$sqlfile.' ...');
-	        }
+
+	        // Pre-Cleanup
+			foreach ( glob ( $backupfolder.'*.sql' ) as $oldsql ) {
+				DHDO::logger('Leftover SQL file found, deleting '.$oldsql.' ...');
+				@unlink($oldzip);
+			}
             
             $dbcmd = sprintf( "mysqldump -h'%s' -u'%s' -p'%s' %s %s --single-transaction 2>&1 >> %s",
             DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, $tables_string, $sqlfile );
