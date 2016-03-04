@@ -422,7 +422,8 @@ class DHDOSET {
 			</select>
 			
 	        <p class="description"><?php echo __('Select how often you want email alerts for backups.', dreamobjects); ?></p>
-	    		<?php
+	        <p class="description"><?php echo __('Email notifications can be pretty spammy. If you\'re having issues with backups, turn on either successes or failures. You certainly can email for everything, but that might be a bit of overkill.', dreamobjects); ?></p>
+	        <?php
 	    	}
 		function backup_notify_validation( $input ) {
 			$notifyarray = DHDOSET::get_notify();
