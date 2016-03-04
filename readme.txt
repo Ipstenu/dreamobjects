@@ -28,13 +28,11 @@ Version 3.5 and up would not have been possible without the work Brad Touesnard 
 
 == Installation ==
 
-1. Sign up for <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects</a>
+1. Sign up for [DreamObjects](http://dreamhost.com/cloud/dreamobjects/)
 1. Install and Activate the plugin
 1. Fill in your Key and Secret Key
 1. Go to the backups page
-1. Pick your backup Bucket
-1. Select what you want to backup
-1. Chose when you want to backup
+1. Make your settings selections (how often, what, how many)
 1. Relax and let DreamHost do the work
 
 == Frequently asked questions ==
@@ -43,7 +41,7 @@ Version 3.5 and up would not have been possible without the work Brad Touesnard 
 
 <strong>What does it do?</strong>
 
-DreamObjects Connection connects your WordPress site to your DreamObjects cloud storage, allowing you to automatically store backups of your content.
+DreamObjects Backups connects your WordPress site to your DreamObjects cloud storage, allowing you to automatically store backups of your content.
 
 <strong>Do you work for DreamHost?</strong>
 
@@ -181,7 +179,6 @@ March 2016 by Ipstenu
 * Migrated to settings API
 * Removed 'reset' and changed to allowing users to edit keys ad hoc
 * Improve translations
-* Email notifications
 
 = 3.5.2 =
 

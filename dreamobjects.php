@@ -9,7 +9,6 @@ Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
 Text Domain: dreamobjects
-Domain Path: /i18n
 
 Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 

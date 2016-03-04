@@ -32,10 +32,10 @@ if (!defined('ABSPATH')) {
 			</script>
 			<div class="wrap">
 				<div id="icon-dreamobjects" class="icon32"></div>
-				<h2><?php echo __("DreamObjects Backups", dreamobjects); ?></h2>
+				<h2><?php echo __("DreamObjects Backups", 'dreamobjects'); ?></h2>
 				<?php settings_errors(); ?>
 
-				<p><?php printf( __( '<a href="%s">DreamObjects&#153;</a> is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', dreamobjects ), 'https://www.dreamhost.com/cloud/storage/' ); ?></p>
+				<p><?php printf( __( '<a href="%s">DreamObjects&#153;</a> is an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.', 'dreamobjects' ), 'https://www.dreamhost.com/cloud/storage/' ); ?></p>
 
 				<form method="post" action="options.php">
 				<?php

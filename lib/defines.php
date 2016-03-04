@@ -29,7 +29,6 @@ defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 // Setting Options
-if ( !defined('dreamobjects')) {define('dreamobjects','dreamobjects');} // Translation
 if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
 if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
 if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}
@@ -40,12 +39,6 @@ if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
 if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'disabled' );}
 if ( !get_option('dh-do-status')) {update_option( 'dh-do-status', '' );}
 if ( !get_option('dh-do-reset')) {update_option( 'dh-do-reset', 'N' );}
-
-// The Help Screen
-function dreamhost_dreamobjects_plugin_help() {
-	include_once( DHDO_PLUGIN_DIR . '/admin/help.php' );
-}
-add_action('contextual_help', 'dreamhost_dreamobjects_plugin_help', 10, 3);
 
 // Filter Cron
 add_filter('cron_schedules', array('DHDO', 'cron_schedules'));

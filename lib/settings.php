@@ -27,7 +27,7 @@ class DHDOSET {
 
 	function get_client() {
 		if ( !get_option('dh-do-key') || !get_option('dh-do-secretkey') ) {
-			return new WP_Error( 'access_keys_missing', sprintf( __( '<div class="dashicons dashicons-no"></div> Please <a href="%s">set your access keys</a> first.', dreamobjects ), 'admin.php?page=dreamobjects-menu' ) );
+			return new WP_Error( 'access_keys_missing', sprintf( __( '<div class="dashicons dashicons-no"></div> Please <a href="%s">set your access keys</a> first.', 'dreamobjects' ), 'admin.php?page=dreamobjects-menu' ) );
 		}
 
         $s3config = array(
@@ -57,17 +57,17 @@ class DHDOSET {
 	
 	function get_sections() {
 		$sections = array(
-			'files'    => __('All Files', dreamobjects),
-			'database' => __('Database', dreamobjects)
+			'files'    => __('All Files', 'dreamobjects'),
+			'database' => __('Database', 'dreamobjects')
 		);
 		return $sections;
 	}
 	function get_schedule() {
 		$schedule = array(
-			'disabled' => __('Disabled', dreamobjects),
-			'daily'    => __('Daily', dreamobjects),
-			'weekly'   => __('Weekly', dreamobjects),
-			'monthly'  => __('Monthly', dreamobjects)
+			'disabled' => __('Disabled', 'dreamobjects'),
+			'daily'    => __('Daily', 'dreamobjects'),
+			'weekly'   => __('Weekly', 'dreamobjects'),
+			'monthly'  => __('Monthly', 'dreamobjects')
 		);
 		return $schedule;
 	}
@@ -77,10 +77,10 @@ class DHDOSET {
 	}
 	function get_notify() {
 		$notify = array(
-			'disabled' => __('Disabled', dreamobjects),
-			'success'  => __('Success', dreamobjects),
-			'failure'  => __('Failure', dreamobjects),
-			'all'      => __('All', dreamobjects)
+			'disabled' => __('Disabled', 'dreamobjects'),
+			'success'  => __('Success', 'dreamobjects'),
+			'failure'  => __('Failure', 'dreamobjects'),
+			'all'      => __('All', 'dreamobjects')
 		);
 		return $notify;
 	}
@@ -135,8 +135,8 @@ class DHDOSET {
         function keypair_callback() { 
 			if ( !get_option('dh-do-key') || !get_option('dh-do-secretkey') ) {
 		    		echo '<p>';
-		    		printf( __( 'If you don\'t have DreamObjects yet, you will need to <a href="%s">sign up for an account</a>.', dreamobjects ), 'https://www.dreamhost.com/cloud/storage/' );
-				printf( __( 'If you do have DreamObjects, you can find your keys in your <a href="%s">panel</a>:', dreamobjects ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+		    		printf( __( 'If you don\'t have DreamObjects yet, you will need to <a href="%s">sign up for an account</a>.', 'dreamobjects' ), 'https://www.dreamhost.com/cloud/storage/' );
+				printf( __( 'If you do have DreamObjects, you can find your keys in your <a href="%s">panel</a>:', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
 		    		echo '</p>';
 			}
         }
@@ -148,11 +148,11 @@ class DHDOSET {
 		    
 			if ( $input != $key ) {
 				$error = TRUE;
-				$string = __('Your key is invalid.', dreamobjects);
+				$string = __('Your key is invalid.', 'dreamobjects');
 			}
 			if ( is_null( $key ) || empty($key) || $key === '' ) {
 				$error = TRUE;
-				$string = __('Your key is empty.', dreamobjects);
+				$string = __('Your key is empty.', 'dreamobjects');
 			}
 
 			if ( $error === TRUE ) {
@@ -175,7 +175,7 @@ class DHDOSET {
 		    	}
 		    	
 		    ?><input type="text" id="dh-do-secretkey" name="dh-do-secretkey" value="<?php echo $secretkey ?>" class="regular-text"  size="50" autocomplete="off"/>
-		    <p><div class="dashicons dashicons-shield"></div><?php _e( "Once saved, your secret will not display again for your own security.", dreamobjects ); ?></p>
+		    <p><div class="dashicons dashicons-shield"></div><?php _e( 'Once saved, your secret will not display again for your own security.', 'dreamobjects' ); ?></p>
 		    <?php
 	    	}
 	    	function secretkey_validation( $input ) {
@@ -183,11 +183,11 @@ class DHDOSET {
 		    	
 			if ( $input != $secretkey ) {
 				$error = TRUE;
-				$string = __('Your secret key is invalid.', dreamobjects);
+				$string = __('Your secret key is invalid.', 'dreamobjects');
 			}
 			if ( is_null( $secretkey ) || empty($secretkey) || $secretkey === '' ) {
 				$error = TRUE;
-				$string = __('Your secret key is empty.', dreamobjects);
+				$string = __('Your secret key is empty.', 'dreamobjects');
 			}
 
 			if ( $error === TRUE ) {
@@ -210,22 +210,22 @@ class DHDOSET {
 
 	    	function logging_callback() {
 		    	?>
-		    	<p><?php echo __('If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time since it\'s publicly accessible and reveals the location of your secret zip file. When you turn off logging, the file will wipe itself out for your protection.', dreamobjects); ?></p>
+		    	<p><?php echo __('If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time since it\'s publicly accessible and reveals the location of your secret zip file. When you turn off logging, the file will wipe itself out for your protection.', 'dreamobjects'); ?></p>
 			<?php
 	    	}
 	    	
 	    	function logging_settings_callback() {
-		    	?><p><input type="checkbox" name="dh-do-logging" <?php checked( get_option('dh-do-logging') == 'on',true); ?> /> <?php echo __('Enable logging (if checked)', dreamobjects); ?> <?php
-				if ( get_option('dh-do-logging') == 'on' ) { ?>&mdash; <span class="description"><?php echo __('Your log file is located at ', dreamobjects); ?><a href="<?php echo plugins_url( 'debug.txt?nocache' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></span></p>
+		    	?><p><input type="checkbox" name="dh-do-logging" <?php checked( get_option('dh-do-logging') == 'on',true); ?> /> <?php echo __('Enable logging (if checked)', 'dreamobjects'); ?> <?php
+				if ( get_option('dh-do-logging') == 'on' ) { ?>&mdash; <span class="description"><?php echo __('Your log file is located at ', 'dreamobjects'); ?><a href="<?php echo plugins_url( 'debug.txt?nocache' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></span></p>
 				<?php }
 		}
 		function logging_validation( $input ) {
 			$logging = ( isset( $input ) && true == $input ? 'on' : 'off' );
 			
 			if ( $logging === 'on' ) {
-				$string = __('Logging is enabled.', dreamobjects);
+				$string = __('Logging is enabled.', 'dreamobjects');
 			} elseif ( $logging === 'off' ) {
-				$string = __('Logging is disabled.', dreamobjects);
+				$string = __('Logging is disabled.', 'dreamobjects');
 			}
 
 			if ( $logging !== get_option('dh-do-logging') ) {
@@ -258,7 +258,7 @@ class DHDOSET {
         }
         
         function backuper_callback() { 
-            echo __( 'Configure your site for backups by selecting your bucket, what you want to backup, and when.', dreamobjects);
+            echo __( 'Configure your site for backups by selecting your bucket, what you want to backup, and when.', 'dreamobjects');
         }
         function backup_bucket_callback() {
             $buckets = DHDOSET::get_buckets();
@@ -266,10 +266,10 @@ class DHDOSET {
             ?> <select name="dh-do-bucket">
                     <option value="XXXX">(select a bucket)</option>
                     <?php foreach ( $buckets['Buckets'] as $bucket ) { ?>
-						<option <?php if ( $bucket['Name'] == get_option('dh-do-bucket') ) echo 'selected="selected"' ?> ><?php echo $bucket['Name'] ?></option>
+						<option <?php if ( $bucket['Name'] == get_option('dh-do-bucket') ) echo 'selected="selected"' ?> ><?php echo esc_attr( $bucket['Name'] ) ?></option>
                     <?php } ?>
                 </select>
-				<p class="description"><?php echo __('Select from pre-existing buckets.', dreamobjects); ?></p><?php
+				<p class="description"><?php echo __('Select from pre-existing buckets.', 'dreamobjects'); ?></p><?php
 		}
 	    function backup_bucket_validation( $input ) {
 		    	$buckets = DHDOSET::get_buckets();		    	
@@ -280,7 +280,7 @@ class DHDOSET {
 		    	
 		    	if ( $input !== $thisbucket || !in_array( $thisbucket, $goodbuckets )  ) {
 			    	$error = true;
-			    	$string = __('Invalid bucket choice.', dreamobjects);
+			    	$string = __('Invalid bucket choice.', 'dreamobjects');
 		    	}
 	
 			if ( $error === true ) {
@@ -306,14 +306,14 @@ class DHDOSET {
 
 			<?php foreach ( $availablesections as $key => $value ) {
 				?>
-				<input <?php if ( in_array( $key, $mysections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="<?php echo $key ?>" id="dh-do-backupsection-<?php echo $key ?>" />
+				<input <?php if ( in_array( $key, $mysections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="<?php echo esc_attr($key) ?>" id="dh-do-backupsection-<?php echo esc_attr($key) ?>" />
 				<?php echo $value ?>
 				</label><br />
 				<?php
 			}			
 
 			?>
-			<p class="description"><?php echo __('You can select portions of your site to backup.', dreamobjects); ?></p><?php
+			<p class="description"><?php echo __('You can select portions of your site to backup.', 'dreamobjects'); ?></p><?php
 	    }
 		function backup_what_validation( $input ) {
 			$availablesections = DHDOSET::get_sections();
@@ -330,7 +330,7 @@ class DHDOSET {
 			}
 	
 			if ( $error === true ) {
-				$string = __('Invalid section choice.', dreamobjects);
+				$string = __('Invalid section choice.', 'dreamobjects');
 			    add_settings_error(
 			      'dh-do-backupsection',
 			      'backupsection-field-error',
@@ -352,9 +352,9 @@ class DHDOSET {
 				</select>
 				<?php
                   $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );
-                  $nextbackup = sprintf(__('Next scheduled backup is at %s', dreamobjects), $timestamp );
+                  $nextbackup = sprintf(__('Next scheduled backup is at %s', 'dreamobjects'), $timestamp );
             ?>
-            <p class="description"><?php echo __('How often do you want to backup your files? Daily is recommended.', dreamobjects); ?></p>
+            <p class="description"><?php echo __('How often do you want to backup your files? Daily is recommended.', 'dreamobjects'); ?></p>
             <?php if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) { ?>
             		<p class="description"><?php echo $nextbackup; ?></p>
             <?php }
@@ -365,7 +365,7 @@ class DHDOSET {
 				
 			if ( $input !== $thistime || !array_key_exists( $thistime, $availabletimes )  ) {
 				$error = true;
-				$string = __('Invalid scheduling choice.', dreamobjects);
+				$string = __('Invalid scheduling choice.', 'dreamobjects');
 			}
 			
 			if ( $error === true ) {
@@ -388,8 +388,8 @@ class DHDOSET {
 			        <option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option('dh-do-retain') ) echo 'selected="selected"' ?>><?php echo $s ?></option>
 			    <?php endforeach; ?>
 			</select>
-			<p class="description"><?php echo __('How many many backups do you want to keep? 15 is recommended.', dreamobjects); ?></p>
-			<p class="description"><?php echo __('DreamObjects charges you based on disk space used. Setting to \'All\' will retain your backups forever, however this can cost you a large sum of money over time. Please use cautiously!', dreamobjects); ?></p>
+			<p class="description"><?php echo __('How many many backups do you want to keep? 15 is recommended.', 'dreamobjects'); ?></p>
+			<p class="description"><?php echo __('DreamObjects charges you based on disk space used. Setting to \'All\' will retain your backups forever, however this can cost you a large sum of money over time. Please use cautiously!', 'dreamobjects'); ?></p>
 			<?php
 	    	}
 		function backup_retain_validation( $input ) {
@@ -398,7 +398,7 @@ class DHDOSET {
 				
 			if ( $input !== $retain || !array_key_exists( $retain, $retainarray )  ) {
 				$error = true;
-				$string = __('Invalid retention option.', dreamobjects);
+				$string = __('Invalid retention option.', 'dreamobjects');
 			}
 			
 			if ( $error === true ) {
@@ -421,8 +421,8 @@ class DHDOSET {
 			<?php endforeach; ?>
 			</select>
 			
-	        <p class="description"><?php echo __('Select how often you want email alerts for backups.', dreamobjects); ?></p>
-	        <p class="description"><?php echo __('Email notifications can be pretty spammy. If you\'re having issues with backups, turn on either successes or failures. You certainly can email for everything, but that might be a bit of overkill.', dreamobjects); ?></p>
+	        <p class="description"><?php echo __('Select how often you want email alerts for backups.', 'dreamobjects'); ?></p>
+	        <p class="description"><?php echo __('Email notifications can be pretty spammy. If you\'re having issues with backups, turn on either successes or failures. You certainly can email for everything, but that might be a bit of overkill.', 'dreamobjects'); ?></p>
 	        <?php
 	    	}
 		function backup_notify_validation( $input ) {
@@ -431,7 +431,7 @@ class DHDOSET {
 				
 			if ( $input !== $notify || !array_key_exists( $notify, $notifyarray )  ) {
 				$error = true;
-				$string = __('Invalid notification option.', dreamobjects);
+				$string = __('Invalid notification option.', 'dreamobjects');
 			}
 			
 			if ( $error === true ) {
@@ -452,10 +452,10 @@ class DHDOSET {
         register_setting( 'dh-do-backupnow-settings', 'dh-do-backupnow', 'backupnow_validation');
         
         function backupnow_callback() { 
-            echo __('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', dreamobjects);
+            echo __('Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', 'dreamobjects');
             
             $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option('date_format').' '.get_option('time_format') );
-            $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', dreamobjects), $timestamp );            
+            $nextbackup = sprintf(__('Keep in mind, your next scheduled backup is at %s', 'dreamobjects'), $timestamp );            
             if ( get_option('dh-do-schedule') != "disabled" && wp_next_scheduled('dh-do-backup') ) {
 	            echo '<p>'.$nextbackup.'</p>';
 	        }
@@ -469,7 +469,7 @@ class DHDOSET {
 			if ( $backup === 'Y' ) {
 
 		        $timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backupnow' ) ), get_option('time_format') );
-		        $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. You may continue using your site per usual, the backup will run behind the scenes.', dreamobjects), '<strong>'.$timestamp.'</strong>' );
+		        $string = sprintf( __('You have an ad-hoc backup scheduled for today at %s. You may continue using your site per usual, the backup will run behind the scenes.', 'dreamobjects'), '<strong>'.$timestamp.'</strong>' );
 
 			    add_settings_error(
 			      'dh-do-backup',

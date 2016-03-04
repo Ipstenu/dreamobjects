@@ -31,7 +31,7 @@ use Aws\S3\S3Client;
 
 <div class="wrap">
     <div id="icon-dreamobjects" class="icon32"></div>
-    <h2><?php echo __("DreamObjects Backup Settings", dreamobjects); ?></h2>
+    <h2><?php echo __("DreamObjects Backup Settings", 'dreamobjects'); ?></h2>
 
     <div id="dho-primary">
 	    	<div id="dho-content">
@@ -50,7 +50,7 @@ use Aws\S3\S3Client;
                 <?php 
                     $num_backups = get_option('dh-do-retain');
                     if ( $num_backups == 'all') { $num_backups = 'WP';}
-                    $show_backup_header = sprintf(__('Latest %s Backups', dreamobjects),$num_backups ); 
+                    $show_backup_header = sprintf(__('Latest %s Backups', 'dreamobjects'),$num_backups ); 
                 ?>                    
                 
                 <h3><?php echo $show_backup_header; ?></h3>
@@ -58,7 +58,7 @@ use Aws\S3\S3Client;
                 <div id="backups">
                     <ul><?php 
 						$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', (time()+600) ), get_option('time_format') );
-						$linksvalid_string = sprintf( __('Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', dreamobjects), $timestamp );									
+						$linksvalid_string = sprintf( __('Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects'), $timestamp );									
 
 						$config = array(
 						    'key'     => get_option('dh-do-key'),
@@ -81,10 +81,10 @@ use Aws\S3\S3Client;
 							$objectsarray = $objects->toArray();
 							
 							if ( empty($objectsarray) ) {
-								echo __('There are no backups currently stored. Why not run a backup now?', dreamobjects);
+								echo __('There are no backups currently stored. Why not run a backup now?', 'dreamobjects');
 							} else {
 								?>
-								<p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', dreamobjects); ?></p>
+								<p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', 'dreamobjects'); ?></p>
 								<p><?php echo $linksvalid_string; ?></p><?php
 
 								krsort($objectsarray);                                
@@ -95,7 +95,7 @@ use Aws\S3\S3Client;
 								echo '</ol>';
 							}
 						} catch (S3Exception $e) {
-							echo __('There are no backups currently stored. Why not run a backup now?', dreamobjects);
+							echo __('There are no backups currently stored. Why not run a backup now?', 'dreamobjects');
 						}
 
                     ?></ul>
