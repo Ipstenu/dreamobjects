@@ -103,8 +103,6 @@ class DHDO {
      * @param type $frequency Determination of what emails are set
      *
      */
-
-    // Email Notification function
     public static function notifier($message,$frequency) {
     
 	    if ( get_option('dh-do-notify') === ( $frequency || 'all' ) ) {
@@ -257,7 +255,7 @@ class DHDO {
             exec( $dbcmd );
             
             $sqlsize = size_format( @filesize($sqlfile) );
-			$message = sprintf( __('SQL file created: %1$s (%2$d) ...', dreamobjects), $sqlfile, $sqlsize );
+			$message = sprintf( __('SQL file created: %1$s (%2$s) ...', dreamobjects), $sqlfile, $sqlsize );
 			DHDO::logger( $message );
             $backups[] = $sqlfile;
             $message = __( 'SQL added to backup list.' , dreamobjects);
@@ -302,7 +300,7 @@ class DHDO {
 			if ( @file_exists( $file ) ) { 
             	DHDO::logger('Calculating zip file size ...');
 				$zipsize = size_format( @filesize($file) );
-				$message = sprintf( __('Zip file created: %1$s (%2$d) ...', dreamobjects), $file, $zipsize );
+				$message = sprintf( __('Zip file created: %1$s (%2$s) ...', dreamobjects), $file, $zipsize );
 				DHDO::logger( $message );
 			} else {
 				@unlink($file);
