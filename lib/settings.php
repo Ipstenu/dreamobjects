@@ -254,7 +254,7 @@ class DHDOSET {
             register_setting( 'dh-do-backuper-settings', 'dh-do-retain', 'backup_retain_validation' );
             add_settings_field( 'dh-do-backupretain_id',  __('Backup Retention', 'dreamobjects'), 'backup_retain_callback', 'dh-do-backuper_page', 'backuper_id' );
             register_setting( 'dh-do-backuper-settings', 'dh-do-notify', 'backup_notify_validation' );
-            add_settings_field( 'dh-do-backupnotify_id',  __('Notifications', 'dreamobjects'), 'backup_notify_callback', 'dh-do-backuper_page', 'backuper_id' );
+            add_settings_field( 'dh-do-backupnotify_id',  __('Status Notifications', 'dreamobjects'), 'backup_notify_callback', 'dh-do-backuper_page', 'backuper_id' );
         }
         
         function backuper_callback() { 
@@ -421,8 +421,7 @@ class DHDOSET {
 			<?php endforeach; ?>
 			</select>
 			
-	        <p class="description"><?php echo __('Select how often you want email alerts for backups.', 'dreamobjects'); ?></p>
-	        <p class="description"><?php echo __('Email notifications can be pretty spammy. If you\'re having issues with backups, turn on either successes or failures. You certainly can email for everything, but that might be a bit of overkill.', 'dreamobjects'); ?></p>
+	        <p class="description"><?php echo __('Select what status notifications you want to see below. DreamObjects will always log all your activity, but only show you what you want.', 'dreamobjects'); ?></p>
 	        <?php
 	    	}
 		function backup_notify_validation( $input ) {

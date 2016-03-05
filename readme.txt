@@ -179,6 +179,7 @@ March 2016 by Ipstenu
 * Migrated to settings API
 * Removed 'reset' and changed to allowing users to edit keys ad hoc
 * Improve translations
+* Status log displayed in dash
 
 = 3.5.2 =
 

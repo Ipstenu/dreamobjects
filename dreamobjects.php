@@ -4,13 +4,13 @@
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 4.0-Beta
+Version: 4.0.0
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
 Text Domain: dreamobjects
 
-Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
+Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
 
     This file is part of DreamObjects, a plugin for WordPress.
 
@@ -29,10 +29,11 @@ Copyright 2012 Mika Epstein (email: ipstenu@ipstenu.org)
 
 */
 
-/**
- * @package dh-do-backups
- */
- 
+global $dreamobjects_db_version, $dreamobjects_table_name;
+
+$dreamobjects_db_version = '4.0.0';
+$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
+  
 function dreamobjects_core_incompatibile( $msg ) {
 	require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	deactivate_plugins( __FILE__ );
@@ -73,6 +74,55 @@ require_once 'lib/settings.php';
 if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
 	require_once 'aws/aws-autoloader.php';
 }
+
+// Filter Cron
+add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
+
+// Etc
+add_action('admin_menu', array('DHDOSET', 'add_settings_page'));
+add_action('dh-do-backup', array('DHDO', 'backup'));
+add_action('dh-do-backupnow', array('DHDO', 'backup'));
+add_action('init', array('DHDO', 'init'));
+
+if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
+	wp_enqueue_script('jquery');
+}
+ 
+// function to create the DB / Options / Defaults					
+function dreamobjects_install() {
+   	global $wpdb, $dreamobjects_table_name, $dreamobjects_db_version;
+  	
+	// create the ECPT metabox database table
+	if($wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name) {
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $dreamobjects_table_name (
+			id mediumint(9) NOT NULL AUTO_INCREMENT,
+			filename tinytext NOT NULL,
+			text text NOT NULL,
+			frequency tinytext NOT NULL,
+			UNIQUE KEY id (id)
+		) $charset_collate;";
+ 
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+
+		//update_option( 'dh-do-version', '$dreamobjects_db_version' );
+	}
+ 
+}
+// run the install scripts upon plugin activation
+register_activation_hook(__FILE__,'dreamobjects_install');
+
+// Update check
+function dreamobjects_update_db_check() {
+    global $dreamobjects_db_version;
+    if ( get_site_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
+        dreamobjects_install();
+    }
+}
+add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );
 
 // WP-CLI
 if ( defined('WP_CLI') && WP_CLI ) {

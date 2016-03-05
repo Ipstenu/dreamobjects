@@ -36,19 +36,4 @@ if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled'
 if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '5' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
-if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'disabled' );}
-if ( !get_option('dh-do-status')) {update_option( 'dh-do-status', '' );}
-if ( !get_option('dh-do-reset')) {update_option( 'dh-do-reset', 'N' );}
-
-// Filter Cron
-add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
-
-// Etc
-add_action('admin_menu', array('DHDOSET', 'add_settings_page'));
-add_action('dh-do-backup', array('DHDO', 'backup'));
-add_action('dh-do-backupnow', array('DHDO', 'backup'));
-add_action('init', array('DHDO', 'init'));
-
-if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
-	wp_enqueue_script('jquery');
-}
+if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'success' );}

@@ -21,7 +21,7 @@
 if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	exit ();
 
-// Deregister
+	// Deregister
     delete_option( 'dh-do-backupsection' );
     delete_option( 'dh-do-bucket' );
     delete_option( 'dh-do-key' );
@@ -32,8 +32,11 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	delete_option( 'dh-do-retain' )
     delete_option( 'dh-do-notify' );
     delete_option( 'dh-do-reset' );
-    delete_option('dh-do-status')
 
-// Unschedule
+	// Unschedule
     wp_clear_scheduled_hook( 'dh-do-backupnow');
     wp_clear_scheduled_hook( 'dh-do-backup');
+
+	// Delete table
+	global $wpdb;
+	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dreamobjects_backup_log" );
