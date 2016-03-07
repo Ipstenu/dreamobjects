@@ -37,3 +37,17 @@ if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', 
 if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '5' );}
 if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
 if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'success' );}
+
+// Requirements
+$dreamobjects_requirements_check = array(
+	'php'       => '5.3.3',
+	'wp'        => '4.0',
+	'curl'      => '7.16.2',
+	'multisite' => false,
+	'curlssl'   => true,
+	'plugins'   => array(
+		'Amazon Web Services' => 'amazon-web-services/amazon-web-services.php',
+		'BackupBuddy'         => 'backupbuddy/backupbuddy.php',
+		),
+);
+update_option( 'dh-do-requirements', $dreamobjects_requirements_check );

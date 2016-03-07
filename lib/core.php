@@ -1,17 +1,5 @@
 <?php
-
 /*
-Plugin Name: DreamObjects Backups
-Plugin URI: https://github.com/Ipstenu/dreamobjects
-Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 4.0
-Author: Mika Epstein
-Author URI: http://ipstenu.org/
-Network: false
-Text Domain: dreamobjects
-
-Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
-
     This file is part of DreamObjects, a plugin for WordPress.
 
     DreamObjects is free software: you can redistribute it and/or modify
@@ -29,43 +17,15 @@ Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
 
 */
 
-global $dreamobjects_db_version, $dreamobjects_table_name, $wpdb;
+if (!defined('ABSPATH')) {
+    die();
+}
+
+global $dreamobjects_db_version, $dreamobjects_table_name;
 
 $dreamobjects_db_version = '4.0';
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 
-require_once 'lib/requirements.php';
-
-add_action( 'admin_init', 'dreamobjects_requirements');
-
-function dreamobjects_requirements() {
-	$dreamobjects_requirements_check = get_option( 'dh-do-requirements' );
-	
-	foreach ( $dreamobjects_requirements_check as $key => $value ) {
-		$run_test = 'dreamobjects_pass_'.$key;
-		$message = $run_test.'_message';
-		
-		if ( !$run_test || call_user_func($run_test) === false ) {
-			$message = $run_test.'_message';
-			add_action( 'admin_notices', $message );
-			add_action( 'admin_print_styles', 'dreamobjects_requirements_css' );
-			deactivate_plugins( __FILE__ );
-		}
-	}
-}
-
-function dreamobjects_requirements_css() {
-	?>
-	<style type="text/css">
-	div#message.notice.is-dismissible {
-	    display: none;
-	}
-	</style>
-	<?php
-}  
-require_once 'lib/defines.php';
-require_once 'lib/dhdo.php';
-require_once 'lib/settings.php';
 if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
 	require_once 'aws/aws-autoloader.php';
 }
