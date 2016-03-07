@@ -21,6 +21,11 @@ if (!defined('ABSPATH')) {
     die();
 }
 
+global $dreamobjects_db_version, $dreamobjects_table_name, $wpdb;
+
+$dreamobjects_db_version = '4.0';
+$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
+
 // Set up defaults
 define( 'DHDO', true);
 defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));

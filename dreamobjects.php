@@ -29,11 +29,6 @@ Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
 
 */
 
-global $dreamobjects_db_version, $dreamobjects_table_name, $wpdb;
-
-$dreamobjects_db_version = '4.0';
-$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
-
 require_once 'lib/requirements.php';
 
 add_action( 'admin_init', 'dreamobjects_requirements');
@@ -113,6 +108,8 @@ function dreamobjects_update_db_check() {
     if ( get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
         dreamobjects_install();
         update_option( 'dh-do-version', '$dreamobjects_db_version' );
+        
+        // NB - If there's ever a need to update the requirements (see /lib/defines), do it here.
     }
 }
 add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );
