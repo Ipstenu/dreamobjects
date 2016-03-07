@@ -180,6 +180,7 @@ March 2016 by Ipstenu
 * Removed 'reset' and changed to allowing users to edit keys ad hoc
 * Improve translations
 * Status log displayed in dash
+* Plugin will now try to backup .htaccess if it can
 
 = 3.5.2 =
 
@@ -217,3 +218,5 @@ August 11, 2014 by Ipstenu
 See changelog.txt
 
 == Upgrade notice ==
+
+4.0 is a major visual overhaul. Code functionality remains the same, but the interface has been improved.

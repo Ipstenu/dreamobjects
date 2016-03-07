@@ -21,7 +21,6 @@ if (!defined('ABSPATH')) {
     die();
 }
 
-
 if( class_exists( 'DHDO' ) ) {
 	WP_CLI::add_command( 'dreamobjects', 'DreamObjects_Command' );
 }
@@ -45,7 +44,13 @@ class DreamObjects_Command extends WP_CLI_Command {
 		do_action('dh-do-backup', array('DHDO', 'backup'));
 		WP_CLI::success( 'Backup Complete' );
 	}
-	
+
+	/**
+	 * Reset debug log 
+	 *
+	 * @param array $args
+	 * @param array $vars
+	 */	
 	function resetlog( $args = array(), $vars = array() ) {
 		DHDO::logger('reset');
 		WP_CLI::success( 'Debug log wiped' );

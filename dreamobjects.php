@@ -4,7 +4,7 @@
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 4.0.0
+Version: 4.0
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
@@ -31,7 +31,7 @@ Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
 
 global $dreamobjects_db_version, $dreamobjects_table_name;
 
-$dreamobjects_db_version = '4.0.0';
+$dreamobjects_db_version = '4.0';
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
   
 function dreamobjects_core_incompatibile( $msg ) {
@@ -47,7 +47,12 @@ if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 	if ( version_compare( PHP_VERSION, '5.3.3', '<' ) ) {
 		dreamobjects_core_incompatibile( __( 'The official Amazon Web Services SDK, which DreamObjects Backups relies on, requires PHP 5.3 or higher. The plugin has now disabled itself.', 'dreamobjects' ) );
 	}
-	elseif ( !function_exists( 'curl_version' ) 
+
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+	    dreamobjects_core_incompatibile( __( 'DreamObjects Backups does not run on Windows servers. The plugin has now disabled itself.', 'dreamobjects' ) );
+	}
+	
+	if ( !function_exists( 'curl_version' ) 
 		|| !( $curl = curl_version() ) || empty( $curl['version'] ) || empty( $curl['features'] )
 		|| version_compare( $curl['version'], '7.16.2', '<' ) )
 	{
@@ -58,11 +63,17 @@ if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 	}
 	elseif ( !( $curl['features'] & CURL_VERSION_LIBZ ) ) {
 		dreamobjects_core_incompatibile( __( 'The official Amazon Web Services SDK, which DreamObjects Backups relies on, requires that cURL is compiled with zlib. The plugin has now disabled itself.', 'dreamobjects' ) );
-	} elseif ( is_multisite() ) {
+	}
+	
+	if ( is_multisite() ) {
 		dreamobjects_core_incompatibile( __( 'Sorry, but DreamObjects Backups is not currently compatible with WordPress Multisite, and should not be used. The plugin has now disabled itself.', 'dreamobjects' ) );
-	} elseif (is_plugin_active( 'amazon-web-services/amazon-web-services.php' )) {
+	} 
+	
+	if (is_plugin_active( 'amazon-web-services/amazon-web-services.php' )) {
 	dreamobjects_core_incompatibile( __( 'Running both DreamObjects Backups AND BackupBuddy at once will cause a rift in the space/time continuum, because we use different versions of the AWS SDK. Please deactivate BackupBuddy if you wish to use DreamObjects.', 'dreamobjects' ) );
-	} elseif (is_plugin_active( 'backupbuddy/backupbuddy.php' )) {
+	}
+	
+	if (is_plugin_active( 'backupbuddy/backupbuddy.php' )) {
 	dreamobjects_core_incompatibile( __( 'Running both DreamObjects Backups AND Amazon Web Services at once will cause a rift in the space/time continuum, because we use different versions of the AWS SDK. Please deactivate Amazon Web Services if you wish to use DreamObjects.', 'dreamobjects' ) );
 	}
 }
@@ -91,7 +102,7 @@ if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] 
 // function to create the DB / Options / Defaults					
 function dreamobjects_install() {
    	global $wpdb, $dreamobjects_table_name, $dreamobjects_db_version;
-  	
+   	
 	// create the ECPT metabox database table
 	if($wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name) {
 
@@ -107,10 +118,7 @@ function dreamobjects_install() {
  
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
-
-		//update_option( 'dh-do-version', '$dreamobjects_db_version' );
-	}
- 
+	} 
 }
 // run the install scripts upon plugin activation
 register_activation_hook(__FILE__,'dreamobjects_install');
@@ -118,8 +126,9 @@ register_activation_hook(__FILE__,'dreamobjects_install');
 // Update check
 function dreamobjects_update_db_check() {
     global $dreamobjects_db_version;
-    if ( get_site_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
+    if ( get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
         dreamobjects_install();
+        update_option( 'dh-do-version', '$dreamobjects_db_version' );
     }
 }
 add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );

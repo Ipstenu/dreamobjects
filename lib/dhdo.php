@@ -237,6 +237,13 @@ class DHDO {
 				DHDO::logger( $message );
 		    }
 
+			if ( file_exists(ABSPATH .'\.htaccess') ) {
+		        $backups[] = ABSPATH .'\.htaccess' ;
+				$message = __('A copy of .htaccess has been added to backup list.', 'dreamobjects' );
+				DHDO::logger( $message );
+		    }
+
+
         } 
         
         // And me DB!
