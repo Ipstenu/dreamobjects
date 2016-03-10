@@ -29,7 +29,7 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
     delete_option( 'dh-do-secretkey' );
     delete_option( 'dh-do-section' );
     delete_option( 'dh-do-logging' );
-	delete_option( 'dh-do-retain' )
+	delete_option( 'dh-do-retain' );
     delete_option( 'dh-do-notify' );
     delete_option( 'dh-do-reset' );
 
