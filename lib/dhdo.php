@@ -80,12 +80,14 @@ class DHDO {
 		if ( $msg == "reset" ) {
 			$fd = fopen($file, "w+");
 			$str = "";
+	        fwrite($fd, $str);
+	        fclose($fd);
 		} elseif ( get_option('dh-do-logging') == 'on' ) {    
             $fd = fopen($file, "a");
             $str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
+	        fwrite($fd, $str);
+	        fclose($fd);
        	}
-        fwrite($fd, $str);
-        fclose($fd);
     }
 
     /**
@@ -237,8 +239,8 @@ class DHDO {
 				DHDO::logger( $message );
 		    }
 
-			if ( file_exists(ABSPATH .'\.htaccess') ) {
-		        $backups[] = ABSPATH .'\.htaccess' ;
+			if ( file_exists(ABSPATH .'.htaccess') ) {
+		        $backups[] = ABSPATH .'.htaccess' ;
 				$message = __('A copy of .htaccess has been added to backup list.', 'dreamobjects' );
 				DHDO::logger( $message );
 		    }

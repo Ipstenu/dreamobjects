@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 4.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 <em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
 
 = Backup Features =
+
 * Automatically backs up your site (DB and files) to your DreamObjects cloud on a daily, weekly, or monthly schedule.
 * Retains a limitable number of backups at any given time (so as not to charge you the moon when you have a large site).
 * Provides <a href="https://wp-cli.org/">wp-cli</a> hooks to do the same
@@ -168,6 +169,13 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 4.0.1 =
+
+March 2016 by Ipstenu
+
+* Fixing .htaccess backups
+* Fixing fwrite, moving it to a more checked location since it's being stupid.
 
 = 4.0 =
 
