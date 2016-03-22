@@ -322,7 +322,7 @@ class DHDOSET {
 			foreach ( $input as $key => $value ) {
 				$thissection = sanitize_text_field($value);
 				
-				if ( $input[$key] !== $thissection || !array_key_exists( $thissection, $availablesections )  ) {
+				if ( $input[$key] !== $thissection || !in_array( $thissection, $availablesections )  ) {
 					$error = true;
 				} else {
 					$thesesections[$key] = $thissection;
