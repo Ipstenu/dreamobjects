@@ -197,14 +197,14 @@ class DHDO {
 			$zip = new ZipArchive( $file );
 			$zaresult = true;
 			$message = __( 'ZipArchive found and will be used for backups.', 'dreamobjects' );
-			DHDO::logger($message);
+			DHDO::logger( $message );
 		} catch ( Exception $e ) {
 			$error_string = $e->getMessage();
 			$zip = new PclZip($file);
 			$message = sprintf( __('ZipArchive not found. Error:  %s', 'dreamobjects' ), $error_string );
 			DHDO::logger( $message );
 			$message = __( 'PclZip will be used for backups.', 'dreamobjects' );
-			DHDO::logger($message);
+			DHDO::logger( $message );
 			require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
 			$zaresult = false;
 		}
@@ -291,7 +291,7 @@ class DHDO {
             } else {
             $message = __( 'Creating zip file using ZipArchive.' , 'dreamobjects' );
             DHDO::logger( $message );
-            $message = __( 'NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider increasing the server\'s PHP memory, RAM or CPU.' , 'dreamobjects' );
+            $message = __( 'NOTICE: If the log stops here, PHP failed to create a zip of your wp-content folder. Please consider increasing the server\'s PHP memory, RAM, or CPU.' , 'dreamobjects' );
             DHDO::logger( $message );
 	            	try {
 		            	$zip->open( $file, ZipArchive::CREATE );
@@ -309,7 +309,7 @@ class DHDO {
 	            		$error_string = $e->getMessage();
 	            		$message = sprintf( __('ZipArchive failed to complete: %s', 'dreamobjects' ), $error_string );
 					DHDO::logger( $message );
-					DHDO::notifier( $filenicename, $message, 'failure');
+					DHDO::notifier( $filenicename, $message, 'failure' );
 	            	}
             }
 
@@ -321,15 +321,15 @@ class DHDO {
 			} else {
 				@unlink($file);
 				$message = __('Zip file failed to generate. Nothing will be backed up.', 'dreamobjects' );
-				DHDO::logger($message);
-				DHDO::notifier( $filenicename, $message, 'failure');
+				DHDO::logger( $message );
+				DHDO::notifier( $filenicename, $message, 'failure' );
 			}
 			
 			// Delete SQL
             if(file_exists($sqlfile)) { 
                 @unlink($sqlfile);
                 $message = sprintf( __('Deleting SQL file: %s', 'dreamobjects' ), $sqlfile );
-                DHDO::logger($message);
+                DHDO::logger( $message );
             }			
             
             // Upload
@@ -355,18 +355,18 @@ class DHDO {
 				// Uploading
 	            set_time_limit(180);
 				$message = __('Beginning upload to DreamObjects servers.', 'dreamobjects' );
-				DHDO::logger($message);
+				DHDO::logger( $message );
 	
 				// Check the size of the file before we upload, in order to compensate for large files
 				if ( @filesize($file) >= (100 * 1024 * 1024) ) {
 	
 					// Files larger than 100megs go through Multipart
 					$message = __('File size is over 100megs, using Multipart uploader.', 'dreamobjects' );
-					DHDO::logger($message);
+					DHDO::logger( $message );
 					
 					// High Level
-					$message = __('Prepare the upload parameters and upload parts in 25M chunks.', 'dreamobjects' );
-					DHDO::logger($message);
+					$message = __('Preparing the upload parameters and upload parts in 25M chunks.', 'dreamobjects' );
+					DHDO::logger( $message );
 					
 					$uploader = UploadBuilder::newInstance()
 					    ->setClient($s3)
@@ -386,30 +386,30 @@ class DHDO {
 					$uploader->getEventDispatcher()->addListener(
 					    'multipart_upload.after_part_upload', 
 					    function($event) {
-						    $message = sprintf( __('Part %d uploaded ...', 'dreamobjects' ), $event["state"]->count() );
-					        DHDO::logger($message);
+						    $message = sprintf( __( 'Part %d uploaded ...', 'dreamobjects' ), $event["state"]->count() );
+					        DHDO::logger( $message );
 					    }
 					);
 					
 					try {
-						$message = __('Beginning upload to the cloud. This may take a while (5 minutes for every 75 megs or so).', 'dreamobjects' );
-						DHDO::logger($message);
+						$message = __( 'Beginning Multipart upload to the cloud. This may take a while (5 minutes for every 75 megs or so).', 'dreamobjects' );
+						DHDO::logger( $message );
 						set_time_limit(180);
 					    $uploader->upload();
-					    $message = __('SUCCESS: Upload to the cloud complete!', 'dreamobjects' );
-					    DHDO::logger($message);
-					    	DHDO::notifier( $filenicename, $message,'success');
+					    $message = __('SUCCESS: Multipart upload to the cloud complete!', 'dreamobjects' );
+					    DHDO::logger( $message );
+					    	DHDO::notifier( $filenicename, $message, 'success' );
 					} catch (MultipartUploadException $e) {
 					    $uploader->abort();
-					    $message = sprintf( __('FAILURE: Upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
+					    $message = sprintf( __('FAILURE: Multipart upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
 					    DHDO::logger( $message );
-					    DHDO::notifier( $filenicename, $message,'failure');
+					    DHDO::notifier( $filenicename, $message, 'failure' );
 					}
 	
 				} else {
 					// If it's under 100megs, do it the old way
 					$message = __('File size is under 100megs. This will be less spammy.', 'dreamobjects' );
-					DHDO::logger($message);
+					DHDO::logger( $message );
 					
 					set_time_limit(180); // 3 min 
 					try {
@@ -425,12 +425,12 @@ class DHDO {
 						    )
 						));
 						$message = __('SUCCESS: Upload to the cloud complete!', 'dreamobjects' );
-						DHDO::logger($message);
+						DHDO::logger( $message );
 						DHDO::notifier( $filenicename, $message, 'success');
 					} catch (S3Exception $e) {
 						$message = sprintf( __('FAILURE: Upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
 					    DHDO::logger( $message );
-					    DHDO::notifier( $filenicename, $message, 'failure');
+					    DHDO::notifier( $filenicename, $message, 'failure' );
 					}
 				}
 				
@@ -440,8 +440,8 @@ class DHDO {
 */
 			} else {
 				$message = __('FAILURE: Nothing to upload.', 'dreamobjects' );
-				DHDO::logger($message);
-				DHDO::notifier( $filenicename, $message, 'failure');
+				DHDO::logger( $message );
+				DHDO::notifier( $filenicename, $message, 'failure' );
 			}
 
             // Cleanup
@@ -453,13 +453,13 @@ class DHDO {
             if(file_exists($sqlfile)) { 
                 @unlink($sqlfile);
                 $message = sprintf( __('Deleting sql file: %s', 'dreamobjects' ), $sqlfile );
-                DHDO::logger($message);
+                DHDO::logger( $message );
             }
         }
         
         // Cleanup Old Backups
         $message = __('Checking for backups to be deleted from the cloud.', 'dreamobjects' );
-        DHDO::logger($message);
+        DHDO::logger( $message );
         if ( $backup_result = 'Yes' && get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
             $num_backups = get_option('dh-do-retain');
 
@@ -495,10 +495,10 @@ class DHDO {
             }
         } else {
 	        $message = __('Per user retention choice, not deleting a single old backup.', 'dreamobjects' );
-	        DHDO::logger($message);
+	        DHDO::logger( $message );
         }
         $message = __('Backup Complete.', 'dreamobjects' );
-        DHDO::logger($message);
+        DHDO::logger( $message );
         DHDO::logger('');
     }
     function cron_schedules($schedules) {
