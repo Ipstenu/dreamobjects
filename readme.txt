@@ -170,6 +170,13 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
+= 4.0.2 =
+
+May 2016 by Ipstenu
+
+* Updating AWS files
+* Change hostname to objects-us-west-1.dream.io
+
 = 4.0.1 =
 
 March 2016 by Ipstenu
