@@ -34,6 +34,7 @@ defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 // Setting Options
+if ( !get_option('dh-do-hostname')) {update_option( 'dh-do-hostname', 'objects-us-west-1.dream.io' );}
 if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
 if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
 if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}

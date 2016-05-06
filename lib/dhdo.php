@@ -339,7 +339,7 @@ class DHDO {
 			  	$s3 = AwsS3DHDO::factory(array(
 					'key'      => get_option('dh-do-key'),
 				    'secret'   => get_option('dh-do-secretkey'),
-				    'base_url' => 'http://objects-us-west-1.dream.io',
+				    'base_url' => 'http://'.get_option('dh-do-hostname'),
 				));
 	
 /*
@@ -466,7 +466,7 @@ class DHDO {
 		  	$s3 = AwsS3DHDO::factory(array(
 				'key'      => get_option('dh-do-key'),
 			    'secret'   => get_option('dh-do-secretkey'),
-			    'base_url' => 'http://objects-us-west-1.dream.io',
+			    'base_url' => 'http://'.get_option('dh-do-hostname'),
 			));
 
             $bucket = get_option('dh-do-bucket');

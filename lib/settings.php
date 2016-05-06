@@ -33,7 +33,7 @@ class DHDOSET {
         $s3config = array(
 		    'key'      => get_option('dh-do-key'),
 		    'secret'   => get_option('dh-do-secretkey'),
-		    'base_url' => 'http://objects-us-west-1.dream.io',
+		    'base_url' => 'http://'.get_option('dh-do-hostname'),
 		);
 
 		try {
@@ -120,7 +120,7 @@ class DHDOSET {
 		$s3config = array(
 		    'key'     => get_option('dh-do-key'),
 		    'secret'  => get_option('dh-do-secretkey'),
-		    'base_url' => 'http://objects-us-west-1.dream.io',
+		    'base_url' => 'http://'.get_option('dh-do-hostname'),
 		);
 
     		// Keypair settings
