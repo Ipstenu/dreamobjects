@@ -177,7 +177,8 @@ May 2016 by Ipstenu
 * Update AWS files
 * Change hostname to objects-us-west-1.dream.io
 * Change language on new setups based on user feedback
-* More checks on when to display content you can use.
+* Improve check on when to show content
+* Prevent multiple ASAP backups from running at the same time
 
 = 4.0.1 =
 
