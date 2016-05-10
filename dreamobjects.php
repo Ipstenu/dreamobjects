@@ -3,8 +3,8 @@
 /*
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
-Description: Connect your WordPress install to your DreamHost DreamObjects buckets.
-Version: 4.0.1
+Description: Secure your WordPress data. Backup your WordPress site on a regular basis to DreamObjects for extra protection. To get started: 1) Click the "Activate" link to the left of this description, 2) Sign up for an DreamObjects storage plan to get a public and secret key, 3) Go to your DreamObjects configuration page, and save your keys.
+Version: 4.0.2
 Author: Mika Epstein
 Author URI: http://ipstenu.org/
 Network: false
@@ -59,62 +59,10 @@ function dreamobjects_requirements_css() {
 	<?php
 }  
 require_once 'lib/defines.php';
+require_once 'lib/core.php';
 require_once 'lib/dhdo.php';
 require_once 'lib/settings.php';
+
 if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
 	require_once 'aws/aws-autoloader.php';
-}
-
-// Filter Cron
-add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
-
-// Etc
-add_action('admin_menu', array('DHDOSET', 'add_settings_page'));
-add_action('dh-do-backup', array('DHDO', 'backup'));
-add_action('dh-do-backupnow', array('DHDO', 'backup'));
-add_action('init', array('DHDO', 'init'));
-
-if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] == 'dh-do-backupnow' ) ) {
-	wp_enqueue_script('jquery');
-}
- 
-// function to create the DB / Options / Defaults					
-function dreamobjects_install() {
-   	global $wpdb, $dreamobjects_table_name, $dreamobjects_db_version;
-   	
-	// create the ECPT metabox database table
-	if($wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name) {
-
-		$charset_collate = $wpdb->get_charset_collate();
-
-		$sql = "CREATE TABLE $dreamobjects_table_name (
-			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			filename tinytext NOT NULL,
-			text text NOT NULL,
-			frequency tinytext NOT NULL,
-			UNIQUE KEY id (id)
-		) $charset_collate;";
- 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-	} 
-}
-// run the install scripts upon plugin activation
-register_activation_hook(__FILE__,'dreamobjects_install');
-
-// Update check
-function dreamobjects_update_db_check() {
-    global $dreamobjects_db_version;
-    if ( get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
-        dreamobjects_install();
-        update_option( 'dh-do-version', '$dreamobjects_db_version' );
-        
-        // NB - If there's ever a need to update the requirements (see /lib/defines), do it here.
-    }
-}
-add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );
-
-// WP-CLI
-if ( defined('WP_CLI') && WP_CLI ) {
-	include( 'lib/wp-cli.php' );
 }

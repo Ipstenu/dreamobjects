@@ -26,10 +26,6 @@ global $dreamobjects_db_version, $dreamobjects_table_name;
 $dreamobjects_db_version = '4.0';
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 
-if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
-	require_once 'aws/aws-autoloader.php';
-}
-
 // Filter Cron
 add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
 
@@ -72,7 +68,9 @@ function dreamobjects_update_db_check() {
     global $dreamobjects_db_version;
     if ( get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
         dreamobjects_install();
-        update_option( 'dh-do-version', '$dreamobjects_db_version' );
+        update_option( 'dh-do-version', $dreamobjects_db_version );
+        
+        // NB - If there's ever a need to update the requirements (see /lib/defines), do it here.
     }
 }
 add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );

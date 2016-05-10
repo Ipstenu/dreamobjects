@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 4.0.1
+Stable tag: 4.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -174,8 +174,10 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 May 2016 by Ipstenu
 
-* Updating AWS files
+* Update AWS files
 * Change hostname to objects-us-west-1.dream.io
+* Change language on new setups based on user feedback
+* More checks on when to display content you can use.
 
 = 4.0.1 =
 

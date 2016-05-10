@@ -33,6 +33,8 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
     delete_option( 'dh-do-notify' );
     delete_option( 'dh-do-reset' );
     delete_option( 'dh-do-hostname' );
+    delete_option( 'dh-do-requirements' );
+    delete_option( 'dh-do-backupnow' );
 
 	// Unschedule
     wp_clear_scheduled_hook( 'dh-do-backupnow');

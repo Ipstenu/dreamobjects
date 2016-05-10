@@ -30,7 +30,7 @@ use Aws\S3\S3Client;
 </script>
 
 <div class="wrap">
-    <h2><?php echo __("DreamObjects Backup Settings", 'dreamobjects'); ?></h2>
+    <h2><?php echo __('DreamObjects Backup Settings', 'dreamobjects'); ?></h2>
 
 	<?php settings_errors(); ?>
     <form method="post" action="options.php">
@@ -42,18 +42,26 @@ use Aws\S3\S3Client;
     </form>
 
     <?php 
-	    if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) {
-            include('backups-retain.php');
-		} 
+    if ( get_option('dh-do-bucket') != "XXXX" && !empty(get_option('dh-do-backupsection')) ) {
+        include('backups-retain.php');
 	?>
 
     <form method="post" action="options.php">
         <?php
             settings_fields( 'dh-do-backupnow-settings' );
             do_settings_sections( 'dh-do-backupnow_page' );
-            submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
+            
+            if ( empty(wp_next_scheduled( 'dh-do-backupnow' ) ) && get_option('dh-do-backupnow') !== 'Y' ) {
+				submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
+            } else {
+	            echo '<p>';
+	            submit_button( __('Backup In Progress','dreamobjects') , 'secondary', null,  null, array('disabled'=>'disabled') );
+	            echo '</p>';
+            }
         ?>
     </form>
-
+	<?php
+	}
+	?>
 
 </div>

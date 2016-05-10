@@ -67,7 +67,7 @@ class DHDO {
     }
 
     // Returns the URL of the plugin's folder.
-    function getURL() {
+    static function getURL() {
         return plugins_url() . '/';
     }
    
@@ -500,6 +500,7 @@ class DHDO {
         $message = __('Backup Complete.', 'dreamobjects' );
         DHDO::logger( $message );
         DHDO::logger('');
+        delete_option( 'dh-do-backupnow' );
     }
     function cron_schedules($schedules) {
         $schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');

@@ -25,7 +25,7 @@ use Aws\S3\S3Client;
 
 class DHDOSET {
 
-	function get_client() {
+	static function get_client() {
 		if ( !get_option('dh-do-key') || !get_option('dh-do-secretkey') ) {
 			return new WP_Error( 'access_keys_missing', sprintf( __( '<div class="dashicons dashicons-no"></div> Please <a href="%s">set your access keys</a> first.', 'dreamobjects' ), 'admin.php?page=dreamobjects-menu' ) );
 		}
@@ -45,7 +45,7 @@ class DHDOSET {
 		return $s3;
 	}
 
-	function get_buckets() {
+	static function get_buckets() {
 		try {
 			$result = DHDOSET::get_client()->listBuckets();
 		}
@@ -55,14 +55,14 @@ class DHDOSET {
 		return $result;
 	}
 	
-	function get_sections() {
+	static function get_sections() {
 		$sections = array(
 			'files'    => __('All Files', 'dreamobjects'),
 			'database' => __('Database', 'dreamobjects')
 		);
 		return $sections;
 	}
-	function get_schedule() {
+	static function get_schedule() {
 		$schedule = array(
 			'disabled' => __('Disabled', 'dreamobjects'),
 			'daily'    => __('Daily', 'dreamobjects'),
@@ -71,13 +71,13 @@ class DHDOSET {
 		);
 		return $schedule;
 	}
-	function get_retain() {
+	static function get_retain() {
 		$retain = array('1','2','5','10','15','30','60','90','all');
 		return $retain;
 	}
-	function get_notify() {
+	static function get_notify() {
 		$notify = array(
-			'disabled' => __('Disabled', 'dreamobjects'),
+			'disabled' => __('None', 'dreamobjects'),
 			'success'  => __('Success', 'dreamobjects'),
 			'failure'  => __('Failure', 'dreamobjects'),
 			'all'      => __('All', 'dreamobjects')
@@ -91,7 +91,6 @@ class DHDOSET {
     */
     // Main Settings Pages
     public static function add_settings_page() {
-        load_plugin_textdomain(dreamobjects, DHDO_PLUGIN_DIR . 'i18n', 'i18n');
         add_action('admin_init', array('DHDOSET', 'add_register_settings'));
         add_menu_page(__('DreamObjects Settings', 'dreamobjects'), __('DreamObjects', 'dreamobjects'), 'manage_options', 'dreamobjects-menu', array('DHDOSET', 'settings_page'), 'dashicons-backup' );
         
@@ -133,12 +132,7 @@ class DHDOSET {
         add_settings_field( 'secretkey_id', __('Secret Key', 'dreamobjects'), 'secretkey_callback', 'dh-do-keypair_page', 'keypair_id' );
 
         function keypair_callback() { 
-			if ( !get_option('dh-do-key') || !get_option('dh-do-secretkey') ) {
-		    		echo '<p>';
-		    		printf( __( 'If you don\'t have DreamObjects yet, you will need to <a href="%s">sign up for an account</a>.', 'dreamobjects' ), 'https://www.dreamhost.com/cloud/storage/' );
-				printf( __( 'If you do have DreamObjects, you can find your keys in your <a href="%s">panel</a>:', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
-		    		echo '</p>';
-			}
+			// Nothing here
         }
 	    	function key_callback() {
 	        ?><input type="text" id="dh-do-key" name="dh-do-key" value="<?php echo get_option('dh-do-key'); ?>" class="regular-text"  size="50" autocomplete="off"/><?php
@@ -175,7 +169,7 @@ class DHDOSET {
 		    	}
 		    	
 		    ?><input type="text" id="dh-do-secretkey" name="dh-do-secretkey" value="<?php echo $secretkey ?>" class="regular-text"  size="50" autocomplete="off"/>
-		    <p><div class="dashicons dashicons-shield"></div><?php _e( 'Once saved, your secret will not display again for your own security.', 'dreamobjects' ); ?></p>
+		    <p><div class="dashicons dashicons-shield"></div><?php _e( 'Your secret key will not display for your own security.', 'dreamobjects' ); ?></p>
 		    <?php
 	    	}
 	    	function secretkey_validation( $input ) {
@@ -246,7 +240,7 @@ class DHDOSET {
         register_setting( 'dh-do-backuper-settings', 'dh-do-bucket', 'backup_bucket_validation' );
         add_settings_field( 'dh-do-bucket_id',  __('Bucket Name', 'dreamobjects'), 'backup_bucket_callback', 'dh-do-backuper_page', 'backuper_id' );
 
-        if ( get_option('dh-do-bucket') && ( !get_option('dh-do-bucket') || (get_option('dh-do-bucket') != "XXXX") ) ) {
+        if ( get_option('dh-do-bucket') != "XXXX" ) {
             register_setting( 'dh-do-backuper-settings', 'dh-do-backupsection', 'backup_what_validation' );
             add_settings_field( 'dh-do-backupsection_id',  __('What to Backup', 'dreamobjects'), 'backup_what_callback', 'dh-do-backuper_page', 'backuper_id' );
             register_setting( 'dh-do-backuper-settings', 'dh-do-schedule', 'backup_sched_validation' );
@@ -258,7 +252,15 @@ class DHDOSET {
         }
         
         function backuper_callback() { 
-            echo __( 'Configure your site for backups by selecting your bucket, what you want to backup, and when.', 'dreamobjects');
+            echo '<p>'.__( 'Configure your site for backups by selecting your bucket, what you want to backup, and when.', 'dreamobjects').'</p>';
+            
+			$buckets = DHDOSET::get_buckets();
+
+			echo '<p>';
+			if ( get_option('dh-do-bucket') == 'XXXX' && empty($buckets['Buckets']) ) {	
+				printf( __( 'To create a bucket, go to your <a href="%s" target="_new">DreamObjects Panel for DreamObjects</a> and click the "Add Buckets" button. Give the bucket a name and click "Save." Once you have a bucket, come back to this configuration page and select the bucket you just created.', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+			}
+			echo '</p>';
         }
         function backup_bucket_callback() {
             $buckets = DHDOSET::get_buckets();
@@ -269,7 +271,13 @@ class DHDOSET {
 						<option <?php if ( $bucket['Name'] == get_option('dh-do-bucket') ) echo 'selected="selected"' ?> ><?php echo esc_attr( $bucket['Name'] ) ?></option>
                     <?php } ?>
                 </select>
-				<p class="description"><?php echo __('Select from pre-existing buckets.', 'dreamobjects'); ?></p><?php
+				<p class="description"><?php 
+					if ( get_option('dh-do-bucket') !== 'XXXX' && !empty($buckets['Buckets']) ) {
+						echo __('Select from pre-existing buckets.', 'dreamobjects');
+					} else {
+						printf( __( 'You need to <a href="%s" target="_new">create a bucket</a> before you can perform any backups.', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+					}
+				?></p><?php
 		}
 	    function backup_bucket_validation( $input ) {
 		    	$buckets = DHDOSET::get_buckets();		    	
