@@ -29,6 +29,10 @@ Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
 
 */
 
+if (!defined('ABSPATH')) {
+    die();
+}
+
 require_once 'lib/requirements.php';
 
 add_action( 'admin_init', 'dreamobjects_requirements');

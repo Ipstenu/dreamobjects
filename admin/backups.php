@@ -42,7 +42,8 @@ use Aws\S3\S3Client;
     </form>
 
     <?php 
-    if ( get_option('dh-do-bucket') != "XXXX" && !empty(get_option('dh-do-backupsection')) ) {
+	$backupsection = get_option('dh-do-backupsection');
+    if ( ( get_option('dh-do-bucket') != "XXXX" ) && empty( $backupsection ) ) {
         include('backups-retain.php');
 	?>
 
@@ -51,7 +52,8 @@ use Aws\S3\S3Client;
             settings_fields( 'dh-do-backupnow-settings' );
             do_settings_sections( 'dh-do-backupnow_page' );
             
-            if ( empty(wp_next_scheduled( 'dh-do-backupnow' ) ) && get_option('dh-do-backupnow') !== 'Y' ) {
+            $nextscheduled = wp_next_scheduled( 'dh-do-backupnow' );
+            if ( empty( $nextscheduled ) && get_option('dh-do-backupnow') !== 'Y' ) {
 				submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
             } else {
 	            echo '<p>';

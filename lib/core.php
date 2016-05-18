@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 
 global $dreamobjects_db_version, $dreamobjects_table_name;
 
-$dreamobjects_db_version = '4.0';
+$dreamobjects_db_version = '4.0.2';
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 
 // Filter Cron
@@ -41,10 +41,10 @@ if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] 
  
 // function to create the DB / Options / Defaults					
 function dreamobjects_install() {
-   	global $wpdb, $dreamobjects_table_name, $dreamobjects_db_version;
+   	global $wpdb, $dreamobjects_table_name;
    	
-	// create the ECPT metabox database table
-	if($wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name) {
+	// create the database table
+	if( $wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name ) {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
@@ -61,12 +61,12 @@ function dreamobjects_install() {
 	} 
 }
 // run the install scripts upon plugin activation
-register_activation_hook(__FILE__,'dreamobjects_install');
+register_activation_hook( __FILE__ , 'dreamobjects_install' );
 
 // Update check
 function dreamobjects_update_db_check() {
     global $dreamobjects_db_version;
-    if ( get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
+    if ( !get_option('dh-do-version') || get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
         dreamobjects_install();
         update_option( 'dh-do-version', $dreamobjects_db_version );
         
