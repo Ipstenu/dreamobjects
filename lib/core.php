@@ -74,8 +74,3 @@ function dreamobjects_update_db_check() {
     }
 }
 add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );
-
-// WP-CLI
-if ( defined('WP_CLI') && WP_CLI ) {
-	include( 'wp-cli.php' );
-}

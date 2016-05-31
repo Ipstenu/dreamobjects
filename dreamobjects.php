@@ -70,3 +70,8 @@ require_once 'lib/settings.php';
 if (false === class_exists('Symfony\Component\ClassLoader\UniversalClassLoader', false)) {
 	require_once 'aws/aws-autoloader.php';
 }
+
+// WP-CLI
+if ( defined('WP_CLI') && WP_CLI ) {
+	include( 'lib/wp-cli.php' );
+}
