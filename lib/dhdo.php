@@ -502,7 +502,7 @@ class DHDO {
         DHDO::logger('');
         delete_option( 'dh-do-backupnow' );
     }
-    function cron_schedules($schedules) {
+    public function cron_schedules($schedules) {
         $schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');
         $schedules['weekly'] = array('interval'=>604800, 'display' => 'Once Weekly');
         $schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');

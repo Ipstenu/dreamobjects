@@ -485,8 +485,6 @@ class DHDOSET {
 			      'updated'
 			    );
 		    }
-
-			return $backup;
 		}
 
     }

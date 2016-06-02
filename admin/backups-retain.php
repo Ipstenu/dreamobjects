@@ -66,7 +66,9 @@ if ( get_option('dh-do-retain') === 'all' ) {
 	}
 
     $bucket = get_option('dh-do-bucket');
-    $prefix = next(explode('//', home_url()));
+    $homeurl = home_url();
+    $prefix = explode('//', $homeurl );
+    $prefix = next ($prefix);
     
     try {
     		$backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));

@@ -43,7 +43,7 @@ use Aws\S3\S3Client;
 
     <?php 
 	$backupsection = get_option('dh-do-backupsection');
-    if ( ( get_option('dh-do-bucket') != "XXXX" ) && empty( $backupsection ) ) {
+    if ( ( get_option('dh-do-bucket') != "XXXX" ) && !empty( $backupsection ) ) {
         include('backups-retain.php');
 	?>
 

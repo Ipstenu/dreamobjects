@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 4.5
-Stable tag: 4.0.3
+Stable tag: 4.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,14 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 1. The uploader page, as seen by Authors
 
 == Changelog ==
+
+= 4.0.4 = 
+
+June 2016 by Ipstenu
+
+* Fix typo that caused ad-hoc notice to display twice
+* Correct display of completed backups
+* Fix unexpected output on activation in some situations
 
 = 4.0.3 =
 
