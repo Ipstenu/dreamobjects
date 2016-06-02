@@ -77,7 +77,7 @@ class DHDOSET {
 	}
 	static function get_notify() {
 		$notify = array(
-			'disabled' => __('None', 'dreamobjects'),
+			'disabled' => __('Disabled', 'dreamobjects'),
 			'success'  => __('Success', 'dreamobjects'),
 			'failure'  => __('Failure', 'dreamobjects'),
 			'all'      => __('All', 'dreamobjects')

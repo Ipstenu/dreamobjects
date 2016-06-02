@@ -38,9 +38,9 @@ if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] 
  
 // function to create the DB / Options / Defaults					
 function dreamobjects_install() {
-   	global $wpdb, $dreamobjects_db_version;
+	global $wpdb, $dreamobjects_db_version;
    	
-   	//$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
+	$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
    	
 	// create the database table
 	if( $wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name ) {

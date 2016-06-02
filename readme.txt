@@ -165,8 +165,7 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 1. Your DreamObjects Public Key
 1. The Settings Page
 1. The backup page
-1. The uploader page, as seen by Admins
-1. The uploader page, as seen by Authors
+1. Stored backups
 
 == Changelog ==
 
@@ -177,6 +176,8 @@ June 2016 by Ipstenu
 * Fix typo that caused ad-hoc notice to display twice
 * Correct display of completed backups
 * Fix unexpected output on activation in some situations
+* Correct typo that prevented disabling notifications
+* Updated screenshots
 
 = 4.0.3 =
 

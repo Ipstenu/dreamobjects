@@ -23,24 +23,25 @@ if (!defined('ABSPATH')) {
 
 use Aws\S3\S3Client;
 
-global $wpdb, $dreamobjects_table_name;
+global $wpdb;
 
+$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 $frequency = get_option('dh-do-notify');
 $total = get_option('dh-do-retain');
 $showbackups = TRUE;
 
 ?><h3>Recent Backup Status</h3><?php
 
-if ( get_option('dh-do-retain') === 'all' ) { 
+if ( get_option('dh-do-notify') === 'all' ) { 
 	?><p><?php echo __('Showing all backups on the cloud is a little crazy and kills servers. You\'ll need to go to your panel.', 'dreamobjects'); ?></p><?php
 } elseif ( $frequency === 'disabled' ) {
 	?><p><?php echo __('You have disabled status notifications. If you just want to see successful backups, chose that.', 'dreamobjects'); ?></p><?php	
 } else {
 	
 	if ( $frequency === 'all' ) {
-		$statusmatch = $wpdb->get_results( "SELECT * FROM $dreamobjects_table_name" );
+		$statusmatch = $wpdb->get_results( "SELECT * FROM '.$dreamobjects_table_name.';" );
 	} else {
-		$statusmatch = $wpdb->get_results( "SELECT * FROM $dreamobjects_table_name WHERE frequency = '$frequency'" );
+		$statusmatch = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$dreamobjects_table_name} WHERE frequency LIKE %s;", $frequency ) );
 	}
 
 	if ( empty($statusmatch) ) {
