@@ -105,6 +105,8 @@ class DHDO {
 
 		if ( get_option('dh-do-notify') !== 'disabled' ) {
 		    global $wpdb;
+
+		    dreamobjects_install();
 			$table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 			
 			$wpdb->insert( 
