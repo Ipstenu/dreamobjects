@@ -2,7 +2,7 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
-Tested up to: 4.8
+Tested up to: 4.9
 Stable tag: 4.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,6 +26,16 @@ Well now that we've gotten the sales-pitch out of the way, DreamObjects Connecti
 = Credit =
 
 Version 3.5 and up would not have been possible without the work Brad Touesnard did with <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>. His incorporation of the AWS SDK v 2.x was the cornerstone to this plugin working better.
+
+= Privacy Policy =
+
+By using this plugin, data will be sent to DreamObjects, a subsidiary of DreamHost. As you are required to register for a DreamObjects account, you have already agreed to the DreamHost.com [terms of service](https://www.dreamhost.com/legal/terms-of-service/) and [privacy policy](https://www.dreamhost.com/legal/privacy-policy/). Those terms are applicable to all data transmitted.
+
+The following information is sent to DreamObjects:
+
+* Your domain name and IP address
+* Your private and secret keys
+* Your backup zip file
 
 == Installation ==
 
@@ -169,12 +179,6 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
-= 4.0.5 = 
-July 2017 by Ipstenu
-
-* Development changes
-* Better checks for table existence
-
 = 4.0.4 = 
 
 June 2016 by Ipstenu
@@ -220,6 +224,37 @@ March 2016 by Ipstenu
 * Improve translations
 * Status log displayed in dash
 * Plugin will now try to backup .htaccess if it can
+
+= 3.5.2 =
+
+April 2015 by Ipstenu
+
+* Hashes and 4.2 compat.
+
+= 3.5.1 =
+
+December 11, 2014 by Ipstenu
+
+* Changed SDK to newest version: 2.7.9
+* Corrected deprecated warning with WP-CLI
+
+= 3.5 =
+
+August 11, 2014 by Ipstenu
+
+* Changed SDK to newest version: 2.6.12 (<a href="http://blogs.aws.amazon.com/php/post/Tx2PDR0J3NL0YKN/Release-AWS-SDK-for-PHP-Version-2-6-12">official release notes</a>)
+* Many code concepts learned from <a href="https://wordpress.org/plugins/amazon-web-services/">Amazon Web Services</a>.
+* Added support for ZipArchive, with graceful fallback to PclZip if needed, to fix Windows unzip issues
+* `/cache/` folder is not backed up anymore
+* Backs up `wp-config.php` sometimes... (if you put it in a weird place, I'm not responsible)
+* Backup ignores `wp-content` if it's nearly 2G (blame PHP, not me!)
+* Zip has shorter paths (unzipped, it's /dreamobjects-backup/wp-content/etc)
+* Improved multipart uploads, which should allow for large files in a better way (worked up to 428M!)
+* Force disable on Multisite, which you shouldn't be using since it breaks six ways from Sunday anyway
+* Security tightening: hiding things, making things harder for people to run, safer command usage
+* Improved debug logging
+* Removed uploader for both security and support reasons. It was bad and I feel bad.
+* New wp-cli command: `wp dreamobjects resetlog` (resets the debug log)
 
 = Previous Versions =
 
