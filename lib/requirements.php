@@ -18,7 +18,7 @@
 */
 
 if (!defined('ABSPATH')) {
-    die();
+	die();
 } 
 
 function dreamobjects_pass_php( ) {

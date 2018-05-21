@@ -18,7 +18,7 @@
 */
 
 if (!defined('ABSPATH')) {
-    die();
+	die();
 }
 
 // Set up defaults
@@ -29,15 +29,15 @@ defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE
 if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 // Setting Options
-if ( !get_option('dh-do-hostname')) {update_option( 'dh-do-hostname', 'objects-us-west-1.dream.io' );}
-if ( !get_option('dh-do-key')) {update_option( 'dh-do-key', '' );}
-if ( !get_option('dh-do-secretkey')) {update_option( 'dh-do-secretkey', '' );}
-if ( !get_option('dh-do-bucket')) {update_option( 'dh-do-bucket', 'XXXX' );}
-if ( !get_option('dh-do-schedule')) {update_option( 'dh-do-schedule', 'disabled' );}
-if ( !get_option('dh-do-backupsection')) {update_option( 'dh-do-backupsection', '' );}
-if ( !get_option('dh-do-retain')) {update_option( 'dh-do-retain', '5' );}
-if ( !get_option('dh-do-logging')) {update_option( 'dh-do-logging', 'off' );}
-if ( !get_option('dh-do-notify')) {update_option( 'dh-do-notify', 'success' );}
+if ( !get_option('dh-do-hostname') ) { update_option( 'dh-do-hostname', 'objects-us-east-1.dream.io' ); }
+if ( !get_option('dh-do-key')) { update_option( 'dh-do-key', '' ); }
+if ( !get_option('dh-do-secretkey')) { update_option( 'dh-do-secretkey', '' ); }
+if ( !get_option('dh-do-bucket')) { update_option( 'dh-do-bucket', 'XXXX' ); }
+if ( !get_option('dh-do-schedule')) { update_option( 'dh-do-schedule', 'disabled' ); }
+if ( !get_option('dh-do-backupsection')) { update_option( 'dh-do-backupsection', '' ); }
+if ( !get_option('dh-do-retain')) { update_option( 'dh-do-retain', '5' ); }
+if ( !get_option('dh-do-logging')) { update_option( 'dh-do-logging', 'off' ); }
+if ( !get_option('dh-do-notify')) { update_option( 'dh-do-notify', 'success' ); }
 
 // Requirements
 $dreamobjects_requirements_check = array(
@@ -49,6 +49,6 @@ $dreamobjects_requirements_check = array(
 	'plugins'   => array(
 		'Amazon Web Services' => 'amazon-web-services/amazon-web-services.php',
 		'BackupBuddy'         => 'backupbuddy/backupbuddy.php',
-		),
+	),
 );
 update_option( 'dh-do-requirements', $dreamobjects_requirements_check );

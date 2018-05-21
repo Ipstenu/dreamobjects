@@ -1,25 +1,23 @@
 <?php
 /*
-    This file is part of DreamObjects, a plugin for WordPress.
+	This file is part of DreamObjects, a plugin for WordPress.
 
-    DreamObjects is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 2 of the License, or
-    (at your option) any later version.
+	DreamObjects is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 2 of the License, or
+	(at your option) any later version.
 
-    DreamObjects is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	DreamObjects is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-if (!defined('ABSPATH')) {
-    die();
-}
+if (!defined('ABSPATH')) { die(); }
 
 use Aws\S3\S3Client;
 
@@ -53,26 +51,26 @@ if ( get_option('dh-do-notify') === 'all' ) {
 	$linksvalid_string = sprintf( __('Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects'), $timestamp );									
 
 	$config = array(
-	    'key'     => get_option('dh-do-key'),
-	    'secret'  => get_option('dh-do-secretkey'),
-	    'base_url' => 'https://'.get_option('dh-do-hostname'),
+		'key'     => get_option('dh-do-key'),
+		'secret'  => get_option('dh-do-secretkey'),
+		'base_url' => 'https://'.get_option('dh-do-hostname'),
 	);
 	
 	try {
 		$s3 = S3Client::factory( $config );
 	} catch ( \Aws\S3\Exception\S3Exception $e) {
-	    echo $e->getAwsErrorCode() . "\n";
-	    echo $e->getMessage() . "\n";
+		echo $e->getAwsErrorCode() . "\n";
+		echo $e->getMessage() . "\n";
 		$showbackups = FALSE;
 	}
 
-    $bucket = get_option('dh-do-bucket');
-    $homeurl = home_url();
-    $prefix = explode('//', $homeurl );
-    $prefix = next ($prefix);
-    
-    try {
-    		$backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));
+	$bucket = get_option('dh-do-bucket');
+	$homeurl = home_url();
+	$prefix = explode('//', $homeurl );
+	$prefix = next ($prefix);
+	
+	try {
+			$backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));
 		$backaupsarray = $backups->toArray();
 	} catch (S3Exception $e) {
 		echo __('There are no backups currently stored. Why not run a backup now?', 'dreamobjects');
@@ -108,9 +106,9 @@ if ( get_option('dh-do-notify') === 'all' ) {
 
 	// If there are no backups and the logs are empty, use the old way
 	if ($showbackups === FALSE && empty($statusmatch) && $frequency !== 'failure' ) {
-        echo '<ol>';
+		echo '<ol>';
 		foreach ($backups as $backup) {
-		    echo '<li><a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes').'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']).'</li>';								    
+			echo '<li><a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes').'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']).'</li>';
 		}
 		echo '</ol>';
 	}

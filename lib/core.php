@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 global $dreamobjects_db_version;
-$dreamobjects_db_version = '4.0.2';
+$dreamobjects_db_version = '4.0.5';
 
 // Filter Cron
 add_filter('cron_schedules', array('DHDO', 'cron_schedules'));
@@ -36,12 +36,12 @@ if ( isset($_GET['page']) && ( $_GET['page'] == 'dh-do-backup' || $_GET['page'] 
 	wp_enqueue_script('jquery');
 }
  
-// function to create the DB / Options / Defaults					
+// function to create the DB / Options / Defaults
 function dreamobjects_install() {
 	global $wpdb, $dreamobjects_db_version;
-   	
+
 	$dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
-   	
+
 	// create the database table
 	if( $wpdb->get_var("show tables like '$dreamobjects_table_name'") != $dreamobjects_table_name ) {
 
@@ -54,21 +54,29 @@ function dreamobjects_install() {
 			frequency tinytext NOT NULL,
 			UNIQUE KEY id (id)
 		) $charset_collate;";
- 
+
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
-	} 
+	}
+
+	// Figure out if we need to change the hostname...
+	$date = new DateTime( '2018-10-01' );
+	$now  = new DateTime();
+	if ( $now >= $date && get_option('dh-do-hostname') == 'objects-us-west-1.dream.io' ) {
+		update_option( 'dh-do-hostname', 'objects-us-east-1.dream.io' );
+	}
+
 }
 // run the install scripts upon plugin activation
 register_activation_hook( __FILE__ , 'dreamobjects_install' );
 
 // Update check
 function dreamobjects_update_db_check() {
-    global $dreamobjects_db_version;
-    if ( !get_option('dh-do-version') || get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
-        dreamobjects_install();
-        update_option( 'dh-do-version', $dreamobjects_db_version );
-        // NB - If there's ever a need to update the requirements (see /lib/defines), do it here.
-    }
+	global $dreamobjects_db_version;
+	if ( !get_option('dh-do-version') || get_option( 'dh-do-version' ) != $dreamobjects_db_version ) {
+		dreamobjects_install();
+		update_option( 'dh-do-version', $dreamobjects_db_version );
+		// NB - If there's ever a need to update the requirements (see /lib/defines), do it here.
+	}
 }
 add_action( 'plugins_loaded', 'dreamobjects_update_db_check' );

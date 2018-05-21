@@ -1,3 +1,10 @@
+= 4.0.5 = 
+
+May 2018 by Ipstenu
+
+* Changed base hostname to new datacenter
+* Formatting cleanup
+
 = 4.0.4 = 
 
 June 2016 by Ipstenu
