@@ -2,14 +2,14 @@
 /*
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
-Description: Secure your WordPress data. Backup your WordPress site on a regular basis to DreamObjects for extra protection. To get started: 1) Click the "Activate" link to the left of this description, 2) Sign up for an DreamObjects storage plan to get a public and secret key, 3) Go to your DreamObjects configuration page, and save your keys.
+Description: Secure your WordPress data. Backup your WordPress site on a regular basis to DreamObjects for extra protection. To get started: Activate this plugin and then sign up for an DreamObjects storage plan to get a public and secret key. Go to your DreamObjects configuration page, and save your keys to begin backups.
 Version: 4.0.5
 Author: Mika Epstein
-Author URI: http://ipstenu.org/
+Author URI: http://halfelf.org/
 Network: false
 Text Domain: dreamobjects
 
-Copyright 2012-2016 Mika Epstein (email: ipstenu@ipstenu.org)
+Copyright 2012-2017 Mika Epstein (email: ipstenu@halfelf.org)
 
     This file is part of DreamObjects, a plugin for WordPress.
 

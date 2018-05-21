@@ -23,6 +23,7 @@ use Aws\S3\S3Client;
 
 global $wpdb;
 
+dreamobjects_install();
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 $frequency = get_option('dh-do-notify');
 $total = get_option('dh-do-retain');
