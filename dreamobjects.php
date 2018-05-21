@@ -9,7 +9,7 @@ Author URI: http://halfelf.org/
 Network: false
 Text Domain: dreamobjects
 
-Copyright 2012-2017 Mika Epstein (email: ipstenu@halfelf.org)
+Copyright 2012-2018 Mika Epstein (email: ipstenu@halfelf.org)
 
     This file is part of DreamObjects, a plugin for WordPress.
 
