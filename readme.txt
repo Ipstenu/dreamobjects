@@ -77,13 +77,11 @@ In a perfect world it would also backup your `wp-config.php` and `.htaccess`, bu
 
 <strong>How big a site can this back up?</strong>
 
-PHP has a hard limit of 2G (see <a href="http://docs.aws.amazon.com/aws-sdk-php/guide/latest/faq.html#why-can-t-i-upload-or-download-files-greater-than-2gb">Why can't I upload or download files greater than 2GB?</a>), so as long as this is uploading a zip of your content, it will be stuck there. Sorry.
+PHP has a hard limit of 2G (see <a href="http://docs.aws.amazon.com/aws-sdk-php/guide/latest/faq.html#why-can-t-i-upload-or-download-files-greater-than-2gb">Why can't I upload or download files greater than 2GB?</a>). Sorry.
 
 <strong>Why does my backup run but not back anything up?</strong>
 
-Your backup may be too big for your server to handle.
-
-A quick way to test if this is happening still is by trying to only backup the SQL. If that works, then it's the size of your total backup.
+Your backup may be too big for your server to handle. A quick way to test if this is happening still is by trying to only backup the SQL. If that works, then it's the size of your total backup.
 
 <strong>Wait, you said it could back up 2G! What gives?</strong>
 
@@ -104,10 +102,6 @@ I admit, it's in a weird spot: `/wp-content/upgrade/RANDOM-dreamobjects-backup.s
 
 Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for me to delete.
 
-<strong>My backup is small, but it won't back up!</strong>
-
-Did you use defines for your HOME_URL and/or SITE_URL? For some reason, PHP gets bibbeldy about that. I'm working on a solution!
-
 = Using the Plugin =
 
 <strong>How often can I schedule backups?</strong>
@@ -120,19 +114,11 @@ Yep! It actually sets it to run in 60 seconds, but works out the same.
 
 <strong>I disabled `wp-cron`. Will this work?</strong>
 
-Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. 'curl http://domain.com/wp-cron.php'). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
-
-<strong>I kicked off an ASAP backup, but it says don't refresh the page. How do I know it's done?</strong>
-
-By revisiting the page, <em>but not</em> pressing refresh. Refresh is a funny thing. It re-runs what you last did, so you might accidentally kick off another backup. You probably don't want that. The list isn't dynamically generated either, so just sitting on the page waiting won't do anything except entertain you as much as watching paint dry.
-
-My suggestions: Visit another part of your site and go get a cup of coffee, or something else that will kill time for about two minutes. Then come back to the backups page. Just click on it from the admin sidebar. You'll see your backup is done.
-
-(Yes, I want to make a better notification about that, I have to master AJAX.)
+Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. `curl http://domain.com/wp-cron.php` or something similar). That will call your regular backups. ASAP backup, however, will need you to manually visit the cron page.
 
 <strong>How long does it keep backups?</strong>
 
-Since you get charged on space used for DreamObjects, the default is to retain the last 15 backups. If you need more, you can save up to 90 backups, however that's rarely needed.
+Since you get charged on space used for DreamObjects, the default is to retain the last 5 backups. If you need more, you can save all your backups, but I don't recommend it.
 
 <strong>Can I keep them forever?</strong>
 
@@ -148,14 +134,6 @@ wp dreamobjects resetlog
 </pre>
 
 The 'backup' command runs an immediate backup, while the `resetlog` command wipes your debug log.
-
-<strong>Why doesn't it have a CDN?</strong>
-
-Because we went with a slightly different feature with the CDN, and as such it's best as a separate plugin. Don't worry, they'll play nice!
-
-<strong>Where did the uploader go!?</strong>
-
-Away. It was never really used well and the CDN plugin will handle this much better. WP's just not the best tool for the job there.
 
 = Errors =
 
@@ -189,6 +167,7 @@ June 2018 by Ipstenu
 * Changed base hostname to new datacenter
 * Formatting cleanup
 * Upgrade AWS to version 3.x
+* Cleaned up notices
 
 = Previous Versions =
 

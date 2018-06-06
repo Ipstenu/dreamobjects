@@ -1,9 +1,11 @@
-= 4.0.5 = 
+= 4.1.0 = 
 
-May 2018 by Ipstenu
+June 2018 by Ipstenu
 
 * Changed base hostname to new datacenter
 * Formatting cleanup
+* Upgrade AWS to version 3.x
+* Cleaned up notices
 
 = 4.0.4 = 
 
