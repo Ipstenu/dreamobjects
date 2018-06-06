@@ -17,31 +17,27 @@
 
 */
 
-if (!defined('ABSPATH')) {
+if (!defined('ABSPATH' )) {
 	die();
 }
 
-// Set up defaults
-define( 'DHDO', true);
-defined( 'DHDO_PLUGIN_DIR') || define('DHDO_PLUGIN_DIR', realpath(dirname(__FILE__) . '/..'));
-
 // Standard content folder defines.
-if ( ! defined( 'WP_CONTENT_DIR' ) )  define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+if ( ! defined( 'WP_CONTENT_DIR' ) ) define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 
 // Setting Options
-if ( !get_option('dh-do-hostname') ) { update_option( 'dh-do-hostname', 'objects-us-east-1.dream.io' ); }
-if ( !get_option('dh-do-key')) { update_option( 'dh-do-key', '' ); }
-if ( !get_option('dh-do-secretkey')) { update_option( 'dh-do-secretkey', '' ); }
-if ( !get_option('dh-do-bucket')) { update_option( 'dh-do-bucket', 'XXXX' ); }
-if ( !get_option('dh-do-schedule')) { update_option( 'dh-do-schedule', 'disabled' ); }
-if ( !get_option('dh-do-backupsection')) { update_option( 'dh-do-backupsection', '' ); }
-if ( !get_option('dh-do-retain')) { update_option( 'dh-do-retain', '5' ); }
-if ( !get_option('dh-do-logging')) { update_option( 'dh-do-logging', 'off' ); }
-if ( !get_option('dh-do-notify')) { update_option( 'dh-do-notify', 'success' ); }
+if ( !get_option( 'dh-do-hostname' ) )      { update_option( 'dh-do-hostname', 'us-west-1' ); }
+if ( !get_option( 'dh-do-key' ) )           { update_option( 'dh-do-key', '' ); }
+if ( !get_option( 'dh-do-secretkey' ) )     { update_option( 'dh-do-secretkey', '' ); }
+if ( !get_option( 'dh-do-bucket' ) )        { update_option( 'dh-do-bucket', 'XXXX' ); }
+if ( !get_option( 'dh-do-schedule' ) )      { update_option( 'dh-do-schedule', 'disabled' ); }
+if ( !get_option( 'dh-do-backupsection' ) ) { update_option( 'dh-do-backupsection', '' ); }
+if ( !get_option( 'dh-do-retain' ) )        { update_option( 'dh-do-retain', '5' ); }
+if ( !get_option( 'dh-do-logging' ) )       { update_option( 'dh-do-logging', 'off' ); }
+if ( !get_option( 'dh-do-notify' ) )        { update_option( 'dh-do-notify', 'success' ); }
 
 // Requirements
 $dreamobjects_requirements_check = array(
-	'php'       => '5.3.3',
+	'php'       => '5.6',
 	'wp'        => '4.0',
 	'curl'      => '7.16.2',
 	'multisite' => false,

@@ -8,6 +8,10 @@ This is the development repository for the DreamObjects Backup plugin.
 
 ## Update
 
+To update libraries, run:  `composer update` 
+
+To update for WP:
+
 * Copy the code from ~/Development/wordpress/plugins-git/dreamobjects to ~/Development/wordpress/plugins-svn/trunk/dreamobjects
 
 ```

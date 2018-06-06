@@ -17,11 +17,9 @@
 
 */
 
-if (!defined('ABSPATH')) {
-	die();
-}
+if (!defined( 'ABSPATH' ) ) die();
 
-use Aws\S3\S3Client as AwsS3DHDO;
+use Aws\S3\S3Client;
 
 use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
@@ -35,32 +33,32 @@ class DHDO {
 	public static function init() {
 
 		// The Scheduler
-		if ( isset($_POST['dh-do-schedule']) && current_user_can('manage_options') ) {
+		if ( isset($_POST['dh-do-schedule']) && current_user_can( 'manage_options' ) ) {
 			
-			check_admin_referer('dh-do-backuper-settings-options');
-			wp_clear_scheduled_hook('dh-do-backup');
+			check_admin_referer( 'dh-do-backuper-settings-options' );
+			wp_clear_scheduled_hook( 'dh-do-backup' );
 			
 			$do_schedule = sanitize_text_field($_POST['dh-do-schedule']);
 			
 			if ( $do_schedule != 'disabled' ) {
-				wp_schedule_event(current_time('timestamp',true)+86400, $do_schedule, 'dh-do-backup');
-				$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option('time_format') );
-				$scheduledbackup = sprintf( __('Scheduled %s backup.', 'dreamobjects' ), $do_schedule );
-				$nextbackup = sprintf( __('Next backup: %s', 'dreamobjects' ), $timestamp );
+				wp_schedule_event(current_time( 'timestamp',true)+86400, $do_schedule, 'dh-do-backup' );
+				$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option( 'time_format' ) );
+				$scheduledbackup = sprintf( __( 'Scheduled %s backup.', 'dreamobjects' ), $do_schedule );
+				$nextbackup = sprintf( __( 'Next backup: %s', 'dreamobjects' ), $timestamp );
 				DHDO::logger( $scheduledbackup.' '.$nextbackup );
 			}
 		}
 
 		// LOGGER: Wipe logger if blank
-		if ( current_user_can('manage_options') && get_option('dh-do-logging') == 'off' ) {
-			DHDO::logger('reset');
+		if ( current_user_can( 'manage_options' ) && get_option( 'dh-do-logging' ) == 'off' ) {
+			DHDO::logger( 'reset' );
 		}       
 
 		// BACKUP ASAP
-		if ( current_user_can('manage_options') && isset($_POST['dh-do-backupnow']) ) {
-			check_admin_referer('dh-do-backupnow-settings-options');
-			wp_schedule_single_event( current_time('timestamp', true)+60, 'dh-do-backupnow');
-			$message = __('Scheduled ASAP backup in 60 seconds.', 'dreamobjects' );
+		if ( current_user_can( 'manage_options' ) && isset($_POST['dh-do-backupnow']) ) {
+			check_admin_referer( 'dh-do-backupnow-settings-options' );
+			wp_schedule_single_event( current_time( 'timestamp', true)+60, 'dh-do-backupnow' );
+			$message = __( 'Scheduled ASAP backup in 60 seconds.', 'dreamobjects' );
 			DHDO::logger( $message );
 		}
 
@@ -76,18 +74,18 @@ class DHDO {
 	 *
 	 */
 	public static function logger($msg) {
-		$file = DHDO_PLUGIN_DIR."/debug.txt";
-		if ( $msg == "reset" ) {
-			$fd = fopen($file, "w+");
-			$str = "";
+		$file = plugin_dir_path( dirname( __FILE__ ) ) . '/debug.txt';
+		if ( $msg == 'reset' ) {
+			$fd = fopen( $file, 'w+' );
+			$str = '';
+			fwrite( $fd, $str );
+			fclose( $fd );
+		} elseif ( get_option( 'dh-do-logging' ) == 'on' ) {
+			$fd = fopen( $file, 'a' );
+			$str = "[" . date("Y/m/d h:i:s", current_time( 'timestamp' ) ) . "] " . $msg . "\n";
 			fwrite($fd, $str);
 			fclose($fd);
-		} elseif ( get_option('dh-do-logging') == 'on' ) {
-			$fd = fopen($file, "a");
-			$str = "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $msg . "\n";
-			fwrite($fd, $str);
-			fclose($fd);
-	   	}
+		}
 	}
 
 	/**
@@ -103,10 +101,10 @@ class DHDO {
 	 */
 	public static function notifier($filename, $message, $frequency) {
 
-		if ( get_option('dh-do-notify') !== 'disabled' ) {
+		if ( get_option( 'dh-do-notify' ) !== 'disabled' ) {
 			global $wpdb;
 
-			dreamobjects_install();
+			DreamObjects_Core::install();
 
 			$table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 			
@@ -115,7 +113,7 @@ class DHDO {
 				array( 
 					'filename' => $filename, 
 					'frequency' => $frequency, 
-					'text' => "[" . date("Y/m/d h:i:s", current_time('timestamp')) . "] " . $message, 
+					'text' => "[" . date("Y/m/d h:i:s", current_time( 'timestamp' ) ) . "] " . $message, 
 				)
 			);
 		}
@@ -127,9 +125,9 @@ class DHDO {
 	 */
 		
 	// Scan folders to collect all the filenames
-	function rscandir($base='') {
-		$data = array_diff(scandir($base), array('.', '..'));
-		$omit = array('\/cache');
+	function rscandir($base='' ) {
+		$data = array_diff(scandir($base), array( '.', '..' ) );
+		$omit = array( '\/cache' );
 	
 		$subs = array();
 		foreach($data as $key => $value) :
@@ -145,7 +143,7 @@ class DHDO {
 			$data = array_merge($data, $sub);
 		}
 		return $data;
-		$message = __('Scanned folders and files to generate list for backup.', 'dreamobjects' );
+		$message = __( 'Scanned folders and files to generate list for backup.', 'dreamobjects' );
 		DHDO::logger( $message );
 	
 		foreach( $omit as $omitter ) {
@@ -155,43 +153,42 @@ class DHDO {
 		DHDO::logger( print_r($data) );
 
 		return $data;
-		$message = __('Scanned folders and files to generate list for backup.', 'dreamobjects' );
+		$message = __( 'Scanned folders and files to generate list for backup.', 'dreamobjects' );
 		DHDO::logger( $message );
 	}
 	
 	// The actual backup
-	function backup() {
+	static function backup() {
 		global $wpdb;
 
 		$backupfolder = WP_CONTENT_DIR . '/upgrade/';
-		$backuphash = wp_hash( wp_rand() );
-		$file = $backupfolder.$backuphash.'-dreamobject-backup.zip';
-		$fileurl = content_url() . '/upgrade/dreamobject-backup.zip';
+		$backuphash   = wp_hash( wp_rand() );
+		$file         = $backupfolder . $backuphash . '-dreamobject-backup.zip';
+		$fileurl      = content_url() . '/upgrade/dreamobject-backup.zip';
+		$bucket       = get_option( 'dh-do-bucket' );
+		$homeurl      = home_url();
+		$prefix       = explode( '//', $homeurl );
+		$prefix       = next( $prefix );
+		$filenicename = $prefix . '/' . date_i18n( 'Y-m-d-His', current_time( 'timestamp' ) ) . '.zip';
 
-		$bucket = get_option('dh-do-bucket');
-		$parseUrl = parse_url(trim(home_url()));
-		$url = $parseUrl['host'];
-		if( isset($parseUrl['path']) ) { $url .= $parseUrl['path']; }
-		$filenicename = $url.'/'.date_i18n('Y-m-d-His', current_time('timestamp')) . '.zip';
-		
-		$message = __('Beginning Backup', 'dreamobjects' );
+		$message = sprintf( __( 'Beginning backup for %1$s ...', 'dreamobjects' ), $filenicename );
 		DHDO::logger( $message );
 
 		if (!is_dir( WP_CONTENT_DIR . '/upgrade/' )) {
-			$message = __('Upgrade folder missing. This will cause serious issues with WP in general, so we will create it for you.', 'dreamobjects' );
+			$message = __( 'Upgrade folder missing. This will cause serious issues with WP in general, so we will create it for you.', 'dreamobjects' );
 			DHDO::logger( $message );
-			mkdir( WP_CONTENT_DIR . '/upgrade/' );       
+			mkdir( WP_CONTENT_DIR . '/upgrade/' );
 		}
 		
 		// Pull in data for what to backup
-		$sections = get_option('dh-do-backupsection');
+		$sections = get_option( 'dh-do-backupsection' );
 		if ( !$sections ) {
 			$sections = array();
 		}
 
 		// Pre-Cleanup
 		foreach ( glob ( $backupfolder.'*.zip' ) as $oldzip ) {
-			$message = sprintf( __('Leftover zip file found, deleting %s ...', 'dreamobjects' ), $oldzip );
+			$message = sprintf( __( 'Leftover zip file found, deleting %s ...', 'dreamobjects' ), $oldzip );
 			DHDO::logger( $message );
 			@unlink($oldzip);
 		}
@@ -204,18 +201,18 @@ class DHDO {
 		} catch ( Exception $e ) {
 			$error_string = $e->getMessage();
 			$zip = new PclZip($file);
-			$message = sprintf( __('ZipArchive not found. Error:  %s', 'dreamobjects' ), $error_string );
+			$message = sprintf( __( 'ZipArchive not found. Error:  %s', 'dreamobjects' ), $error_string );
 			DHDO::logger( $message );
 			$message = __( 'PclZip will be used for backups.', 'dreamobjects' );
 			DHDO::logger( $message );
-			require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php');
+			require_once(ABSPATH . '/wp-admin/includes/class-pclzip.php' );
 			$zaresult = false;
 		}
 
 		$backups = array();
 
 		// All me files!
-		if ( in_array('files', $sections) ) {
+		if ( in_array( 'files', $sections) ) {
 
 			$message = __( 'Calculating backup size...', 'dreamobjects' );
 			DHDO::logger( $message );
@@ -225,34 +222,32 @@ class DHDO {
 			$diskusage = exec( $diskcmd );
 			$diskusage = trim(str_replace($trimdisk, '', $diskusage));
 			
-			DHDO::logger(size_format( $diskusage * 1024 ).' of diskspace will be processed.');
+			DHDO::logger(size_format( $diskusage * 1024 ).' of diskspace will be processed.' );
 			
 			if ($diskusage < ( 2000 * 1024 ) ) {
 				$backups = array_merge($backups, DHDO::rscandir(WP_CONTENT_DIR));
-				$message = sprintf( __('%d files added to backup list.', 'dreamobjects' ), count($backups) );
+				$message = sprintf( __( '%d files added to backup list.', 'dreamobjects' ), count($backups) );
 				DHDO::logger( $message );
 			} else {
-				$message = __('ERROR! PHP is unable to backup your wp-content folder. Please consider cleaning out unused files (like plugins and themes).', 'dreamobjects' );
+				$message = __( 'ERROR! PHP is unable to backup your wp-content folder. Please consider cleaning out unused files (like plugins and themes).', 'dreamobjects' );
 				DHDO::logger( $message );
 			}
 
-			if ( file_exists(ABSPATH .'wp-config.php') ) {
+			if ( file_exists(ABSPATH .'wp-config.php' ) ) {
 				$backups[] = ABSPATH .'wp-config.php' ;
-				$message = __('wp-config.php added to backup list.', 'dreamobjects' );
+				$message = __( 'wp-config.php added to backup list.', 'dreamobjects' );
 				DHDO::logger( $message );
 			}
 
-			if ( file_exists(ABSPATH .'.htaccess') ) {
+			if ( file_exists(ABSPATH .'.htaccess' ) ) {
 				$backups[] = ABSPATH .'.htaccess' ;
-				$message = __('A copy of .htaccess has been added to backup list.', 'dreamobjects' );
+				$message = __( 'A copy of .htaccess has been added to backup list.', 'dreamobjects' );
 				DHDO::logger( $message );
 			}
-
-
 		} 
 		
 		// And me DB!
-		if ( in_array('database', $sections) ) {
+		if ( in_array( 'database', $sections) ) {
 			set_time_limit(300);
 		   
 			$sqlfile = $backupfolder.$backuphash.'-dreamobjects-backup.sql';
@@ -263,7 +258,7 @@ class DHDO {
 
 			// Pre-Cleanup
 			foreach ( glob ( $backupfolder.'*.sql' ) as $oldsql ) {
-				$message = sprintf( __('Leftover SQL file found, deleting %s ...', 'dreamobjects' ), $oldsql );
+				$message = sprintf( __( 'Leftover SQL file found, deleting %s ...', 'dreamobjects' ), $oldsql );
 				DHDO::logger( $message );
 				@unlink($oldsql);
 			}
@@ -274,7 +269,7 @@ class DHDO {
 			exec( $dbcmd );
 			
 			$sqlsize = size_format( @filesize($sqlfile) );
-			$message = sprintf( __('SQL file created: %1$s (%2$s) ...', 'dreamobjects' ), $sqlfile, $sqlsize );
+			$message = sprintf( __( 'SQL file created: %1$s (%2$s) ...', 'dreamobjects' ), $sqlfile, $sqlsize );
 			DHDO::logger( $message );
 			$backups[] = $sqlfile;
 			$message = __( 'SQL added to backup list.' , 'dreamobjects' );
@@ -300,7 +295,7 @@ class DHDO {
 						$zip->open( $file, ZipArchive::CREATE );
 						$trimpath =  ABSPATH ;
 	
-						foreach($backups as $backupfiles) {
+						foreach( $backups as $backupfiles ) {
 							if (strpos( $backupfiles , DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR ) === false) {
 								$zip->addFile($backupfiles, 'dreamobjects-backup'.str_replace($trimpath, '/', $backupfiles) );
 								//DHDO::logger( $backupfiles );
@@ -310,20 +305,20 @@ class DHDO {
 						$zip->close();
 					} catch ( Exception $e ) {
 						$error_string = $e->getMessage();
-						$message = sprintf( __('ZipArchive failed to complete: %s', 'dreamobjects' ), $error_string );
+						$message = sprintf( __( 'ZipArchive failed to complete: %s', 'dreamobjects' ), $error_string );
 					DHDO::logger( $message );
 					DHDO::notifier( $filenicename, $message, 'failure' );
 					}
 			}
 
 			if ( @file_exists( $file ) ) { 
-				DHDO::logger('Calculating zip file size ...');
+				DHDO::logger( 'Calculating zip file size ...' );
 				$zipsize = size_format( @filesize($file) );
-				$message = sprintf( __('Zip file created: %1$s (%2$s) ...', 'dreamobjects' ), $filenicename, $zipsize );
+				$message = sprintf( __( 'Zip file created: %1$s (%2$s) ...', 'dreamobjects' ), $filenicename, $zipsize );
 				DHDO::logger( $message );
 			} else {
 				@unlink($file);
-				$message = __('Zip file failed to generate. Nothing will be backed up.', 'dreamobjects' );
+				$message = __( 'Zip file failed to generate. Nothing will be backed up.', 'dreamobjects' );
 				DHDO::logger( $message );
 				DHDO::notifier( $filenicename, $message, 'failure' );
 			}
@@ -331,44 +326,40 @@ class DHDO {
 			// Delete SQL
 			if(file_exists($sqlfile)) { 
 				@unlink($sqlfile);
-				$message = sprintf( __('Deleting SQL file: %s', 'dreamobjects' ), $sqlfile );
+				$message = sprintf( __( 'Deleting SQL file: %s', 'dreamobjects' ), $sqlfile );
 				DHDO::logger( $message );
-			}			
+			}
 			
 			// Upload
-
+			$message = __( 'Connecting to DreamObjects Server ...', 'dreamobjects' );
+			DHDO::logger( $message );
 			if ( @file_exists( $file ) ) {
-	
-			  	$s3 = AwsS3DHDO::factory(array(
-					'key'      => get_option('dh-do-key'),
-					'secret'   => get_option('dh-do-secretkey'),
-					'base_url' => 'https://'.get_option('dh-do-hostname'),
-				));
-	
+				$s3 = new S3Client( DreamObjects_Core::$s3Options );
+
 /*
 				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/
 				// This should never be used, but if it has to be commented out, it's a bad day.
 				$logPlugin = LogPlugin::getDebugPlugin(TRUE,
 				//Don't provide this parameter to show the log in PHP output
-					fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a')
+					fopen(DHDO_PLUGIN_DIR.'/debug2.txt', 'a' )
 				);
 				$s3->addSubscriber($logPlugin);
 */
 	
 				// Uploading
 				set_time_limit(180);
-				$message = __('Beginning upload to DreamObjects servers.', 'dreamobjects' );
+				$message = __( 'Beginning upload.', 'dreamobjects' );
 				DHDO::logger( $message );
 	
 				// Check the size of the file before we upload, in order to compensate for large files
 				if ( @filesize($file) >= (100 * 1024 * 1024) ) {
 	
 					// Files larger than 100megs go through Multipart
-					$message = __('File size is over 100megs, using Multipart uploader.', 'dreamobjects' );
+					$message = __( 'File size is over 100megs, using Multipart uploader.', 'dreamobjects' );
 					DHDO::logger( $message );
 					
 					// High Level
-					$message = __('Preparing the upload parameters and upload parts in 25M chunks.', 'dreamobjects' );
+					$message = __( 'Preparing the upload parameters and upload parts in 25M chunks.', 'dreamobjects' );
 					DHDO::logger( $message );
 					
 					$uploader = UploadBuilder::newInstance()
@@ -377,11 +368,11 @@ class DHDO {
 						->setBucket($bucket)
 						->setKey($filenicename)
 						->setMinPartSize(25 * 1024 * 1024)
-						->setOption('Metadata', array(
+						->setOption( 'Metadata', array(
 							'UploadedBy' => 'DreamObjectsBackupPlugin',
-							'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp'))
+							'UploadedDate' => date_i18n( 'Y-m-d-His', current_time( 'timestamp' ) )
 						))
-						->setOption('ACL', 'private')
+						->setOption( 'ACL', 'private' )
 						->setConcurrency(3)
 						->build();
 					
@@ -399,19 +390,19 @@ class DHDO {
 						DHDO::logger( $message );
 						set_time_limit(180);
 						$uploader->upload();
-						$message = __('SUCCESS: Multipart upload to the cloud complete!', 'dreamobjects' );
+						$message = __( 'SUCCESS: Multipart upload to the cloud complete!', 'dreamobjects' );
 						DHDO::logger( $message );
 							DHDO::notifier( $filenicename, $message, 'success' );
 					} catch (MultipartUploadException $e) {
 						$uploader->abort();
-						$message = sprintf( __('FAILURE: Multipart upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
+						$message = sprintf( __( 'FAILURE: Multipart upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
 						DHDO::logger( $message );
 						DHDO::notifier( $filenicename, $message, 'failure' );
 					}
 	
 				} else {
 					// If it's under 100megs, do it the old way
-					$message = __('File size is under 100megs. This will be less spammy.', 'dreamobjects' );
+					$message = __( 'File size is under 100megs. This will be less spammy.', 'dreamobjects' );
 					DHDO::logger( $message );
 					
 					set_time_limit(180); // 3 min 
@@ -424,14 +415,14 @@ class DHDO {
 							'ACL'          => 'private',
 							'Metadata'     => array(
 								'UploadedBy'   => 'DreamObjectsBackupPlugin',
-								'UploadedDate' => date_i18n('Y-m-d-His', current_time('timestamp')),
+								'UploadedDate' => date_i18n( 'Y-m-d-His', current_time( 'timestamp' ) ),
 							)
 						));
-						$message = __('SUCCESS: Upload to the cloud complete!', 'dreamobjects' );
+						$message = __( 'SUCCESS: Upload to the cloud complete!', 'dreamobjects' );
 						DHDO::logger( $message );
-						DHDO::notifier( $filenicename, $message, 'success');
+						DHDO::notifier( $filenicename, $message, 'success' );
 					} catch (S3Exception $e) {
-						$message = sprintf( __('FAILURE: Upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
+						$message = sprintf( __( 'FAILURE: Upload to the cloud failed: %s', 'dreamobjects' ), $e->getMessage() );
 						DHDO::logger( $message );
 						DHDO::notifier( $filenicename, $message, 'failure' );
 					}
@@ -442,7 +433,7 @@ class DHDO {
 				$s3->getEventDispatcher()->removeSubscriber($logPlugin);
 */
 			} else {
-				$message = __('FAILURE: Nothing to upload.', 'dreamobjects' );
+				$message = __( 'FAILURE: Nothing to upload.', 'dreamobjects' );
 				DHDO::logger( $message );
 				DHDO::notifier( $filenicename, $message, 'failure' );
 			}
@@ -450,65 +441,67 @@ class DHDO {
 			// Cleanup
 			if(file_exists($file)) { 
 				@unlink($file);
-				$message = sprintf( __('Deleting zip file: %s', 'dreamobjects' ), $file );
+				$message = sprintf( __( 'Deleting zip file: %s', 'dreamobjects' ), $file );
 				DHDO::logger( $message);
 			}
 			if(file_exists($sqlfile)) { 
 				@unlink($sqlfile);
-				$message = sprintf( __('Deleting sql file: %s', 'dreamobjects' ), $sqlfile );
+				$message = sprintf( __( 'Deleting sql file: %s', 'dreamobjects' ), $sqlfile );
 				DHDO::logger( $message );
 			}
 		}
 		
 		// Cleanup Old Backups
-		$message = __('Checking for backups to be deleted from the cloud.', 'dreamobjects' );
+		$message = __( 'Checking for backups to be deleted from the cloud.', 'dreamobjects' );
 		DHDO::logger( $message );
-		if ( $backup_result = 'Yes' && get_option('dh-do-retain') && get_option('dh-do-retain') != 'all' ) {
-			$num_backups = get_option('dh-do-retain');
+		if ( $backup_result = 'Yes' && get_option( 'dh-do-retain' ) && get_option( 'dh-do-retain' ) != 'all' ) {
+			$num_backups = get_option( 'dh-do-retain' );
 
-			$s3 = AwsS3DHDO::factory(array(
-				'key'      => get_option('dh-do-key'),
-				'secret'   => get_option('dh-do-secretkey'),
-				'base_url' => 'https://'.get_option('dh-do-hostname'),
-			));
+			$s3 = new S3Client( DreamObjects_Core::$s3Options );
 
-			$bucket = get_option('dh-do-bucket');
+			$bucket = get_option( 'dh-do-bucket' );
 			
-			$parseUrl = parse_url(trim(home_url()));
+			$parseUrl = parse_url( trim( home_url() ) );
 			$prefixurl = $parseUrl['host'];
 			if( isset($parseUrl['path']) ) 
 				{ $prefixurl .= $parseUrl['path']; }
-			
-			$backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, "Prefix" => $prefixurl ) );
-			
-			if ($backups !== false) {
+
+			$backups = $s3->listObjectsV2( array( 'Bucket' => $bucket, 'Prefix' => $prefixurl ) );
+
+			if ( $backups !== false ) {
 				$backups = $backups->toArray();
-				krsort($backups);
-				$count = 0;
-				foreach ($backups as $object) {
-					if ( ++$count > $num_backups ) {
-						$s3->deleteObject( array(
-							'Bucket' => $bucket,
-							'Key'    => $object['Key'],
-						));
-						$message = sprintf( __('Removed backup %s from the cloud, per user retention choice', 'dreamobjects' ), $object['Key'] );
-						DHDO::logger( $message );
-					}    
+				
+				if ( empty( $backups ) || !array_key_exists( 'Contents', $backups ) || count( $backups['Contents'] ) <= 1 ) {
+					$message = __( 'No backups found that are eligible for deletion.', 'dreamobjects' );
+					DHDO::logger( $message );
+				} else {
+					krsort( $backups['Contents'] );
+					$count = 0;
+					foreach ( $backups['Contents'] as $object ) {
+						if ( ++$count > $num_backups && substr( $object['Key'], -1 ) !== '/') {
+							$s3->deleteObject( array(
+								'Bucket' => $bucket,
+								'Key'    => $object['Key'],
+							));
+							$message = sprintf( __( 'Removed backup %s from the cloud, per user retention choice', 'dreamobjects' ), $object['Key'] );
+							DHDO::logger( $message );
+						}
+					}
 				}
 			}
 		} else {
-			$message = __('Per user retention choice, not deleting a single old backup.', 'dreamobjects' );
+			$message = __( 'Per user retention choice, not deleting a single old backup.', 'dreamobjects' );
 			DHDO::logger( $message );
 		}
-		$message = __('Backup Complete.', 'dreamobjects' );
+		$message = __( 'Backup Complete.', 'dreamobjects' );
 		DHDO::logger( $message );
-		DHDO::logger('');
+		DHDO::logger( '' );
 		delete_option( 'dh-do-backupnow' );
 	}
 	public function cron_schedules($schedules) {
-		$schedules['daily'] = array('interval'=>86400, 'display' => 'Once Daily');
-		$schedules['weekly'] = array('interval'=>604800, 'display' => 'Once Weekly');
-		$schedules['monthly'] = array('interval'=>2592000, 'display' => 'Once Monthly');
+		$schedules['daily'] = array( 'interval'=>86400, 'display' => 'Once Daily' );
+		$schedules['weekly'] = array( 'interval'=>604800, 'display' => 'Once Weekly' );
+		$schedules['monthly'] = array( 'interval'=>2592000, 'display' => 'Once Monthly' );
 		return $schedules;
 	}
 }

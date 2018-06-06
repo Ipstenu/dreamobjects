@@ -57,7 +57,7 @@ use Aws\S3\S3Client;
 				submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
 			} else {
 				echo '<p>';
-				submit_button( __('Backup In Progress','dreamobjects') , 'secondary', null,  null, array('disabled'=>'disabled') );
+				submit_button( __( 'Backup In Progress','dreamobjects' ) , 'secondary', null,  null, array('disabled'=>'disabled') );
 				echo '</p>';
 			}
 		?>

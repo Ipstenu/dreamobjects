@@ -17,24 +17,25 @@
 
 */
 
-if (!defined('ABSPATH')) { die(); }
+if (!defined( 'ABSPATH' )) { die(); }
 
 use Aws\S3\S3Client;
 
 global $wpdb;
 
-dreamobjects_install();
+DreamObjects_Core::install();
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
-$frequency = get_option('dh-do-notify');
-$total = get_option('dh-do-retain');
-$showbackups = TRUE;
+$frequency               = get_option( 'dh-do-notify' );
+$total                   = get_option( 'dh-do-retain' );
+$showbackups             = TRUE;
+$emptybackups            = FALSE;
 
 ?><h3>Recent Backup Status</h3><?php
 
-if ( get_option('dh-do-notify') === 'all' ) { 
-	?><p><?php echo __('Showing all backups on the cloud is a little crazy and kills servers. You\'ll need to go to your panel.', 'dreamobjects'); ?></p><?php
+if ( get_option( 'dh-do-notify' ) === 'all' ) { 
+	?><p><?php echo __( 'Showing all backups on the cloud is a little crazy and kills servers. You\'ll need to go to your panel.', 'dreamobjects' ); ?></p><?php
 } elseif ( $frequency === 'disabled' ) {
-	?><p><?php echo __('You have disabled status notifications. If you just want to see successful backups, chose that.', 'dreamobjects'); ?></p><?php	
+	?><p><?php echo __( 'You have disabled status notifications. If you just want to see successful backups, chose that.', 'dreamobjects' ); ?></p><?php	
 } else {
 	
 	if ( $frequency === 'all' ) {
@@ -43,73 +44,69 @@ if ( get_option('dh-do-notify') === 'all' ) {
 		$statusmatch = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$dreamobjects_table_name} WHERE frequency LIKE %s;", $frequency ) );
 	}
 
-	if ( empty($statusmatch) ) {
+	if ( empty( $statusmatch ) || $frequency == 'failure' ) {
 		$showbackups = FALSE;
 	}
+
+	if ( $showbackups ) {
+
+		$statusshow = array_slice($statusmatch, -$total);  // returns last "total" items.
+		$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', (time()+600) ), get_option( 'time_format' ) );
+		$linksvalid_string = sprintf( __( 'Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects' ), $timestamp );
 	
-	$statusshow = array_slice($statusmatch, -$total);  // returns last "total" items.
-	$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', (time()+600) ), get_option('time_format') );
-	$linksvalid_string = sprintf( __('Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects'), $timestamp );									
-
-	$config = array(
-		'key'     => get_option('dh-do-key'),
-		'secret'  => get_option('dh-do-secretkey'),
-		'base_url' => 'https://'.get_option('dh-do-hostname'),
-	);
+		try {
+			$s3 = new S3Client( DreamObjects_Core::$s3Options );
+		} catch ( \Aws\S3\Exception\S3Exception $e) {
+			echo $e->getAwsErrorCode() . "\n";
+			echo $e->getMessage() . "\n";
+			$emptybackups = TRUE;
+		}
 	
-	try {
-		$s3 = S3Client::factory( $config );
-	} catch ( \Aws\S3\Exception\S3Exception $e) {
-		echo $e->getAwsErrorCode() . "\n";
-		echo $e->getMessage() . "\n";
-		$showbackups = FALSE;
-	}
-
-	$bucket = get_option('dh-do-bucket');
-	$homeurl = home_url();
-	$prefix = explode('//', $homeurl );
-	$prefix = next ($prefix);
+		$bucket  = get_option( 'dh-do-bucket' );
+		$homeurl = home_url();
+		$prefix  = explode( '//', $homeurl );
+		$prefix  = next( $prefix );
+		$maxkeys = get_option( 'dh-do-retain' ) + 1;
 	
-	try {
-			$backups = $s3->getIterator('ListObjects', array('Bucket' => $bucket, 'Prefix' => $prefix));
-		$backaupsarray = $backups->toArray();
-	} catch (S3Exception $e) {
-		echo __('There are no backups currently stored. Why not run a backup now?', 'dreamobjects');
-		$showbackups = FALSE;
+		try {
+			$backups = $s3->listObjectsV2( array( 'Bucket' => $bucket, 'Prefix' => $prefix, 'MaxKeys' => $maxkeys, ) );
+			$backupsarray = $backups->toArray();
+		} catch ( S3Exception $e ) {
+			$emptybackups = TRUE;
+		}
+
+		if ( empty( $backupsarray ) || !array_key_exists( 'Contents', $backupsarray ) || count( $backupsarray['Contents'] ) <= 1 ) {
+			$emptybackups = TRUE;
+		}
+	} else {
+		$emptybackups = TRUE;
 	}
 
-	if ( empty($backaupsarray) ) {
-		$showbackups = FALSE;
-	}
-
-	if ( $showbackups === TRUE || ( $showbackups === FALSE && empty($statusmatch) && $frequency !== 'failure' ) ) {
-		?><p><?php echo __('All backups can be downloaded from this page without logging in to DreamObjects.', 'dreamobjects'); ?></p>
+	if ( $emptybackups ) {
+		echo __( 'There are no backups currently stored. Why not run a backup now?', 'dreamobjects' );
+	} else {
+		?><p><?php echo __( 'All backups can be downloaded from this page without logging in to DreamObjects.', 'dreamobjects' ); ?></p>
 		<p><?php echo $linksvalid_string; ?></p><?php
-	}
 
-	foreach( $statusshow as $key => $value ) {
-		?><p><?php echo $value->text;
-		
-		if ( $showbackups === TRUE && $value->frequency === 'success' ) {
-			foreach ($backups as $backup) {
-				if ( $value->filename === $backup['Key'] ) {
-					echo '<br />'. __( 'Download:', 'dreamobjects') .' <a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes').'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']);	
+		foreach( $statusshow as $key => $value ) {
+			?><p><?php echo $value->text;
+			
+			if ( $showbackups === TRUE && $value->frequency === 'success' ) {
+				foreach ( $backups['Contents'] as $backup ) {
+					if ( $value->filename === $backup['Key'] ) {
+						echo '<br />'. __( 'Download:', 'dreamobjects' ) .' <a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes' ).'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']);	
+					}
 				}
 			}
+			?></p><?php 
 		}
-		
-		?></p><?php 
-	}
-	
-	if ($showbackups === FALSE && empty($statusmatch) && $frequency === 'failure' ) {
-		echo '<p>'. __( 'Congratulations! You don\'t have any recorded backup failures.', 'dreamobjects') .'</p>';
 	}
 
 	// If there are no backups and the logs are empty, use the old way
-	if ($showbackups === FALSE && empty($statusmatch) && $frequency !== 'failure' ) {
+	if ( !$showbackups && !$emptybackups ) {
 		echo '<ol>';
 		foreach ($backups as $backup) {
-			echo '<li><a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes').'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']).'</li>';
+			echo '<li><a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes' ).'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']).'</li>';
 		}
 		echo '</ol>';
 	}

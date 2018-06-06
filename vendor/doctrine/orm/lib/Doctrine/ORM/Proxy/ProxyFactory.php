@@ -91,7 +91,9 @@ class ProxyFactory extends AbstractProxyFactory
     protected function skipClass(ClassMetadata $metadata)
     {
         /* @var $metadata \Doctrine\ORM\Mapping\ClassMetadataInfo */
-        return $metadata->isMappedSuperclass || $metadata->getReflectionClass()->isAbstract();
+        return $metadata->isMappedSuperclass
+            || $metadata->isEmbeddedClass
+            || $metadata->getReflectionClass()->isAbstract();
     }
 
     /**
@@ -228,7 +230,7 @@ class ProxyFactory extends AbstractProxyFactory
                 );
             }
 
-            foreach ($class->getReflectionClass()->getProperties() as $property) {
+            foreach ($class->getReflectionProperties() as $property) {
                 if ( ! $class->hasField($property->name) && ! $class->hasAssociation($property->name)) {
                     continue;
                 }
