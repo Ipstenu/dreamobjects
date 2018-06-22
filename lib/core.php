@@ -94,7 +94,7 @@ class DreamObjects_Core {
 	// Are we past the deadline to move the datacenter?
 	static function datacenter_move_east( $type ) {
 		$deadline = new DateTime( '2018-06-21' );
-		$gonegirl = new DateTime( '2018-10-31' );
+		$gonegirl = new DateTime( '2018-10-01' );
 		$toolate  = new DateTime( '2018-12-31' );
 		$now      = new DateTime();
 		$return   = false;
