@@ -22,24 +22,4 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	exit ();
 
 	// Deregister
-	delete_option( 'dh-do-backupsection' );
-	delete_option( 'dh-do-bucket' );
-	delete_option( 'dh-do-key' );
-	delete_option( 'dh-do-schedule' );
-	delete_option( 'dh-do-secretkey' );
-	delete_option( 'dh-do-section' );
-	delete_option( 'dh-do-logging' );
-	delete_option( 'dh-do-retain' );
-	delete_option( 'dh-do-notify' );
-	delete_option( 'dh-do-reset' );
-	delete_option( 'dh-do-hostname' );
-	delete_option( 'dh-do-requirements' );
-	delete_option( 'dh-do-backupnow' );
-
-	// Unschedule
-	wp_clear_scheduled_hook( 'dh-do-backupnow');
-	wp_clear_scheduled_hook( 'dh-do-backup');
-
-	// Delete table
-	global $wpdb;
-	$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dreamobjects_backup_log" );
+	DreamObjects_Core::kill_it_all();

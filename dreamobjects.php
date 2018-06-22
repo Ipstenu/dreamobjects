@@ -3,7 +3,7 @@
 Plugin Name: DreamObjects Backups
 Plugin URI: https://github.com/Ipstenu/dreamobjects
 Description: Secure your WordPress data. Backup your WordPress site on a regular basis to DreamObjects for extra protection. To get started: Activate this plugin and then sign up for an DreamObjects storage plan to get a public and secret key. Go to your DreamObjects configuration page, and save your keys to begin backups.
-Version: 4.1.0
+Version: 4.1.1
 Author: Mika Epstein
 Author URI: http://halfelf.org/
 Network: false
@@ -66,9 +66,7 @@ require_once 'lib/settings.php';
 
 // Include AWS library
 require_once 'vendor/autoload.php';
-
-// Include Persistant Admin Notices Dismissal Library
-require_once 'vendor/collizo4sky/persist-admin-notices-dismissal/persist-admin-notices-dismissal.php';
+add_action( 'admin_init', array( 'PAnD', 'init' ) );
 
 if ( defined('WP_CLI') && WP_CLI ) {
 	include( 'lib/wp-cli.php' );

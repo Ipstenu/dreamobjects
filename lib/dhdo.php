@@ -52,7 +52,7 @@ class DHDO {
 		// LOGGER: Wipe logger if blank
 		if ( current_user_can( 'manage_options' ) && get_option( 'dh-do-logging' ) == 'off' ) {
 			DHDO::logger( 'reset' );
-		}       
+		}
 
 		// BACKUP ASAP
 		if ( current_user_can( 'manage_options' ) && isset($_POST['dh-do-backupnow']) ) {

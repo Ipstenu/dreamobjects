@@ -124,12 +124,14 @@ class DHDOSET {
 		function keypair_callback() { 
 			// Nothing here
 		}
-			function key_callback() {
+
+		function key_callback() {
 			?><input type="text" id="dh-do-key" name="dh-do-key" value="<?php echo get_option( 'dh-do-key' ); ?>" class="regular-text"  size="50" autocomplete="off"/><?php
-			}
-			function key_validation( $input ) {
-				$key = sanitize_text_field($input);
-			
+		}
+
+		function key_validation( $input ) {
+			$key = sanitize_text_field( $input );
+
 			if ( $input != $key ) {
 				$error = TRUE;
 				$string = __( 'Your key is invalid.', 'dreamobjects' );
@@ -138,7 +140,7 @@ class DHDOSET {
 				$error = TRUE;
 				$string = __( 'Your key is empty.', 'dreamobjects' );
 			}
-
+	
 			if ( $error === TRUE ) {
 				add_settings_error(
 					'dh-do-key',
@@ -147,33 +149,34 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $key;
-				}
+				return $key;
 			}
-			function secretkey_callback() {
-				
-				if (get_option( 'dh-do-secretkey' ) === '' || !get_option( 'dh-do-secretkey' ) ) {
-					$secretkey = '';
-				} else {
-					$secretkey = '-- not shown --';
-				}
-				
+		}
+
+		function secretkey_callback() {
+			if ( get_option( 'dh-do-secretkey' ) === '' || !get_option( 'dh-do-secretkey' ) ) {
+				$secretkey = '';
+			} else {
+				$secretkey = '-- not shown --';
+			}
+
 			?><input type="text" id="dh-do-secretkey" name="dh-do-secretkey" value="<?php echo $secretkey ?>" class="regular-text"  size="50" autocomplete="off"/>
 			<p><div class="dashicons dashicons-shield"></div><?php _e( 'Your secret key will not display again for your own security.', 'dreamobjects' ); ?></p>
 			<?php
-			}
-			function secretkey_validation( $input ) {
-				$secretkey = sanitize_text_field($input);
-				
+		}
+
+		function secretkey_validation( $input ) {
+			$secretkey = sanitize_text_field( $input );
+			
 			if ( $input != $secretkey ) {
 				$error = TRUE;
 				$string = __( 'Your secret key is invalid.', 'dreamobjects' );
 			}
-			if ( is_null( $secretkey ) || empty($secretkey) || $secretkey === '' ) {
+			if ( is_null( $secretkey ) || empty( $secretkey ) || $secretkey === '' ) {
 				$error = TRUE;
 				$string = __( 'Your secret key is empty.', 'dreamobjects' );
 			}
-
+	
 			if ( $error === TRUE ) {
 				add_settings_error(
 					'dh-do-secretkey',
@@ -182,9 +185,10 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $secretkey;
-				}
+				return $secretkey;
 			}
+		}
+
 
 		// Logging Settings (these show ONLY when the keypair stuff is handled)
 		add_settings_section( 'logging_id', __( 'Debug Logging', 'dreamobjects' ), 'logging_callback', 'dh-do-logging_page' );
@@ -192,17 +196,16 @@ class DHDOSET {
 		register_setting( 'dh-do-logging-settings', 'dh-do-logging', 'logging_validation' );
 		add_settings_field( 'dh-do-logging_id', __( 'Enable Logging', 'dreamobjects' ), 'logging_settings_callback', 'dh-do-logging_page', 'logging_id' );
 
-			function logging_callback() {
-				?>
-				<p><?php echo __( 'If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time since it\'s publicly accessible and reveals the location of your secret zip file. When you turn off logging, the file will wipe itself out for your protection.', 'dreamobjects' ); ?></p>
-			<?php
-			}
-
-			function logging_settings_callback() {
-				?><p><input type="checkbox" name="dh-do-logging" <?php checked( get_option( 'dh-do-logging' ) == 'on',true); ?> /> <?php echo __( 'Enable logging (if checked)', 'dreamobjects' ); ?> <?php
-				if ( get_option( 'dh-do-logging' ) == 'on' ) { ?>&mdash; <span class="description"><?php echo __( 'Your log file is located at ', 'dreamobjects' ); ?><a href="<?php echo plugins_url( 'debug.txt?nocache' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></span></p>
-				<?php }
+		function logging_callback() {
+			?><p><?php echo __( 'If you\'re trying to troubleshoot problems, like why backups only work for SQL, you can turn on logging to see what\'s being kicked off and when. Generally you should not leave this on all the time since it\'s publicly accessible and reveals the location of your secret zip file. When you turn off logging, the file will wipe itself out for your protection.', 'dreamobjects' ); ?></p><?php
 		}
+
+		function logging_settings_callback() {
+			?><p><input type="checkbox" name="dh-do-logging" <?php checked( get_option( 'dh-do-logging' ) == 'on',true); ?> /> <?php echo __( 'Enable logging (if checked)', 'dreamobjects' ); ?> <?php
+			if ( get_option( 'dh-do-logging' ) == 'on' ) { ?>&mdash; <span class="description"><?php echo __( 'Your log file is located at ', 'dreamobjects' ); ?><a href="<?php echo plugins_url( 'debug.txt?nocache' , dirname(__FILE__) );?>"><?php echo plugins_url( 'debug.txt' , dirname(__FILE__) );?></a></span></p>
+			<?php }
+		}
+
 		function logging_validation( $input ) {
 			$logging = ( isset( $input ) && true == $input ? 'on' : 'off' );
 			
@@ -247,11 +250,12 @@ class DHDOSET {
 			$buckets = DHDOSET::get_buckets();
 
 			echo '<p>';
-			if ( get_option( 'dh-do-bucket' ) == 'XXXX' && empty( $buckets['Buckets'] ) ) {
+			if ( get_option( 'dh-do-bucket' ) == 'XXXX' || empty( $buckets['Buckets'] ) ) {
 				printf( __( 'To create a bucket, go to your <a href="%s" target="_new">DreamObjects Panel for DreamObjects</a> and click the "Add Buckets" button. Give the bucket a name and click "Save." Once you have a bucket, come back to this configuration page and select the bucket you just created.', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
 			}
 			echo '</p>';
 		}
+
 		function backup_bucket_callback() {
 			$buckets = DHDOSET::get_buckets();
 
@@ -262,29 +266,30 @@ class DHDOSET {
 					<?php } ?>
 				</select>
 				<p class="description"><?php 
-					if ( get_option( 'dh-do-bucket' ) !== 'XXXX' && !empty($buckets['Buckets']) ) {
-						echo __( 'Select from pre-existing buckets.', 'dreamobjects' );
+					if ( !empty( $buckets['Buckets'] ) ) {
+						printf( __( 'Select from pre-existing buckets in %s.', 'dreamobjects' ), get_option( 'dh-do-hostname' ) );
 					} else {
 						printf( __( 'You need to <a href="%s" target="_new">create a bucket</a> before you can perform any backups.', 'dreamobjects' ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
 
-						if ( DreamObjects_Core::datacenter_move_east() ) {
-							echo '<strong>' . __( 'NOTICE!', 'dreamobjects' ) . '</strong> ';
-							printf( __( 'You\'re seeing this message because you have no buckets on the new datacenter. All of your buckets should have been moved over, but there was an issue with your cluster migration. Please <a href="%s" target="_new">review the cluster migration procedure</a> to resolve this.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+						if ( DreamObjects_Core::datacenter_move_east( 'deadline' ) && !DreamObjects_Core::datacenter_move_east( 'toolate' ) ) {
+							echo ' <strong>' . __( 'NOTICE!', 'dreamobjects' ) . '</strong> ';
+							printf( __( 'You\'re seeing this message because you have no buckets on the new datacenter. All of your buckets should have been replicated but there was an error. Please <a href="%s" target="_new">review the cluster migration procedure</a> to resolve this.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
 						}
 					}
 				?></p><?php
 		}
+
 		function backup_bucket_validation( $input ) {
-				$buckets = DHDOSET::get_buckets();
-				$goodbuckets = array_map(function($bname) {
+			$buckets = DHDOSET::get_buckets();
+			$goodbuckets = array_map(function($bname) {
 				return $bname['Name'];
 			}, $buckets['Buckets']);
-				$thisbucket  = sanitize_file_name($input);
-				
-				if ( $input !== $thisbucket || !in_array( $thisbucket, $goodbuckets )  ) {
-					$error = true;
-					$string = __( 'Invalid bucket choice.', 'dreamobjects' );
-				}
+			$thisbucket  = sanitize_file_name($input);
+			
+			if ( $input !== $thisbucket || !in_array( $thisbucket, $goodbuckets )  ) {
+				$error = true;
+				$string = __( 'Invalid bucket choice.', 'dreamobjects' );
+			}
 	
 			if ( $error === true ) {
 				add_settings_error(
@@ -294,20 +299,20 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $thisbucket;
-				}
+				return $thisbucket;
+			}
 		}
 	
-			function backup_what_callback() {
-				$mysections = get_option( 'dh-do-backupsection' );
-				if ( !$mysections ) {
-					$mysections = array();
-				}
-				$availablesections = DHDOSET::get_sections();
-				
-				?><p><label for="dh-do-backupsections">
+		function backup_what_callback() {
+			$mysections = get_option( 'dh-do-backupsection' );
+			if ( !$mysections ) {
+				$mysections = array();
+			}
+			$availablesections = DHDOSET::get_sections();
+			
+			?><p><label for="dh-do-backupsections"><?php
 
-			<?php foreach ( $availablesections as $key => $value ) {
+			foreach ( $availablesections as $key => $value ) {
 				?>
 				<input <?php if ( in_array( $key, $mysections) ) echo 'checked="checked"' ?> type="checkbox" name="dh-do-backupsection[]" value="<?php echo esc_attr($key) ?>" id="dh-do-backupsection-<?php echo esc_attr($key) ?>" />
 				<?php echo $value ?>
@@ -315,16 +320,15 @@ class DHDOSET {
 				<?php
 			}
 
-			?>
-			<p class="description"><?php echo __( 'You can select portions of your site to backup.', 'dreamobjects' ); ?></p><?php
+			?><p class="description"><?php echo __( 'You can select portions of your site to backup.', 'dreamobjects' ); ?></p><?php
 		}
+
 		function backup_what_validation( $input ) {
 			$availablesections = DHDOSET::get_sections();
 			$thesesections = array();
 
 			foreach ( $input as $key => $value ) {
 				$thissection = sanitize_text_field($value);
-				
 				if ( $input[$key] !== $thissection || !array_key_exists( $thissection, $availablesections )  ) {
 					$error = true;
 				} else {
@@ -341,31 +345,29 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $thesesections;
-				}
+				return $thesesections;
+			}
 		}
 
-			function backup_sched_callback() {
-			?><select name="dh-do-schedule">
-				<?php 
-				$schedules = DHDOSET::get_schedule();	
-				foreach ( $schedules as $s ) { ?>
-				<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-schedule' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-				<?php } ?>
-				</select>
-				<?php
-					$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ).' '.get_option( 'time_format' ) );
-					$nextbackup = sprintf(__( 'Next scheduled backup is at %s', 'dreamobjects' ), $timestamp );
-			?>
-			<p class="description"><?php echo __( 'How often do you want to backup your files? Daily is recommended.', 'dreamobjects' ); ?></p>
-			<?php if ( get_option( 'dh-do-schedule' ) != "disabled" && wp_next_scheduled( 'dh-do-backup' ) ) { ?>
-					<p class="description"><?php echo $nextbackup; ?></p>
-			<?php }
+		function backup_sched_callback() {
+			?><select name="dh-do-schedule"><?php 
+			$schedules = DHDOSET::get_schedule();	
+			foreach ( $schedules as $s ) { 
+				?><option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-schedule' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option><?php 
+			} 
+			?></select><?php
+
+			$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ).' '.get_option( 'time_format' ) );
+			$nextbackup = sprintf(__( 'Next scheduled backup is at %s', 'dreamobjects' ), $timestamp );
+			?><p class="description"><?php echo __( 'How often do you want to backup your files? Daily is recommended.', 'dreamobjects' ); ?></p><?php
+			if ( get_option( 'dh-do-schedule' ) != "disabled" && wp_next_scheduled( 'dh-do-backup' ) ) {
+				 ?><p class="description"><?php echo $nextbackup; ?></p><?php 
+			}
 		}
+
 		function backup_sched_validation( $input ) {
 			$availabletimes = DHDOSET::get_schedule();
 			$thistime = sanitize_text_field($input);
-				
 			if ( $input !== $thistime || !array_key_exists( $thistime, $availabletimes )  ) {
 				$error = true;
 				$string = __( 'Invalid scheduling choice.', 'dreamobjects' );
@@ -379,26 +381,26 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $thistime;
-				}
+				return $thistime;
+			}
 		}
 		
-			function backup_retain_callback() {
-				$retainarray = DHDOSET::get_retain();
-				
-				?><select name="dh-do-retain">
-				<?php foreach ( $retainarray as $s ) : ?>
-					<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-retain' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-				<?php endforeach; ?>
-			</select>
+		function backup_retain_callback() {
+			$retainarray = DHDOSET::get_retain();
+
+			?><select name="dh-do-retain"><?php 
+			foreach ( $retainarray as $s ) {
+				?><option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-retain' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option><?php 
+			}		
+			?></select>
 			<p class="description"><?php echo __( 'How many many backups do you want to keep? 15 is recommended.', 'dreamobjects' ); ?></p>
-			<p class="description"><?php echo __( 'DreamObjects charges you based on disk space used. Setting to \'All\' will retain your backups forever, however this can cost you a large sum of money over time. Please use cautiously!', 'dreamobjects' ); ?></p>
-			<?php
-			}
+			<p class="description"><?php echo __( 'DreamObjects charges you based on disk space used. Setting to \'All\' will retain your backups forever, however this can cost you a large sum of money over time. Please use cautiously!', 'dreamobjects' ); ?></p><?php
+		}
+
 		function backup_retain_validation( $input ) {
 			$retainarray = DHDOSET::get_retain();
 			$retain = sanitize_text_field($input);
-				
+
 			if ( $input !== $retain || !in_array( $retain, $retainarray )  ) {
 				$error = true;
 				$string = __( 'Invalid retention option.', 'dreamobjects' );
@@ -412,21 +414,20 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $retain;
-				}
+				return $retain;
+			}
 		}
 		
-			function backup_notify_callback() {
-				$notifyarray = DHDOSET::get_notify();
-			?><select name="dh-do-notify">
-				<?php foreach ( $notifyarray as $s ) : ?>
-				<option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-notify' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option>
-			<?php endforeach; ?>
-			</select>
-			
-			<p class="description"><?php echo __( 'Select what status notifications you want to see below. DreamObjects will always log all your activity, but only show you what you want.', 'dreamobjects' ); ?></p>
-			<?php
+		function backup_notify_callback() {
+			$notifyarray = DHDOSET::get_notify();
+			?><select name="dh-do-notify"><?php 
+			foreach ( $notifyarray as $s ) { 
+				?><option value="<?php echo strtolower($s) ?>" <?php if ( strtolower($s) == get_option( 'dh-do-notify' ) ) echo 'selected="selected"' ?>><?php echo $s ?></option><?php
 			}
+			?></select>
+			<p class="description"><?php echo __( 'Select what status notifications you want to see below. DreamObjects will always log all your activity, but only show you what you want.', 'dreamobjects' ); ?></p><?php
+		}
+
 		function backup_notify_validation( $input ) {
 			$notifyarray = DHDOSET::get_notify();
 			$notify = sanitize_text_field($input);
@@ -444,13 +445,12 @@ class DHDOSET {
 					'error'
 				);
 			} else {
-					return $notify;
-				}
+				return $notify;
+			}
 		}
 
 		// Backup NOW Settings
 		add_settings_section( 'backupnow_id', __( 'Immediate Backup', 'dreamobjects' ), 'backupnow_callback', 'dh-do-backupnow_page' );
-		
 		register_setting( 'dh-do-backupnow-settings', 'dh-do-backupnow', 'backupnow_validation' );
 		
 		function backupnow_callback() { 
@@ -480,6 +480,27 @@ class DHDOSET {
 					'updated'
 				);
 			}
+		}
+
+		// RESET SETTINGS SECTION
+		add_settings_section( 'resetplugin_id', __( 'Reset Plugin', 'dreamobjects' ), 'resetplugin_callback', 'dh-do-resetplugin_page' );
+		register_setting( 'dh-do-resetplugin-settings', 'dh-do-resetplugin', 'resetplugin_validation' );
+
+		function resetplugin_callback() {
+			echo __( 'Resetting the plugin will not delete any backups, however it will delete logs.', 'dreamobjects' );
+			echo '<input type="hidden" name="dh-do-resetplugin" value="Y" />';
+		}
+
+		function resetplugin_validation( $input ) {
+
+				add_settings_error(
+					'dh-do-resetplugin',
+					'logging-field-updated',
+					__( 'Your plugin has been reset.', 'dreamobjects' ),
+					'updated'
+				);
+
+				DreamObjects_Core::kill_it_all();
 		}
 
 	}

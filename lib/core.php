@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) die();
 
 class DreamObjects_Core {
 
-	public $version = '4.1.0';
+	public $version = '4.1.1';
 	
 	static public $s3Options;
 
@@ -76,7 +76,7 @@ class DreamObjects_Core {
 		}
 	
 		// Figure out if we need to change the hostname...
-		if ( self::datacenter_move_east() && get_option( 'dh-do-hostname' ) !== 'us-east-1' ) {
+		if ( self::datacenter_move_east( 'deadline' ) && get_option( 'dh-do-hostname' ) !== 'us-east-1' ) {
 			update_option( 'dh-do-hostname', 'us-east-1' );
 		} else {
 			update_option( 'dh-do-hostname', 'us-west-1' );
@@ -92,12 +92,30 @@ class DreamObjects_Core {
 	}
 
 	// Are we past the deadline to move the datacenter?
-	static function datacenter_move_east() {
+	static function datacenter_move_east( $type ) {
 		$deadline = new DateTime( '2018-06-21' );
+		$gonegirl = new DateTime( '2018-10-31' );
+		$toolate  = new DateTime( '2018-12-31' );
 		$now      = new DateTime();
 		$return   = false;
 
-		if ( $now >= $deadline ) $return = true;
+		switch ( $type ) {
+			case 'deadline':
+				// If it's AFTER the deadline, let's show this:
+				if ( $now >= $deadline ) $return = true;
+				break;
+			case 'gonegirl':
+				// If it's BEFORE gone girl
+				if ( $now >= $gonegirl ) $return = true;
+				break;
+			case 'toolate':
+				// If it's BEFORE toolate
+				if ( $now >= $toolate ) $return = true;
+				break;
+			default:
+				$return = false;
+				break;
+		}
 
 		return $return;
 	}
@@ -105,18 +123,41 @@ class DreamObjects_Core {
 	function admin_notices() {
 
 		// Datacenter Move Notice
-		if ( self::datacenter_move_east() ) {
-			if ( !PAnD::is_admin_notice_active( 'datacenter_move_east' ) ) {
-				return;
-			}
-
-			$message = sprintf( __( 'As of June 21, 2018, DreamObjects has moved to a new datacenter. While the <strong>DreamObjects Backup Plugin</strong> has automatically begun using the new datacenter, it <em>will not</em> migrate your existing data. You will need to <a href="%s" target="_new">migrate your data to the new cluster on your own</a> to see your old backups.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
-			?>
-			<div data-dismissible="datacenter_move_east" class="notice notice-warning is-dismissible">
-				<p><strong><?php __( 'NOTICE!', 'dreamobjects' ); ?></strong> <?php echo $message; ?></p>
-			</div>
-			<?php
+		if ( self::datacenter_move_east( 'deadline' ) && !self::datacenter_move_east( 'gonegirl' ) ) {
+			if ( !PAnD::is_admin_notice_active( 'datacenter-move-east-forever' ) ) return;
+			$message = sprintf( __( 'As of June 21, 2018, DreamObjects has moved to a new datacenter (us-west-1). The <strong>DreamObjects Backup Plugin</strong> has automatically begun using the new datacenter, but you will need to <a href="%s" target="_new">migrate existing data to the new cluster on your own</a>. In order to prevent possible file collisions, it is recommend you migrate your old files to a new and differently named bucket.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+			?><div data-dismissible="datacenter-move-east-forever" class="notice notice-warning is-dismissible"><p><strong><?php __( 'NOTICE!', 'dreamobjects' ); ?></strong> <?php echo $message; ?></p></div><?php
+		} elseif ( self::datacenter_move_east( 'gonegirl' ) && !self::datacenter_move_east( 'toolate' ) ) {
+			if ( !PAnD::is_admin_notice_active( 'datacenter-gonegirl-forever' ) ) return;
+			$message = sprintf( __( 'The old DreamObjects us-east-1 datacenter was shut down on <strong>October 1, 2018</strong>. You should have already <a href="%s" target="_new">migrated any existing data to the new cluster</a>. Any data not migrated is no longer recoverable.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+			?><div data-dismissible="datacenter-gonegirl-forever" class="notice notice-warning is-dismissible"><p><strong><?php __( 'NOTICE!', 'dreamobjects' ); ?></strong> <?php echo $message; ?></p></div><?php
 		}
+
+	}
+
+	function kill_it_all() {
+		delete_option( 'dh-do-backupsection' );
+		delete_option( 'dh-do-bucket' );
+		delete_option( 'dh-do-key' );
+		delete_option( 'dh-do-schedule' );
+		delete_option( 'dh-do-secretkey' );
+		delete_option( 'dh-do-section' );
+		delete_option( 'dh-do-logging' );
+		delete_option( 'dh-do-retain' );
+		delete_option( 'dh-do-notify' );
+		delete_option( 'dh-do-reset' );
+		delete_option( 'dh-do-hostname' );
+		delete_option( 'dh-do-requirements' );
+		delete_option( 'dh-do-backupnow' );
+		delete_option( 'dh-do-resetplugin' );
+	
+		// Unschedule
+		wp_clear_scheduled_hook( 'dh-do-backupnow');
+		wp_clear_scheduled_hook( 'dh-do-backup');
+	
+		// Delete table
+		global $wpdb;
+		$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}dreamobjects_backup_log" );
 	}
 
 }

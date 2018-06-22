@@ -56,9 +56,7 @@ use Aws\S3\S3Client;
 			if ( empty( $nextscheduled ) && get_option('dh-do-backupnow') !== 'Y' ) {
 				submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
 			} else {
-				echo '<p>';
 				submit_button( __( 'Backup In Progress','dreamobjects' ) , 'secondary', null,  null, array('disabled'=>'disabled') );
-				echo '</p>';
 			}
 		?>
 	</form>
