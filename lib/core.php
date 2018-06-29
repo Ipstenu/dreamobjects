@@ -78,8 +78,6 @@ class DreamObjects_Core {
 		// Figure out if we need to change the hostname...
 		if ( self::datacenter_move_east( 'deadline' ) && get_option( 'dh-do-hostname' ) !== 'us-east-1' ) {
 			update_option( 'dh-do-hostname', 'us-east-1' );
-		} else {
-			update_option( 'dh-do-hostname', 'us-west-1' );
 		}
 	}
 
@@ -125,11 +123,11 @@ class DreamObjects_Core {
 		// Datacenter Move Notice
 		if ( self::datacenter_move_east( 'deadline' ) && !self::datacenter_move_east( 'gonegirl' ) ) {
 			if ( !PAnD::is_admin_notice_active( 'datacenter-move-east-forever' ) ) return;
-			$message = sprintf( __( 'As of June 21, 2018, DreamObjects has moved to a new datacenter (us-west-1). The <strong>DreamObjects Backup Plugin</strong> has automatically begun using the new datacenter, but you will need to <a href="%s" target="_new">migrate existing data to the new cluster on your own</a>. In order to prevent possible file collisions, it is recommend you migrate your old files to a new and differently named bucket.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+			$message = sprintf( __( 'As of June 21, 2018, DreamObjects has moved to a new datacenter. The <strong>DreamObjects Backup Plugin</strong> has automatically begun using the new datacenter, but you will need to <a href="%s" target="_new">migrate existing data to the new cluster on your own</a>. In order to prevent possible file collisions, it is recommend you migrate your old files to a new and differently named bucket.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
 			?><div data-dismissible="datacenter-move-east-forever" class="notice notice-warning is-dismissible"><p><strong><?php __( 'NOTICE!', 'dreamobjects' ); ?></strong> <?php echo $message; ?></p></div><?php
 		} elseif ( self::datacenter_move_east( 'gonegirl' ) && !self::datacenter_move_east( 'toolate' ) ) {
 			if ( !PAnD::is_admin_notice_active( 'datacenter-gonegirl-forever' ) ) return;
-			$message = sprintf( __( 'The old DreamObjects us-east-1 datacenter was shut down on <strong>October 1, 2018</strong>. You should have already <a href="%s" target="_new">migrated any existing data to the new cluster</a>. Any data not migrated is no longer recoverable.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+			$message = sprintf( __( 'The old DreamObjects us-west-1 datacenter was shut down on <strong>October 1, 2018</strong>. You should have already <a href="%s" target="_new">migrated any existing data to the new cluster</a>. Any data not migrated is no longer recoverable.', 'dreamobjects' ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
 			?><div data-dismissible="datacenter-gonegirl-forever" class="notice notice-warning is-dismissible"><p><strong><?php __( 'NOTICE!', 'dreamobjects' ); ?></strong> <?php echo $message; ?></p></div><?php
 		}
 

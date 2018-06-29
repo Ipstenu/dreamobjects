@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,12 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 1. Stored backups
 
 == Changelog ==
+
+= 4.1.2 =
+
+June 2018 by Ipstenu
+
+* Typo in the alert warned people about the wrong datacenter. us-east-1 is the NEW datacenter. The code was fine.
 
 = 4.1.1 =
 
