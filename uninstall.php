@@ -22,4 +22,5 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 	exit ();
 
 	// Deregister
+	require_once 'lib/core.php';
 	DreamObjects_Core::kill_it_all();
