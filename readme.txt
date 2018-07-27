@@ -16,7 +16,7 @@ Backup your WordPress site to DreamHost's DreamObjects.
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
-Well now that we've gotten the sales-pitch out of the way, DreamObjects Connections will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
+Well now that we've gotten the sales-pitch out of the way, DreamObjects Backups will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
 <em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
 
@@ -71,9 +71,7 @@ Not at this time. Backups for Multisite are a little messier, and I'm not sure h
 
 <strong>What does it backup?</strong>
 
-Your database and your `wp-content` folder.
-
-In a perfect world it would also backup your `wp-config.php` and `.htaccess`, but those are harder to grab since there aren't consistent locations.
+Your database and your `wp-content` folder. It also attempts to backup your `.htaccess` and `wp-config.php` files if it can be sure it's found them.
 
 <strong>How big a site can this back up?</strong>
 
@@ -94,7 +92,7 @@ There are a few things at play here:
 
 In a perfect world, you have enough to cope with all that. When you have a very large site, however, not so much. You can try increasing your <a href="http://wiki.dreamhost.com/PHP.ini#Increasing_the_PHP_Memory_Limit">PHP memory limit</a>, or if your site really is that big, consider a VPS. Remember you're using WordPress to run backups here, so you're at the mercy of a middle-man. Just because PHP has a hard limit of 2G doesn't mean it'll even get that far.
 
-I have, personally, verified a 250MB zip file, with no timeouts, no server thrashing, and no PHP errors, so if this is still happening, turn on debugging and check the log. If the log stalls on creating the zip, then you've hit the memory wall. It's possible to increase your memory limit via PHP, <em>however</em> doing this on a shared server means you're probably getting too big for this sort of backup solution in the first place. If your site is over 500megs and you're still on shared, you need to seriously think about your future. This will be much less of an issue on VPS and dedicated boxes, where you don't have the same limits.
+I have, personally, verified a 250MB zip file on a shared host, with no timeouts, no server thrashing, and no PHP errors, so if this is still happening, turn on debugging and check the log. If the log stalls on creating the zip, then you've hit the memory wall. It's possible to increase your memory limit via PHP, <em>however</em> doing this on a shared server means you're probably getting too big for this sort of backup solution in the first place. If your site is over 500megs and you're still on shared, you need to seriously think about your future. This will be much less of an issue on VPS and dedicated boxes, where you don't have the same limits.
 
 <strong>Where's the Database in the zip?</strong>
 
