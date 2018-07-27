@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 4.1.3
+Stable tag: 4.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -130,10 +130,11 @@ If you have <a href="https://github.com/wp-cli/wp-cli#what-is-wp-cli">wp-cli</a>
 
 <pre>
 wp dreamobjects backup
-wp dreamobjects resetlog
+wp dreamobjects reset log
+wp dreamobjects reset settings
 </pre>
 
-The 'backup' command runs an immediate backup, while the `resetlog` command wipes your debug log.
+The 'backup' command runs an immediate backup, while the `reset` command wipes either the log or the settings.
 
 = Errors =
 
@@ -160,32 +161,15 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
-= 4.1.3 =
+= 4.2.0 =
 
-June 2018 by Ipstenu
+July by Ipstenu
 
-* Fix uninstall (Props Evan S.)
-
-= 4.1.2 =
-
-June 2018 by Ipstenu
-
-* Typo in the alert warned people about the wrong datacenter. us-east-1 is the NEW datacenter. The code was fine.
-
-= 4.1.1 =
-
-June 2018 by Ipstenu
-
-* Make sure the notice dismisses (sorry)
-
-= 4.1.0 = 
-
-June 2018 by Ipstenu
-
-* Changed base hostname to new datacenter
-* Formatting cleanup
-* Upgrade AWS to version 3.x
-* Cleaned up notices
+* Added: reset feature on the settings page
+* Updated: reset command for WP-CLI (`wp dreamobjects reset [log|settings]`)
+* Updated: AWS SDK to version 3.63.7
+* Fixed: Backup issues with large sites (100+ megs)
+* Misc: Factoring in WPCS (Coding standards)
 
 = Previous Versions =
 

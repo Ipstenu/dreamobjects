@@ -17,7 +17,9 @@
 
 */
 
-if (!defined( 'ABSPATH' )) { die(); }
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
+}
 
 use Aws\S3\S3Client;
 
@@ -27,86 +29,104 @@ DreamObjects_Core::install();
 $dreamobjects_table_name = $wpdb->prefix . 'dreamobjects_backup_log';
 $frequency               = get_option( 'dh-do-notify' );
 $total                   = get_option( 'dh-do-retain' );
-$showbackups             = TRUE;
-$emptybackups            = FALSE;
+$showbackups             = true;
+$emptybackups            = false;
 
-?><h3>Recent Backup Status</h3><?php
+echo '<h3>' . esc_html__( 'Recent Backup Status', 'dreamobjects' ) . '</h3>';
 
-if ( get_option( 'dh-do-notify' ) === 'all' ) { 
-	?><p><?php echo __( 'Showing all backups on the cloud is a little crazy and kills servers. You\'ll need to go to your panel.', 'dreamobjects' ); ?></p><?php
-} elseif ( $frequency === 'disabled' ) {
-	?><p><?php echo __( 'You have disabled status notifications. If you just want to see successful backups, chose that.', 'dreamobjects' ); ?></p><?php	
+if ( 'all' === get_option( 'dh-do-notify' ) ) {
+	echo '<p>' . esc_html__( 'Showing all backups on the cloud is a little crazy and kills servers. You\'ll need to go to your panel.', 'dreamobjects' ) . '</p>';
+} elseif ( 'disabled' === $frequency ) {
+	echo '<p>' . esc_html__( 'You have disabled status notifications. If you just want to see successful backups, chose that.', 'dreamobjects' ) . '</p>';
 } else {
-	
-	if ( $frequency === 'all' ) {
-		$statusmatch = $wpdb->get_results( "SELECT * FROM '.$dreamobjects_table_name.';" );
+	if ( 'all' === $frequency ) {
+		$statusmatch = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM '.$dreamobjects_table_name.';" ) );
 	} else {
-		$statusmatch = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$dreamobjects_table_name} WHERE frequency LIKE %s;", $frequency ) );
+		$statusmatch = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$dreamobjects_table_name} WHERE frequency LIKE %s;", $frequency ) );
 	}
 
-	if ( empty( $statusmatch ) || $frequency == 'failure' ) {
-		$showbackups = FALSE;
+	if ( empty( $statusmatch ) || 'failure' === $frequency ) {
+		$showbackups = false;
 	}
 
 	if ( $showbackups ) {
-
-		$statusshow = array_slice($statusmatch, -$total);  // returns last "total" items.
-		$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', (time()+600) ), get_option( 'time_format' ) );
+		$statusshow = array_slice( $statusmatch, -$total );  // returns last "total" items.
+		$timestamp  = get_date_from_gmt( date( 'Y-m-d H:i:s', ( time() + 600 ) ), get_option( 'time_format' ) );
+		// translators: %s is the time the links expire.
 		$linksvalid_string = sprintf( __( 'Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects' ), $timestamp );
-	
+
 		try {
-			$s3 = new S3Client( DreamObjects_Core::$s3Options );
-		} catch ( \Aws\S3\Exception\S3Exception $e) {
-			echo $e->getAwsErrorCode() . "\n";
-			echo $e->getMessage() . "\n";
-			$emptybackups = TRUE;
+			$s3 = new S3Client( DreamObjects_Core::$s3_options );
+		} catch ( \Aws\S3\Exception\S3Exception $e ) {
+			echo wp_kses_post( $e->getAwsErrorCode() . "\n" );
+			echo wp_kses_post( $e->getMessage() . "\n" );
+			$emptybackups = true;
 		}
-	
+
 		$bucket  = get_option( 'dh-do-bucket' );
 		$homeurl = home_url();
 		$prefix  = explode( '//', $homeurl );
 		$prefix  = next( $prefix );
 		$maxkeys = get_option( 'dh-do-retain' ) + 1;
-	
+
 		try {
-			$backups = $s3->listObjectsV2( array( 'Bucket' => $bucket, 'Prefix' => $prefix, 'MaxKeys' => $maxkeys, ) );
+			$backups      = $s3->listObjectsV2( array(
+				'Bucket'  => $bucket,
+				'Prefix'  => $prefix,
+				'MaxKeys' => $maxkeys,
+			) );
 			$backupsarray = $backups->toArray();
 		} catch ( S3Exception $e ) {
-			$emptybackups = TRUE;
+			$emptybackups = true;
 		}
 
-		if ( empty( $backupsarray ) || !array_key_exists( 'Contents', $backupsarray ) || count( $backupsarray['Contents'] ) <= 1 ) {
-			$emptybackups = TRUE;
+		if ( empty( $backupsarray ) || ! array_key_exists( 'Contents', $backupsarray ) || count( $backupsarray['Contents'] ) <= 1 ) {
+			$emptybackups = true;
 		}
 	} else {
-		$emptybackups = TRUE;
+		$emptybackups = true;
 	}
 
 	if ( $emptybackups ) {
-		echo __( 'There are no backups currently stored. Why not run a backup now?', 'dreamobjects' );
+		echo '<p>' . esc_html__( 'There are no backups currently stored. Why not run a backup now?', 'dreamobjects' ) . '</p>';
 	} else {
-		?><p><?php echo __( 'All backups can be downloaded from this page without logging in to DreamObjects.', 'dreamobjects' ); ?></p>
-		<p><?php echo $linksvalid_string; ?></p><?php
+		echo '<p>' . esc_html__( 'All backups can be downloaded from this page without logging in to DreamObjects.', 'dreamobjects' ) . '</p>';
+		echo '<p>' . esc_html( $linksvalid_string ) . '</p>';
 
-		foreach( $statusshow as $key => $value ) {
-			?><p><?php echo $value->text;
-			
-			if ( $showbackups === TRUE && $value->frequency === 'success' ) {
+		echo '<ul>';
+		foreach ( $statusshow as $key => $value ) {
+			echo '<li><strong>' . esc_html( $value->text ) . '</strong>';
+			if ( $showbackups && 'success' === $value->frequency ) {
 				foreach ( $backups['Contents'] as $backup ) {
 					if ( $value->filename === $backup['Key'] ) {
-						echo '<br />'. __( 'Download:', 'dreamobjects' ) .' <a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes' ).'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']);	
+						$bucket_size = size_format( $backup['Size'] );
+						$bucket_data = $s3->getCommand('GetObject', [
+							'Bucket' => $bucket,
+							'Key'    => $backup['Key'],
+						]);
+						$bucket_url  = $s3->createPresignedRequest( $bucket_data, '+10 minutes' );
+						$bucket_link = (string) $bucket_url->getUri();
+						echo '<br />' . esc_html__( 'Download:', 'dreamobjects' ) . ' <a href="' . esc_url_raw( $bucket_link ) . '">' . esc_html( $backup['Key'] ) . '</a> - ' . esc_html( $bucket_size );
 					}
 				}
 			}
-			?></p><?php 
+			echo '</li>';
 		}
+		echo '</ul>';
 	}
 
 	// If there are no backups and the logs are empty, use the old way
-	if ( !$showbackups && !$emptybackups ) {
+	if ( ! $showbackups && ! $emptybackups ) {
 		echo '<ol>';
-		foreach ($backups as $backup) {
-			echo '<li><a href="'.$s3->getObjectUrl($bucket, $backup['Key'], '+10 minutes' ).'">'.$backup['Key'] .'</a> - '.size_format($backup['Size']).'</li>';
+		foreach ( $backups as $backup ) {
+			$bucket_size = size_format( $backup['Size'] );
+			$bucket_data = $s3->getCommand('GetObject', [
+				'Bucket' => $bucket,
+				'Key'    => $backup['Key'],
+			]);
+			$bucket_url  = $s3->createPresignedRequest( $bucket_data, '+10 minutes' );
+			$bucket_link = (string) $bucket_url->getUri();
+			echo '<li><a href="' . esc_url_raw( $bucket_link ) . '">' . esc_html( $backup['Key'] ) . '</a> - ' . esc_html( $bucket_size ) . '</li>';
 		}
 		echo '</ol>';
 	}
