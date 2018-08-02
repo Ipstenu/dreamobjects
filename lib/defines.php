@@ -38,8 +38,8 @@ add_option( 'dh-do-notify', 'success' );
 
 // Requirements
 $dreamobjects_requirements_check = array(
-	'php'       => '5.6',
-	'wp'        => '4.0',
+	'php'       => '7.0',
+	'wp'        => '4.8',
 	'curl'      => '7.16.2',
 	'multisite' => false,
 	'curlssl'   => true,
