@@ -2,7 +2,7 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
-Tested up to: 4.9
+Tested up to: 5.1
 Stable tag: 4.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
