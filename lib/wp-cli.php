@@ -1,26 +1,24 @@
 <?php
 /*
 	This file is part of DreamObjects, a plugin for WordPress.
-	
+
 	DreamObjects is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 2 of the License, or
 	(at your option) any later version.
-	
+
 	DreamObjects is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with WordPress.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-if ( !defined( 'ABSPATH' ) ) die();
-
-if( class_exists( 'DHDO' ) ) {
-	WP_CLI::add_command( 'dreamobjects', 'DreamObjects_Command' );
+if ( ! defined( 'ABSPATH' ) ) {
+	die();
 }
 
 /**
@@ -33,38 +31,48 @@ if( class_exists( 'DHDO' ) ) {
 class DreamObjects_Command extends WP_CLI_Command {
 
 	/**
-	 * Run a backup right now
+	 * Runs an immediate backup.
 	 *
-	 * @param array $args
-	 * @param array $vars
+	 * ## EXAMPLES
+	 *
+	 *      wp dreamobjects backup
 	 */
-	function backup( $args = array(), $vars = array() ) {
-		do_action( 'dh-do-backup', array('DHDO', 'backup') );
+	public function backup() {
+		do_action( 'dh-do-backup', array( 'DHDO', 'backup' ) );
 		WP_CLI::success( 'Backup Complete' );
 	}
 
 	/**
-	 * Reset debug log 
+	 * Reset the backup log
 	 *
-	 * @param array $args
-	 * @param array $vars
-	 */	
-	function resetlog( $args = array(), $vars = array() ) {
-		DHDO::logger('reset');
-		WP_CLI::success( 'Debug log wiped' );
-	}
-
-	/**
-	 * Help function for this command
+	 * ## EXAMPLES
+	 *
+	 *      wp dreamobjects reset log
 	 */
-	public static function help() {
-		WP_CLI::line( <<<EOB
-usage: wp dreamobjects [backup]
+	public function reset( $args, $assoc_args ) {
 
-	backup    run a backup now
-	resetlog  wipe the debug log
+		$valid_resets = array( 'settings', 'log' );
 
-EOB
-	);
+		// Check for valid arguments.
+		if ( empty( $args[0] ) || ! in_array( $args[0], $valid_resets ) ) {
+			WP_CLI::error( __( 'You must provide something to be reset.', 'dreamobjects' ) );
+		} else {
+			switch ( $args[0] ) {
+				case 'settings':
+					DHDO::DreamObjects_Core( 'kill_it_all' );
+					$message = __( 'Settings reset', 'dramobjects' );
+					break;
+				case 'log':
+					DHDO::logger( 'reset' );
+					$message = __( 'Debug log reset', 'dramobjects' );
+					break;
+			}
+			WP_CLI::success( $message );
+		}
 	}
+
+}
+
+if ( class_exists( 'DHDO' ) ) {
+	WP_CLI::add_command( 'dreamobjects', 'DreamObjects_Command' );
 }

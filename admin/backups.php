@@ -17,7 +17,7 @@
 
 */
 
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -25,42 +25,41 @@ use Aws\S3\S3Client;
 
 ?>
 <script type="text/javascript">
-	var ajaxTarget = "<?php echo DHDO::getURL() ?>backup.ajax.php";
-	var nonce = "<?php echo wp_create_nonce('dreamobjects'); ?>";
+	var ajaxTarget = "<?php echo esc_url( DHDO::get_url() ); ?>backup.ajax.php";
+	var nonce = "<?php echo esc_html( wp_create_nonce( 'dreamobjects' ) ); ?>";
 </script>
 
 <div class="wrap">
-	<h2><?php echo __('DreamObjects Backup Settings', 'dreamobjects'); ?></h2>
+	<h2><?php echo esc_html__( 'DreamObjects Backup Settings', 'dreamobjects' ); ?></h2>
 
 	<?php settings_errors(); ?>
 	<form method="post" action="options.php">
 		<?php
 		settings_fields( 'dh-do-backuper-settings' );
 		do_settings_sections( 'dh-do-backuper_page' );
-		submit_button( __('Update Options','dreamobjects') , 'primary');
+		submit_button( __( 'Update Options', 'dreamobjects' ), 'primary' );
 		?>
 	</form>
 
-	<?php 
-	$backupsection = get_option('dh-do-backupsection');
-	if ( ( get_option('dh-do-bucket') != "XXXX" ) && !empty( $backupsection ) ) {
-		include('backups-retain.php');
-	?>
-
-	<form method="post" action="options.php">
-		<?php
+	<?php
+	$backupsection = get_option( 'dh-do-backupsection' );
+	if ( ( get_option( 'dh-do-bucket' ) !== 'XXXX' ) && ! empty( $backupsection ) ) {
+		require_once 'backups-retain.php';
+		?>
+		<form method="post" action="options.php">
+			<?php
 			settings_fields( 'dh-do-backupnow-settings' );
 			do_settings_sections( 'dh-do-backupnow_page' );
-			
+
 			$nextscheduled = wp_next_scheduled( 'dh-do-backupnow' );
-			if ( empty( $nextscheduled ) && get_option('dh-do-backupnow') !== 'Y' ) {
-				submit_button( __('Backup ASAP','dreamobjects') , 'secondary');
+			if ( empty( $nextscheduled ) && get_option( 'dh-do-backupnow' ) !== 'Y' ) {
+				submit_button( __( 'Backup ASAP', 'dreamobjects' ), 'secondary' );
 			} else {
-				submit_button( __( 'Backup In Progress','dreamobjects' ) , 'secondary', null,  null, array('disabled'=>'disabled') );
+				submit_button( __( 'Backup In Progress', 'dreamobjects' ), 'secondary', null, null, array( 'disabled' => 'disabled' ) );
 			}
-		?>
-	</form>
-	<?php
+			?>
+		</form>
+		<?php
 	}
 	?>
 
