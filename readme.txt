@@ -1,8 +1,8 @@
 === DreamObjects Backups ===
-Contributors: Ipstenu
+Contributors: Ipstenu, dreamhost
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
-Tested up to: 4.9
+Tested up to: 5.3
 Stable tag: 4.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
