@@ -3,7 +3,7 @@ Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 4.0
 Tested up to: 5.4
-Stable tag: 4.2.0
+Stable tag: 4.2.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,8 +11,6 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Backup your WordPress site to DreamHost's DreamObjects.
 
 == Description ==
-
-**As of June 21, 2018, DreamObjects is moving to a new datacenter. While this plugin _will_ automatically begin using the new datacenter on that date, it _will not_ migrate your existing data. You will need to <a href="https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure">migrate your data to the new cluster on your own</a>.**
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 

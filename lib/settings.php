@@ -141,10 +141,9 @@ class DreamObjects_Settings {
 	 * Add settings pages.
 	 *
 	 * @access public
-	 * @static
 	 * @return void
 	 */
-	public static function add_settings_page() {
+	public function add_settings_page() {
 		add_menu_page( __( 'DreamObjects Settings', 'dreamobjects' ), __( 'DreamObjects', 'dreamobjects' ), 'manage_options', 'dreamobjects-menu', array( $this, 'settings_page' ), 'dashicons-backup' );
 
 		if ( get_option( 'dh-do-key' ) && get_option( 'dh-do-secretkey' ) ) {
@@ -156,10 +155,9 @@ class DreamObjects_Settings {
 	 * Define settings pages.
 	 *
 	 * @access public
-	 * @static
 	 * @return void
 	 */
-	public static function settings_page() {
+	public function settings_page() {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/admin/settings.php';// Main Settings
 	}
 
@@ -167,10 +165,9 @@ class DreamObjects_Settings {
 	 * Define backup pages.
 	 *
 	 * @access public
-	 * @static
 	 * @return void
 	 */
-	public static function backup_page() {
+	public function backup_page() {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . '/admin/backups.php'; // Backup Settings
 	}
 
@@ -178,10 +175,9 @@ class DreamObjects_Settings {
 	 * Register Settings
 	 *
 	 * @access public
-	 * @static
 	 * @return void
 	 */
-	public static function add_register_settings() {
+	public function add_register_settings() {
 
 		$s3 = new S3Client( DreamObjects_Core::$s3_options );
 
