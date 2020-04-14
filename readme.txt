@@ -16,7 +16,7 @@ DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/"
 
 Well now that we've gotten the sales-pitch out of the way, DreamObjects Backups will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
-<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
+<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you as soon as I can.
 
 = Backup Features =
 
