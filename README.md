@@ -8,7 +8,7 @@ This is the development repository for the DreamObjects Backup plugin.
 
 ## Update
 
-To update libraries, run:  `composer update` 
+To update libraries, run:  `composer update`
 
 To update for WP:
 
@@ -22,8 +22,4 @@ rsync -va --delete --exclude debug.txt --exclude .git/ --exclude .DS_Store --exc
 
 * Run `svn status` to see what’s missing or needs removing
 * Run svn commit: `svn ci -m "Version X"`
-* Run SVN CP
-
-```
-svn cp https://plugins.svn.wordpress.org/dreamobjects/trunk https://plugins.svn.wordpress.org/dreamobjects/tags/TAG/
-```
+* Run SVN CP: `svn cp https://plugins.svn.wordpress.org/dreamobjects/trunk https://plugins.svn.wordpress.org/dreamobjects/tags/TAG/`

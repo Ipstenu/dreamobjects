@@ -1,9 +1,9 @@
 === DreamObjects Backups ===
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
-Requires at least: 4.0
+Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 4.2.1
+Stable tag: 4.3.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -157,13 +157,20 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
+= 4.3.0 =
+
+April 2020 - by Ipstenu
+
+* Bugfix: corrected public/static keys for PHP compatibility
+* Updated: AWS SDK to version 3.63.7
+
 = 4.2.0 =
 
-July by Ipstenu
+July 2019 by Ipstenu
 
 * Added: reset feature on the settings page
 * Updated: reset command for WP-CLI (`wp dreamobjects reset [log|settings]`)
-* Updated: AWS SDK to version 3.63.7
+* Updated: AWS SDK to version 3.134.6
 * Fixed: Backup issues with large sites (100+ megs)
 * Misc: Factoring in WPCS (Coding standards)
 
