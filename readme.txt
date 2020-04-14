@@ -8,7 +8,7 @@ Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Backup your WordPress site to DreamHost's DreamObjects.
+Backup your WordPress site to DreamHost's Cloud: DreamObjects.
 
 == Description ==
 
@@ -96,7 +96,7 @@ I have, personally, verified a 250MB zip file on a shared host, with no timeouts
 
 I admit, it's in a weird spot: `/wp-content/upgrade/RANDOM-dreamobjects-backup.sql`
 
-Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for me to delete.
+Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for the plugin to delete.
 
 = Using the Plugin =
 
@@ -114,11 +114,11 @@ Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. `curl ht
 
 <strong>How long does it keep backups?</strong>
 
-Since you get charged on space used for DreamObjects, the default is to retain the last 5 backups. If you need more, you can save all your backups, but I don't recommend it.
+Since you get charged on space used for DreamObjects, the default is to retain the last 5 backups. If you need more history you can save all your backups.
 
 <strong>Can I keep them forever?</strong>
 
-If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you may be charged more money.
+If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you will be charged more money.
 
 <strong>How do I use the CLI?</strong>
 
@@ -159,25 +159,13 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 = 4.3.0 =
 
-April 2020 - by Ipstenu
+April 2020 by Ipstenu
 
-* Bugfix: corrected public/static keys for PHP compatibility
-* Updated: AWS SDK to version 3.63.7
-
-= 4.2.0 =
-
-July 2019 by Ipstenu
-
-* Added: reset feature on the settings page
-* Updated: reset command for WP-CLI (`wp dreamobjects reset [log|settings]`)
+* Bugfix: corrected static functions for PHP 7.4+ compatibility
 * Updated: AWS SDK to version 3.134.6
-* Fixed: Backup issues with large sites (100+ megs)
-* Misc: Factoring in WPCS (Coding standards)
 
 = Previous Versions =
 
 See changelog.txt
 
 == Upgrade notice ==
-
-4.1.0 upgrades AWS to the 3.x branch AND will move your future backups to the new datacenter.
