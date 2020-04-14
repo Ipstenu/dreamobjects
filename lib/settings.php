@@ -129,7 +129,7 @@ class DreamObjects_Settings {
 	 */
 	public static function get_notify() {
 		$notify = array(
-			'disabled' => __( 'Disabled', 'dreamobjects' ),
+			'disabled' => __( 'Disabled (None)', 'dreamobjects' ),
 			'success'  => __( 'Success', 'dreamobjects' ),
 			'failure'  => __( 'Failure', 'dreamobjects' ),
 			'all'      => __( 'All', 'dreamobjects' ),
@@ -266,7 +266,7 @@ class DreamObjects_Settings {
 			$string = __( 'Your key is empty.', 'dreamobjects' );
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			add_settings_error( 'dh-do-key', 'key-field-error', $string, 'error' );
 		} else {
 			return $key;
@@ -282,13 +282,15 @@ class DreamObjects_Settings {
 	public function secretkey_callback() {
 		if ( get_option( 'dh-do-secretkey' ) === '' || ! get_option( 'dh-do-secretkey' ) ) {
 			$secretkey = '';
+			$message   = __( 'Your secret key will not display again for your own safety.', 'dreamobjects' );
 		} else {
 			$secretkey = '-- not shown --';
+			$message   = __( 'Your secret key does not display for security reasons.', 'dreamobjects' );
 		}
 
 		?>
 		<input type="text" id="dh-do-secretkey" name="dh-do-secretkey" value="<?php echo esc_html( $secretkey ); ?>" class="regular-text"  size="50" autocomplete="off"/>
-		<p><div class="dashicons dashicons-shield"></div><?php esc_html_e( 'Your secret key will not display again for your own security.', 'dreamobjects' ); ?></p>
+		<p><div class="dashicons dashicons-shield"></div><?php echo esc_html( $message ) ; ?></p>
 		<?php
 	}
 
@@ -451,7 +453,7 @@ class DreamObjects_Settings {
 			$string = __( 'Invalid bucket choice.', 'dreamobjects' );
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			add_settings_error(
 				'dh-do-bucket',
 				'bucket-field-error',
@@ -511,7 +513,7 @@ class DreamObjects_Settings {
 			}
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			$string = __( 'Invalid section choice.', 'dreamobjects' );
 			add_settings_error(
 				'dh-do-backupsection',
@@ -571,7 +573,7 @@ class DreamObjects_Settings {
 			$string = __( 'Invalid scheduling choice.', 'dreamobjects' );
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			add_settings_error(
 				'dh-do-schedule',
 				'schedule-field-error',
@@ -619,7 +621,7 @@ class DreamObjects_Settings {
 			$string = __( 'Invalid retention option.', 'dreamobjects' );
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			add_settings_error(
 				'dh-do-retain',
 				'retain-field-error',
@@ -666,7 +668,7 @@ class DreamObjects_Settings {
 			$string = __( 'Invalid notification option.', 'dreamobjects' );
 		}
 
-		if ( true === $error ) {
+		if ( isset( $error ) && true === $error ) {
 			add_settings_error(
 				'dh-do-notify',
 				'notify-field-error',

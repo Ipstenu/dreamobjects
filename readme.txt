@@ -161,7 +161,9 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 April 2020 by Ipstenu
 
-* Bugfix: corrected static functions for PHP 7.4+ compatibility
+* Fixed: corrected static functions for PHP 7.4+ compatibility
+* Fixed: correct undefined variable issue
+* Updated: Settings panel shows better details in the logs
 * Updated: AWS SDK to version 3.134.6
 
 = Previous Versions =
