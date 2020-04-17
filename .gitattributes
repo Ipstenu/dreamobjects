@@ -1,4 +1,3 @@
 log.txt export-ignore
-/vendor/ export-ignore
-.gitattributes export-ignore  
+.gitattributes export-ignore
 .gitignore export-ignore
