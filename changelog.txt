@@ -1,3 +1,13 @@
+= 4.2.0 =
+
+July 2019 by Ipstenu
+
+* Added: reset feature on the settings page
+* Updated: reset command for WP-CLI (`wp dreamobjects reset [log|settings]`)
+* Updated: AWS SDK to version 3.63.7
+* Fixed: Backup issues with large sites (100+ megs)
+* Misc: Factoring in WPCS (Coding standards)
+
 = 4.1.3 =
 
 June 2018 by Ipstenu
@@ -16,7 +26,7 @@ June 2018 by Ipstenu
 
 * Make sure the notice dismisses (sorry)
 
-= 4.1.0 = 
+= 4.1.0 =
 
 June 2018 by Ipstenu
 
@@ -25,7 +35,7 @@ June 2018 by Ipstenu
 * Upgrade AWS to version 3.x
 * Cleaned up notices
 
-= 4.0.4 = 
+= 4.0.4 =
 
 June 2016 by Ipstenu
 

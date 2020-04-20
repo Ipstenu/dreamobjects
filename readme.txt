@@ -1,24 +1,22 @@
 === DreamObjects Backups ===
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
-Requires at least: 4.0
+Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 4.2.0
+Stable tag: 4.3.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Backup your WordPress site to DreamHost's DreamObjects.
+Backup your WordPress site to DreamHost's Cloud: DreamObjects.
 
 == Description ==
-
-**As of June 21, 2018, DreamObjects is moving to a new datacenter. While this plugin _will_ automatically begin using the new datacenter on that date, it _will not_ migrate your existing data. You will need to <a href="https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure">migrate your data to the new cluster on your own</a>.**
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
 Well now that we've gotten the sales-pitch out of the way, DreamObjects Backups will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
-<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you ASAP.
+<em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you as soon as I can.
 
 = Backup Features =
 
@@ -98,7 +96,7 @@ I have, personally, verified a 250MB zip file on a shared host, with no timeouts
 
 I admit, it's in a weird spot: `/wp-content/upgrade/RANDOM-dreamobjects-backup.sql`
 
-Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for me to delete.
+Why there? Security. It's a safer spot, though safest would be a non-web-accessible folder. Maybe in the future. Keeping it there makes it easy for the plugin to delete.
 
 = Using the Plugin =
 
@@ -116,11 +114,11 @@ Yes, <em>provided</em> you still call cron via a grownup cron job (i.e. `curl ht
 
 <strong>How long does it keep backups?</strong>
 
-Since you get charged on space used for DreamObjects, the default is to retain the last 5 backups. If you need more, you can save all your backups, but I don't recommend it.
+Since you get charged on space used for DreamObjects, the default is to retain the last 5 backups. If you need more history you can save all your backups.
 
 <strong>Can I keep them forever?</strong>
 
-If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you may be charged more money.
+If you chose 'all' then yes, however this is not recommended. DreamObjects (like most S3/cloud platforms) charges you based on space and bandwidth, so if you have a large amount of files stored, you will be charged more money.
 
 <strong>How do I use the CLI?</strong>
 
@@ -159,20 +157,17 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
-= 4.2.0 =
+= 4.3.0 =
 
-July by Ipstenu
+April 2020 by Ipstenu
 
-* Added: reset feature on the settings page
-* Updated: reset command for WP-CLI (`wp dreamobjects reset [log|settings]`)
-* Updated: AWS SDK to version 3.63.7
-* Fixed: Backup issues with large sites (100+ megs)
-* Misc: Factoring in WPCS (Coding standards)
+* Fixed: corrected static functions for PHP 7.4+ compatibility
+* Fixed: correct undefined variable issue
+* Updated: Settings panel shows better details in the logs
+* Updated: AWS SDK to version 3.134.6
 
 = Previous Versions =
 
 See changelog.txt
 
 == Upgrade notice ==
-
-4.1.0 upgrades AWS to the 3.x branch AND will move your future backups to the new datacenter.
