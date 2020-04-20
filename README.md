@@ -1,5 +1,7 @@
 # DreamObjects Backup #
 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [!(https://img.shields.io/badge/version-4.3.0-success)]
+
 This is the development repository for the DreamObjects Backup plugin.
 
 * [WP Readme](readme.txt)
@@ -22,4 +24,8 @@ rsync -va --delete --exclude debug.txt --exclude .git/ --exclude .DS_Store --exc
 
 * Run `svn status` to see what’s missing or needs removing
 * Run svn commit: `svn ci -m "Version X"`
-* Run SVN CP: `svn cp https://plugins.svn.wordpress.org/dreamobjects/trunk https://plugins.svn.wordpress.org/dreamobjects/tags/TAG/`
+* Run SVN CP
+
+```
+svn cp https://plugins.svn.wordpress.org/dreamobjects/trunk https://plugins.svn.wordpress.org/dreamobjects/tags/TAG/
+```
