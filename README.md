@@ -1,6 +1,6 @@
 # DreamObjects Backup #
 
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Stable Version: 4.3.0](https://img.shields.io/badge/version-4.3.0-success)](https://wordpress.org/plugins/dreamobjects/)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html) [![Stable Version: 4.3.0](https://img.shields.io/badge/Version-4.3.0-success)](https://wordpress.org/plugins/dreamobjects/)
 
 This is the development repository for the DreamObjects Backup plugin.
 
