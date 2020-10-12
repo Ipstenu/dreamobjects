@@ -2,7 +2,7 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 5.0
-Tested up to: 5.4
+Tested up to: 5.5
 Stable tag: 4.3.0
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -156,6 +156,13 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 1. Stored backups
 
 == Changelog ==
+
+= 4.3.1 =
+
+October 2020 by Ipstenu
+
+* Fixed: Check for other plugins you don't want to run with this.
+* Updated: AWS SDK to v 3.158.6
 
 = 4.3.0 =
 

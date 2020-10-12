@@ -13,6 +13,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise batchEnableStandardsAsync(array $args = [])
  * @method \Aws\Result batchImportFindings(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchImportFindingsAsync(array $args = [])
+ * @method \Aws\Result batchUpdateFindings(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise batchUpdateFindingsAsync(array $args = [])
  * @method \Aws\Result createActionTarget(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createActionTargetAsync(array $args = [])
  * @method \Aws\Result createInsight(array $args = [])
@@ -85,6 +87,8 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise updateFindingsAsync(array $args = [])
  * @method \Aws\Result updateInsight(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateInsightAsync(array $args = [])
+ * @method \Aws\Result updateSecurityHubConfiguration(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateSecurityHubConfigurationAsync(array $args = [])
  * @method \Aws\Result updateStandardsControl(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateStandardsControlAsync(array $args = [])
  */

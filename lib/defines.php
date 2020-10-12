@@ -38,14 +38,16 @@ add_option( 'dh-do-notify', 'success' );
 
 // Requirements
 $dreamobjects_requirements_check = array(
-	'php'       => '7.0',
-	'wp'        => '4.8',
+	'php'       => '7.2',
+	'wp'        => '5.2',
 	'curl'      => '7.16.2',
 	'multisite' => false,
 	'curlssl'   => true,
 	'plugins'   => array(
-		'Amazon Web Services' => 'amazon-web-services/amazon-web-services.php',
-		'BackupBuddy'         => 'backupbuddy/backupbuddy.php',
+		'Amazon Web Services'  => 'amazon-web-services/amazon-web-services.php',
+		'BackupBuddy'          => 'backupbuddy/backupbuddy.php',
+		'Total Upkeep'         => 'boldgrid-backup/boldgrid-backup.php',
+		'Total Upkeep Premium' => 'boldgrid-backup-premium/boldgrid-backup-premium.php',
 	),
 );
 
