@@ -1,3 +1,19 @@
+= 4.3.1 =
+
+October 2020 by Ipstenu
+
+* Fixed: Check for other plugins you don't want to run with this.
+* Updated: AWS SDK to v 3.158.6
+
+= 4.3.0 =
+
+April 2020 by Ipstenu
+
+* Fixed: corrected static functions for PHP 7.4+ compatibility
+* Fixed: correct undefined variable issue
+* Updated: Settings panel shows better details in the logs
+* Updated: AWS SDK to version 3.134.6
+
 = 4.2.0 =
 
 July 2019 by Ipstenu

@@ -2,8 +2,8 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 5.0
-Tested up to: 5.6
-Stable tag: 4.3.1
+Tested up to: 5.8
+Stable tag: 4.4
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,6 +11,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Backup your WordPress site to DreamHost's Cloud: DreamObjects.
 
 == Description ==
+
+<strong>FINAL UPDATE</strong>
+
+This plugin is no longer supported. I will be available for security patches, going forward until 2022, but after that point, this will be closed.
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
@@ -157,24 +161,14 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 == Changelog ==
 
-= 4.3.1 =
+= 4.4 =
 
-October 2020 by Ipstenu
-
-* Fixed: Check for other plugins you don't want to run with this.
-* Updated: AWS SDK to v 3.158.6
-
-= 4.3.0 =
-
-April 2020 by Ipstenu
-
-* Fixed: corrected static functions for PHP 7.4+ compatibility
-* Fixed: correct undefined variable issue
-* Updated: Settings panel shows better details in the logs
-* Updated: AWS SDK to version 3.134.6
+Final update - July 2021
 
 = Previous Versions =
 
 See changelog.txt
 
 == Upgrade notice ==
+
+THIS PLUGIN IS NO LONGER MAINTAINED. IT WILL RECEIVE SECURITY UPDATES AND BUG FIXES FOR THE NEXT 12 MONTHS (JULY 2022). AFTER THAT TIME, IT WILL BE RETIRED.

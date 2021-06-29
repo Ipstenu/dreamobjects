@@ -24,7 +24,7 @@ class DreamObjects_Core {
 
 	public $version = '4.3.0';
 
-	static public $s3_options;
+	public static $s3_options;
 
 	public function __construct() {
 

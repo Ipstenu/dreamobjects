@@ -42,6 +42,10 @@ if ( ! $sections ) {
 		printf( wp_kses_post( __( 'DreamObjects Backups allows WordPress to backup your site\'s critical files to <a href="%s">DreamObjects&#153;</a>, housing your data in an inexpensive, scalable object storage service that provides a reliable, flexible cloud solution.', 'dreamobjects' ) ), 'https://www.dreamhost.com/cloud/storage/' );
 	?>
 	</p>
+
+	<p><strong><?php echo esc_html__( 'IMPORTANT NOTICE!', 'dreamobjects' ); ?></strong></p>
+
+	<p><?php echo esc_html__( 'Version 4.4 is the final release for this plugin. After this, there will be bug fixes and security updates for 12 months. On 1 July 2022, this plugin will be closed.', 'dreamobjects' ); ?></p>
 	<?php
 
 	if ( ! get_option( 'dh-do-key' ) || ! get_option( 'dh-do-secretkey' ) ) {

@@ -17,7 +17,7 @@
 
 */
 
-if (! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -51,8 +51,8 @@ class DHDO {
 			$do_schedule = sanitize_text_field( $_POST['dh-do-schedule'] );
 
 			if ( 'disabled' !== $do_schedule ) {
-				wp_schedule_event( current_time( 'timestamp', true ) + 86400, $do_schedule, 'dh-do-backup' );
-				$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option( 'time_format' ) );
+				wp_schedule_event( time() + 86400, $do_schedule, 'dh-do-backup' );
+				$timestamp = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-schedule' ) ), get_option( 'time_format' ) );
 				// translators: %s is type of backup scheduled
 				$scheduledbackup = sprintf( __( 'Scheduled %s backup.', 'dreamobjects' ), $do_schedule );
 				// translators: %s is time of backup scheduled
@@ -69,7 +69,7 @@ class DHDO {
 		// BACKUP ASAP
 		if ( current_user_can( 'manage_options' ) && isset( $_POST['dh-do-backupnow'] ) ) {
 			check_admin_referer( 'dh-do-backupnow-settings-options' );
-			wp_schedule_single_event( current_time( 'timestamp', true ) + 60, 'dh-do-backupnow' );
+			wp_schedule_single_event( time() + 60, 'dh-do-backupnow' );
 			$message = __( 'Scheduled ASAP backup in 60 seconds.', 'dreamobjects' );
 			self::logger( $message );
 		}
@@ -94,7 +94,7 @@ class DHDO {
 			fclose( $fd );
 		} elseif ( 'on' === get_option( 'dh-do-logging' ) ) {
 			$fd  = fopen( $file, 'a' );
-			$str = '[' . date( 'Y/m/d h:i:s', current_time( 'timestamp' ) ) . '] ' . $msg . "\n";
+			$str = '[' . gmdate( 'Y/m/d h:i:s', current_time( 'timestamp' ) ) . '] ' . $msg . "\n";
 			fwrite( $fd, $str );
 			fclose( $fd );
 		}
@@ -125,7 +125,7 @@ class DHDO {
 				array(
 					'filename'  => $filename,
 					'frequency' => $frequency,
-					'text'      => '[' . date( 'Y/m/d h:i:s', current_time( 'timestamp' ) ) . '] ' . $message,
+					'text'      => '[' . gmdate( 'Y/m/d h:i:s', current_time( 'timestamp' ) ) . '] ' . $message,
 				)
 			);
 		}
@@ -358,7 +358,7 @@ class DHDO {
 				$message = sprintf( __( 'Zip file created: %1$s (%2$s) ...', 'dreamobjects' ), $filenicename, $zipsize );
 				self::logger( $message );
 			} else {
-				@unlink($file);
+				@unlink( $file );
 				$message = __( 'Zip file failed to generate. Nothing will be backed up.', 'dreamobjects' );
 				self::logger( $message );
 				self::notifier( $filenicename, $message, 'failure' );

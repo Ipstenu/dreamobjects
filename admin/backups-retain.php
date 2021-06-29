@@ -50,7 +50,7 @@ if ( 'disabled' === $frequency ) {
 		// We don't show backup links for certain cases
 		if ( $showbackups ) {
 			$emptybackups = false;
-			$timestamp  = get_date_from_gmt( date( 'Y-m-d H:i:s', ( time() + 600 ) ), get_option( 'time_format' ) );
+			$timestamp  = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', ( time() + 600 ) ), get_option( 'time_format' ) );
 			// translators: %s is the time the links expire.
 			$linksvalid_string = sprintf( __( 'Links are valid until %s (aka 10 minutes from page load). After that time, you need to reload this page.', 'dreamobjects' ), $timestamp );
 

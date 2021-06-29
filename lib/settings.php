@@ -290,7 +290,7 @@ class DreamObjects_Settings {
 
 		?>
 		<input type="text" id="dh-do-secretkey" name="dh-do-secretkey" value="<?php echo esc_html( $secretkey ); ?>" class="regular-text"  size="50" autocomplete="off"/>
-		<p><div class="dashicons dashicons-shield"></div><?php echo esc_html( $message ) ; ?></p>
+		<p><div class="dashicons dashicons-shield"></div><?php echo esc_html( $message ); ?></p>
 		<?php
 	}
 
@@ -443,9 +443,12 @@ class DreamObjects_Settings {
 	 */
 	public function backup_bucket_validation( $input ) {
 		$buckets     = self::get_buckets();
-		$goodbuckets = array_map( function( $bname ) {
-			return $bname['Name'];
-		}, $buckets['Buckets']);
+		$goodbuckets = array_map(
+			function( $bname ) {
+				return $bname['Name'];
+			},
+			$buckets['Buckets']
+		);
 		$thisbucket  = sanitize_file_name( $input );
 
 		if ( $input !== $thisbucket || ! in_array( $thisbucket, $goodbuckets, true ) ) {
@@ -545,7 +548,7 @@ class DreamObjects_Settings {
 		</select>
 		<?php
 
-		$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
+		$timestamp = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 		// translators: %s is the time of the backup
 		$nextbackup = sprintf( __( 'Next scheduled backup is at %s', 'dreamobjects' ), $timestamp );
 		?>
@@ -689,7 +692,7 @@ class DreamObjects_Settings {
 	public function backupnow_callback() {
 		echo '<p>' . esc_html__( 'Oh you really want to do a backup right now? Schedule your backup to start in a minute. Be careful! This may take a while, and slow your site down, if you have a big site. Also if you made any changes to your settings, go back and click "Update Options" before running this.', 'dreamobjects' ) . '</p>';
 
-		$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
+		$timestamp = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backup' ) ), get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 		// translators: %s is the time of the next backup
 		$nextbackup = sprintf( __( 'Keep in mind, your next scheduled backup is at %s', 'dreamobjects' ), $timestamp );
 		if ( 'disabled' === get_option( 'dh-do-schedule' ) && wp_next_scheduled( 'dh-do-backup' ) ) {
@@ -710,7 +713,7 @@ class DreamObjects_Settings {
 		$backup = ( isset( $input ) && 'Y' === $input ) ? 'Y' : 'N';
 
 		if ( 'Y' === $backup ) {
-			$timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backupnow' ) ), get_option( 'time_format' ) );
+			$timestamp = get_date_from_gmt( gmdate( 'Y-m-d H:i:s', wp_next_scheduled( 'dh-do-backupnow' ) ), get_option( 'time_format' ) );
 			// translators: %s is the time of the backup
 			$string = sprintf( __( 'You have an ad-hoc backup scheduled for today at %s. You may continue using your site per usual, the backup will run behind the scenes.', 'dreamobjects' ), '<strong>' . $timestamp . '</strong>' );
 			add_settings_error( 'dh-do-backup', 'backup-field-updated', $string, 'updated' );
