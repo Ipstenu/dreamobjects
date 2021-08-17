@@ -388,12 +388,17 @@ class DreamObjects_Settings {
 
 		$buckets = self::get_buckets();
 
-		echo '<p>';
-		if ( get_option( 'dh-do-bucket' ) === 'XXXX' || empty( $buckets['Buckets'] ) ) {
-			// translators: %s is the URL to DreamHost Panel
-			printf( wp_kses_post( __( 'To create a bucket, go to your <a href="%s" target="_new">DreamObjects Panel for DreamObjects</a> and click the "Add Buckets" button. Give the bucket a name and click "Save." Once you have a bucket, come back to this configuration page and select the bucket you just created.', 'dreamobjects' ) ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+		if ( is_wp_error( $buckets ) ) {
+			$error_string = $buckets->get_error_message();
+			echo '<div id="message" class="notice notice-error"><p><strong>' . esc_html__( 'Cannot connect to DreamObjects:', 'dreamobjects' ) . '</strong></p><p>' . esc_html( $error_string ) . '</p></div>';
+		} else {
+			echo '<p>';
+			if ( get_option( 'dh-do-bucket' ) === 'XXXX' || is_wp_error( $buckets ) || ! is_array( $buckets ) || empty( $buckets['Buckets'] ) ) {
+				// translators: %s is the URL to DreamHost Panel
+				printf( wp_kses_post( __( 'To create a bucket, go to your <a href="%s" target="_new">DreamObjects Panel for DreamObjects</a> and click the "Add Buckets" button. Give the bucket a name and click "Save." Once you have a bucket, come back to this configuration page and select the bucket you just created.', 'dreamobjects' ) ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+			}
+			echo '</p>';
 		}
-		echo '</p>';
 	}
 
 	/**
@@ -404,34 +409,40 @@ class DreamObjects_Settings {
 	 */
 	public function backup_bucket_callback() {
 		$buckets = self::get_buckets();
-		?>
-		<select name="dh-do-bucket">
-			<option value="XXXX">(select a bucket)</option>
-			<?php
-			foreach ( $buckets['Buckets'] as $bucket ) {
-				$selected = ( get_option( 'dh-do-bucket' ) === $bucket['Name'] ) ? 'selected="selected"' : '';
-				echo '<option ' . esc_html( $selected ) . '>' . esc_attr( $bucket['Name'] ) . '</option>';
-			}
-			?>
-		</select>
-		<p class="description">
-			<?php
-			if ( ! empty( $buckets['Buckets'] ) ) {
-				// translators: %s is the hostname
-				printf( esc_html__( 'Select from pre-existing buckets in %s.', 'dreamobjects' ), esc_html( get_option( 'dh-do-hostname' ) ) );
-			} else {
-				// translators: %s is the panel link for help
-				printf( wp_kses_post( __( 'You need to <a href="%s" target="_new">create a bucket</a> before you can perform any backups.', 'dreamobjects' ) ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
 
-				if ( DreamObjects_Core::datacenter_move_east( 'deadline' ) && ! DreamObjects_Core::datacenter_move_east( 'toolate' ) ) {
-					echo ' <strong>' . esc_html__( 'NOTICE!', 'dreamobjects' ) . '</strong> ';
-					// translators: %s is the help doc
-					printf( wp_kses_post( __( 'You\'re seeing this message because you have no buckets on the new datacenter. All of your buckets should have been replicated but there was an error. Please <a href="%s" target="_new">review the cluster migration procedure</a> to resolve this.', 'dreamobjects' ) ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
-				}
-			}
+		if ( is_wp_error( $buckets ) ) {
+			$error_string = $buckets->get_error_message();
+			echo '<div id="message" class="notice notice-error"><p><strong>' . esc_html__( 'Cannot connect to DreamObjects:', 'dreamobjects' ) . '</strong></p><p>' . esc_html( $error_string ) . '</p></div>';
+		} else {
 			?>
-		</p>
-		<?php
+			<select name="dh-do-bucket">
+				<option value="XXXX">(select a bucket)</option>
+				<?php
+				foreach ( $buckets['Buckets'] as $bucket ) {
+					$selected = ( get_option( 'dh-do-bucket' ) === $bucket['Name'] ) ? 'selected="selected"' : '';
+					echo '<option ' . esc_html( $selected ) . '>' . esc_attr( $bucket['Name'] ) . '</option>';
+				}
+				?>
+			</select>
+			<p class="description">
+				<?php
+				if ( ! empty( $buckets['Buckets'] ) ) {
+					// translators: %s is the hostname
+					printf( esc_html__( 'Select from pre-existing buckets in %s.', 'dreamobjects' ), esc_html( get_option( 'dh-do-hostname' ) ) );
+				} else {
+					// translators: %s is the panel link for help
+					printf( wp_kses_post( __( 'You need to <a href="%s" target="_new">create a bucket</a> before you can perform any backups.', 'dreamobjects' ) ), 'https://panel.dreamhost.com/index.cgi?tree=cloud.objects&' );
+
+					if ( DreamObjects_Core::datacenter_move_east( 'deadline' ) && ! DreamObjects_Core::datacenter_move_east( 'toolate' ) ) {
+						echo ' <strong>' . esc_html__( 'NOTICE!', 'dreamobjects' ) . '</strong> ';
+						// translators: %s is the help doc
+						printf( wp_kses_post( __( 'You\'re seeing this message because you have no buckets on the new datacenter. All of your buckets should have been replicated but there was an error. Please <a href="%s" target="_new">review the cluster migration procedure</a> to resolve this.', 'dreamobjects' ) ), 'https://help.dreamhost.com/hc/en-us/articles/360002135871-Cluster-migration-procedure' );
+					}
+				}
+				?>
+			</p>
+			<?php
+		}
 	}
 
 	/**

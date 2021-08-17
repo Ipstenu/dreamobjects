@@ -14,7 +14,7 @@ Backup your WordPress site to DreamHost's Cloud: DreamObjects.
 
 <strong>FINAL UPDATE</strong>
 
-This plugin is no longer supported. I will be available for security patches, going forward until 2022, but after that point, this will be closed.
+This plugin is no longer supported. I will be available for security patches, going forward until July 2022, but after that point, this plugin will be closed.
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
@@ -54,6 +54,18 @@ The following information is sent to DreamObjects:
 == Frequently asked questions ==
 
 = General Questions =
+
+<strong>Why is this plugin being retired?</strong>
+
+While this plugin works well for backups, it was originally intended to be for use on DreamPress (the managed WordPress hosting service from DreamHost). Since that service has much better backups, it's no longer necessary to use a plugin.
+
+<strong>What alternatives are there to this plugin?</strong>
+
+In no particular order:
+
+* [Jetpack Backups (aka VaultPress)](https://wordpress.org/plugins/jetpack/)
+* [BoldGrid Total Backup](https://wordpress.org/plugins/boldgrid-backup/)
+* [BlogVault](https://wordpress.org/plugins/blogvault-real-time-backup/)
 
 <strong>What does it do?</strong>
 
@@ -163,7 +175,10 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 = 4.4 =
 
-Final update - July 2021
+<strong>Final update - August 2021</strong>
+
+* Update AWS
+* Better error trapping if Buckets cannot be collected
 
 = Previous Versions =
 
@@ -171,4 +186,4 @@ See changelog.txt
 
 == Upgrade notice ==
 
-THIS PLUGIN IS NO LONGER MAINTAINED. IT WILL RECEIVE SECURITY UPDATES AND BUG FIXES FOR THE NEXT 12 MONTHS (JULY 2022). AFTER THAT TIME, IT WILL BE RETIRED.
+THIS PLUGIN IS NO LONGER MAINTAINED. IT WILL RECEIVE SECURITY UPDATES AND BUG FIXES UNTIL JULY 2022. AFTER THAT TIME, IT WILL BE RETIRED.

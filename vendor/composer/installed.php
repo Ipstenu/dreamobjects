@@ -5,18 +5,18 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'd1387cb89d92c98a9f5bf4fe04355a0b826ea4d9',
+        'reference' => '6b959a4c18a1ddb0653c84d896710989c846a60f',
         'name' => 'dreamhost/dreamobjects',
         'dev' => true,
     ),
     'versions' => array(
         'aws/aws-sdk-php' => array(
-            'pretty_version' => '3.185.3',
-            'version' => '3.185.3.0',
+            'pretty_version' => '3.190.3',
+            'version' => '3.190.3.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../aws/aws-sdk-php',
             'aliases' => array(),
-            'reference' => 'e7a7d6b28b477a02a5625348995949c2dee7919a',
+            'reference' => '4e641e25cc8f4d04002404afe050e25035fad0f3',
             'dev_requirement' => false,
         ),
         'collizo4sky/persist-admin-notices-dismissal' => array(
@@ -34,7 +34,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'd1387cb89d92c98a9f5bf4fe04355a0b826ea4d9',
+            'reference' => '6b959a4c18a1ddb0653c84d896710989c846a60f',
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(

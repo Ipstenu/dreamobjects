@@ -34,6 +34,13 @@ if ( ! $sections ) {
 <div class="wrap">
 	<div id="icon-dreamobjects" class="icon32"></div>
 	<h2><?php echo esc_html__( 'DreamObjects Backups', 'dreamobjects' ); ?></h2>
+
+	<div class="notice notice-warning">
+		<p><strong><?php echo esc_html__( 'IMPORTANT NOTICE!', 'dreamobjects' ); ?></strong></p>
+
+		<p><?php echo esc_html__( 'Version 4.4 is the final release for this plugin. After this, there will be bug fixes and security updates until 1 July 2022. At that time, this plugin will be closed.', 'dreamobjects' ); ?></p>
+	</div>
+
 	<?php settings_errors(); ?>
 
 	<p>
@@ -43,11 +50,7 @@ if ( ! $sections ) {
 	?>
 	</p>
 
-	<p><strong><?php echo esc_html__( 'IMPORTANT NOTICE!', 'dreamobjects' ); ?></strong></p>
-
-	<p><?php echo esc_html__( 'Version 4.4 is the final release for this plugin. After this, there will be bug fixes and security updates for 12 months. On 1 July 2022, this plugin will be closed.', 'dreamobjects' ); ?></p>
 	<?php
-
 	if ( ! get_option( 'dh-do-key' ) || ! get_option( 'dh-do-secretkey' ) ) {
 		?>
 		<p>
