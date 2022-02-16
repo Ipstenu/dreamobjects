@@ -54,17 +54,17 @@ class DreamObjects_Command extends WP_CLI_Command {
 		$valid_resets = array( 'settings', 'log' );
 
 		// Check for valid arguments.
-		if ( empty( $args[0] ) || ! in_array( $args[0], $valid_resets ) ) {
+		if ( empty( $args[0] ) || ! in_array( $args[0], $valid_resets, true ) ) {
 			WP_CLI::error( __( 'You must provide something to be reset.', 'dreamobjects' ) );
 		} else {
 			switch ( $args[0] ) {
 				case 'settings':
 					DHDO::DreamObjects_Core( 'kill_it_all' );
-					$message = __( 'Settings reset', 'dramobjects' );
+					$message = __( 'Settings reset', 'dreamobjects' );
 					break;
 				case 'log':
 					DHDO::logger( 'reset' );
-					$message = __( 'Debug log reset', 'dramobjects' );
+					$message = __( 'Debug log reset', 'dreamobjects' );
 					break;
 			}
 			WP_CLI::success( $message );

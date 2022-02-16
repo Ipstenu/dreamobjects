@@ -9,7 +9,7 @@
  * Network: false
  * Text Domain: dreamobjects
  *
- * Copyright 2012-2021 Mika Epstein (email: ipstenu@halfelf.org)
+ * Copyright 2012-2022 Mika Epstein (email: ipstenu@halfelf.org)
  *
  * This file is part of DreamObjects Backups, a plugin for WordPress.
  *
@@ -35,6 +35,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once 'lib/requirements.php';
 
 add_action( 'admin_init', 'dreamobjects_requirements' );
+add_action( 'admin_notices', 'dreamobjects_retired_notice' );
+add_action( 'admin_init', 'dreamobjects_retired_notice_ignore' );
 
 function dreamobjects_requirements() {
 	$dreamobjects_requirements_check = get_option( 'dh-do-requirements' );
@@ -58,6 +60,18 @@ function dreamobjects_requirements_css() {
 	div#message.notice.is-dismissible { display: none; }
 	</style>
 	<?php
+}
+
+function dreamobjects_retired_notice() {
+	if ( current_user_can( 'manage_options' ) && ! get_user_meta( get_current_user_id(), 'dreampress_retired_notice_ignore' ) ) {
+		echo '<div class="updated notice"><p>' . esc_html__( 'This plugin is no longer being actively developed and will only receive maintenance notices.', 'dreamobjects' ) . ' <a href="?dreampress_retired_ignore_notice">Dismiss</a></p></div>';
+	}
+}
+
+function dreamobjects_retired_notice_ignore() {
+	if ( isset( $_GET['dreampress_retired_ignore_notice'] ) ) {
+		add_user_meta( get_current_user_id(), 'dreampress_retired_notice_ignore', 'true', true );
+	}
 }
 
 // Include my own libraries

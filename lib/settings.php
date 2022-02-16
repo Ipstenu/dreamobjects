@@ -496,7 +496,7 @@ class DreamObjects_Settings {
 		<p><label for="dh-do-backupsections">
 			<?php
 			foreach ( $availablesections as $key => $value ) {
-				$checked = ( in_array( $key, $mysections ) ) ? 'checked="checked"' : '';
+				$checked = ( in_array( $key, $mysections, true ) ) ? 'checked="checked"' : '';
 				echo '<input ' . esc_html( $checked ) . ' type="checkbox" name="dh-do-backupsection[]" value="' . esc_attr( $key ) . '" id="dh-do-backupsection-' . esc_attr( $key ) . '" />';
 				echo esc_html( $value );
 				echo '<br />';
@@ -630,7 +630,7 @@ class DreamObjects_Settings {
 		$retainarray = self::get_retain();
 		$retain      = sanitize_text_field( $input );
 
-		if ( $input !== $retain || ! in_array( $retain, $retainarray ) ) {
+		if ( $input !== $retain || ! in_array( $retain, $retainarray, true ) ) {
 			$error  = true;
 			$string = __( 'Invalid retention option.', 'dreamobjects' );
 		}

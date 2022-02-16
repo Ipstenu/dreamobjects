@@ -69,11 +69,13 @@ if ( 'disabled' === $frequency ) {
 			$maxkeys = get_option( 'dh-do-retain' ) + 1;
 
 			try {
-				$backups      = $s3->listObjectsV2( array(
-					'Bucket'  => $bucket,
-					'Prefix'  => $prefix,
-					'MaxKeys' => $maxkeys,
-				) );
+				$backups      = $s3->listObjectsV2(
+					array(
+						'Bucket'  => $bucket,
+						'Prefix'  => $prefix,
+						'MaxKeys' => $maxkeys,
+					)
+				);
 				$backupsarray = $backups->toArray();
 			} catch ( S3Exception $e ) {
 				$emptybackups = true;

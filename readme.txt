@@ -2,7 +2,7 @@
 Contributors: Ipstenu
 Tags: cloud, dreamhost, dreamobjects, backup
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Stable tag: 4.4
 Requires PHP: 7.0
 License: GPLv2 or later
@@ -14,11 +14,11 @@ Backup your WordPress site to DreamHost's Cloud: DreamObjects.
 
 <strong>FINAL UPDATE</strong>
 
-This plugin is no longer supported. I will be available for security patches, going forward until July 2022, but after that point, this plugin will be closed.
+<em>This plugin is no longer supported. I will be available for security patches going forward until December 2022 but, after that point, this plugin will be closed.</em>
 
 DreamHost has its own Cloud - <a href="http://dreamhost.com/cloud/dreamobjects/">DreamObjects&#153;</a> - an inexpensive, scalable object storage service that was developed from the ground up to provide a reliable, flexible cloud storage solution for entrepreneurs and developers. It provides a perfect, scalable storage solution for your WordPress site.
 
-Well now that we've gotten the sales-pitch out of the way, DreamObjects Backups will plugin your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
+DreamObjects Backups connects your WordPress site into DreamObjects, tapping into the amazing power of automated backups!
 
 <em>Please <strong>do not</strong> open DreamHost Support Tickets for this plugin.</em> Post in the <a href="http://wordpress.org/support/plugin/dreamobjects">support forum here</a>, and I'll get to you as soon as I can.
 
@@ -81,7 +81,7 @@ No, but using it anywhere else is unsupported. You have to use Dream<em>Objects<
 
 <strong>Can I use this on Multisite?</strong>
 
-Not at this time. Backups for Multisite are a little messier, and I'm not sure how I want to handle that yet.
+Multisite is not supported.
 
 <strong>What does it backup?</strong>
 
@@ -175,7 +175,7 @@ You can also log in via SSH and run `wp dreamobjects backup` to see if that work
 
 = 4.4 =
 
-<strong>Final update - August 2021</strong>
+<strong>Final update - February 2022</strong>
 
 * Update AWS
 * Better error trapping if Buckets cannot be collected

@@ -35,7 +35,7 @@ use Aws\S3\S3Client;
 	<div class="notice notice-warning">
 		<p><strong><?php echo esc_html__( 'IMPORTANT NOTICE!', 'dreamobjects' ); ?></strong></p>
 
-		<p><?php echo esc_html__( 'Version 4.4 is the final release for this plugin. After this, there will be bug fixes and security updates until 1 July 2022. At that time, this plugin will be closed.', 'dreamobjects' ); ?></p>
+		<p><?php echo esc_html__( 'Version 4.4 is the final release for this plugin. After this, there will be bug fixes and security updates until the end of 2022. At that time, this plugin will be closed.', 'dreamobjects' ); ?></p>
 	</div>
 
 	<?php settings_errors(); ?>

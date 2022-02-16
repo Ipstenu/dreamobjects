@@ -94,7 +94,7 @@ class DHDO {
 			fclose( $fd );
 		} elseif ( 'on' === get_option( 'dh-do-logging' ) ) {
 			$fd  = fopen( $file, 'a' );
-			$str = '[' . gmdate( 'Y/m/d h:i:s', current_time( 'timestamp' ) ) . '] ' . $msg . "\n";
+			$str = '[' . gmdate( 'Y/m/d h:i:s', time() ) . '] ' . $msg . "\n";
 			fwrite( $fd, $str );
 			fclose( $fd );
 		}
@@ -404,13 +404,16 @@ class DHDO {
 					$message = __( 'Preparing the upload parameters and upload parts in 25M chunks.', 'dreamobjects' );
 					self::logger( $message );
 
-					$uploader = new MultipartUploader( $s3, $file, [
-						'bucket'      => $bucket,
-						'key'         => $filenicename,
-						'part_size'   => 25 * 1024 * 1024,
-						'acl'         => 'private',
-						'concurrency' => 3,
-					]);
+					$uploader = new MultipartUploader(
+						$s3,
+						$file, [
+							'bucket'      => $bucket,
+							'key'         => $filenicename,
+							'part_size'   => 25 * 1024 * 1024,
+							'acl'         => 'private',
+							'concurrency' => 3,
+						]
+					);
 
 					try {
 						$message = __( 'Beginning Multipart upload to the cloud. This may take a while (5 minutes for every 75 megs or so).', 'dreamobjects' );
@@ -434,17 +437,19 @@ class DHDO {
 
 					set_time_limit( 180 ); // 3 min
 					try {
-						$result  = $s3->putObject( array(
-							'Bucket'      => $bucket,
-							'Key'         => $filenicename,
-							'SourceFile'  => $file,
-							'ContentType' => 'application/zip',
-							'ACL'         => 'private',
-							'Metadata'    => array(
-								'UploadedBy'   => 'DreamObjectsBackupPlugin',
-								'UploadedDate' => date_i18n( 'Y-m-d-His', current_time( 'timestamp' ) ),
-							),
-						) );
+						$result  = $s3->putObject(
+							array(
+								'Bucket'      => $bucket,
+								'Key'         => $filenicename,
+								'SourceFile'  => $file,
+								'ContentType' => 'application/zip',
+								'ACL'         => 'private',
+								'Metadata'    => array(
+									'UploadedBy'   => 'DreamObjectsBackupPlugin',
+									'UploadedDate' => date_i18n( 'Y-m-d-His', time() ),
+								),
+							)
+						);
 						$message = __( 'SUCCESS: Upload to the cloud complete!', 'dreamobjects' );
 						self::logger( $message );
 						self::notifier( $filenicename, $message, 'success' );
@@ -455,9 +460,6 @@ class DHDO {
 						self::notifier( $filenicename, $message, 'failure' );
 					}
 				}
-
-				// https://dreamxtream.wordpress.com/2013/10/29/aws-php-sdk-logging-using-guzzle/ .
-				// $s3->getEventDispatcher()->removeSubscriber($logPlugin);
 			} else {
 				$message = __( 'FAILURE: Nothing to upload.', 'dreamobjects' );
 				self::logger( $message );
@@ -494,10 +496,12 @@ class DHDO {
 				$prefixurl .= $parseurl['path'];
 			}
 
-			$backups = $s3->listObjectsV2( array(
-				'Bucket' => $bucket,
-				'Prefix' => $prefixurl,
-			) );
+			$backups = $s3->listObjectsV2(
+				array(
+					'Bucket' => $bucket,
+					'Prefix' => $prefixurl,
+				)
+			);
 
 			if ( false !== $backups ) {
 				$backups = $backups->toArray();

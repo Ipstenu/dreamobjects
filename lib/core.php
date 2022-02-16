@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class DreamObjects_Core {
 
-	public $version = '4.3.0';
+	public $version = '4.4.0';
 
 	public static $s3_options;
 
